@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Calculate Your Final Scaled Mark | MYP Haven</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+        }
+
+
+        body{
+            min-height:100vh;
+            background:#FAF8F6;
+            color:#202333;
+            font-family:"DM Sans",sans-serif;
+            padding:55px 25px 80px;
+        }
+
+
+        .page{
+            width:100%;
+            max-width:1050px;
+            margin:0 auto;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header{
+            text-align:center;
+            margin-bottom:45px;
+        }
+
+
+        .header h1{
+            font-family:"Bricolage Grotesque",sans-serif;
+            font-size:clamp(40px,6vw,68px);
+            line-height:1;
+            font-weight:800;
+            letter-spacing:-.055em;
+        }
+
+
+        .header p{
+            margin:17px auto 0;
+            max-width:680px;
+            color:#777;
+            font-size:16px;
+            line-height:1.6;
+        }
+
+
+        /* =========================================================
+           CRITERIA
+        ========================================================= */
+
+        .criteria-grid{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:24px;
+        }
+
+
+        .criterion{
+            min-height:245px;
+            padding:30px;
+            border-radius:30px;
+
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,.06);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+
+        .criterion:hover{
+            transform:translateY(-4px);
+
+            box-shadow:
+                0 18px 42px rgba(0,0,0,.09);
+        }
+
+
+        .criterion-a{
+            background:#FFB3C6;
+        }
+
+
+        .criterion-b{
+            background:#FFE69A;
+        }
+
+
+        .criterion-c{
+            background:#A8E6CF;
+        }
+
+
+        .criterion-d{
+            background:#CDB4DB;
+        }
+
+
+        .criterion-top{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:15px;
+        }
+
+
+        .criterion-letter{
+            font-family:"Bricolage Grotesque",sans-serif;
+            font-size:52px;
+            line-height:1;
+            font-weight:800;
+            letter-spacing:-.06em;
+        }
+
+
+        .criterion-range{
+            padding:8px 12px;
+            border-radius:50px;
+
+            background:rgba(255,255,255,.55);
+
+            font-size:13px;
+            font-weight:800;
+        }
+
+
+        .criterion-label{
+            margin-top:8px;
+            font-size:14px;
+            font-weight:700;
+            opacity:.72;
+        }
+
+
+        /* =========================================================
+           INPUTS
+        ========================================================= */
+
+        .score-input{
+            width:100%;
+            height:70px;
+
+            margin-top:25px;
+            padding:0 20px;
+
+            border:none;
+            outline:none;
+            border-radius:20px;
+
+            background:rgba(255,255,255,.72);
+
+            color:#202333;
+
+            font-family:"Bricolage Grotesque",sans-serif;
+            font-size:32px;
+            font-weight:800;
+
+            text-align:center;
+
+            box-shadow:
+                inset 0 0 0 2px rgba(255,255,255,.3);
+
+            transition:
+                background .2s ease,
+                box-shadow .2s ease,
+                transform .2s ease;
+        }
+
+
+        .score-input:focus{
+            background:#fff;
+
+            box-shadow:
+                inset 0 0 0 3px rgba(32,35,51,.12),
+                0 8px 20px rgba(0,0,0,.06);
+
+            transform:translateY(-1px);
+        }
+
+
+        .score-input.invalid{
+            box-shadow:
+                inset 0 0 0 3px #FF4D6D,
+                0 6px 18px rgba(255,77,109,.12);
+        }
+
+
+        .score-input::-webkit-outer-spin-button,
+        .score-input::-webkit-inner-spin-button{
+            -webkit-appearance:none;
+            margin:0;
+        }
+
+
+        .score-input[type=number]{
+            appearance:textfield;
+            -moz-appearance:textfield;
+        }
+
+
+        /* =========================================================
+           CALCULATE
+        ========================================================= */
+
+        .calculate-area{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+
+            margin-top:35px;
+        }
+
+
+        .calculate-button{
+            width:100%;
+            max-width:520px;
+            min-height:70px;
+
+            border:none;
+            border-radius:22px;
+
+            background:#202333;
+            color:#fff;
+
+            font-family:"Bricolage Grotesque",sans-serif;
+            font-size:21px;
+            font-weight:800;
+
+            cursor:pointer;
+
+            box-shadow:
+                0 12px 30px rgba(32,35,51,.16);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+
+        .calculate-button:hover{
+            transform:translateY(-3px);
+
+            box-shadow:
+                0 17px 35px rgba(32,35,51,.22);
+        }
+
+
+        .calculate-button:active{
+            transform:translateY(0) scale(.98);
+        }
+
+
+        .error-message{
+            min-height:24px;
+
+            margin-top:12px;
+
+            color:#FF4D6D;
+
+            font-size:13px;
+            font-weight:700;
+
+            text-align:center;
+        }
+
+
+        /* =========================================================
+           RESULT
+        ========================================================= */
+
+        .result-wrapper{
+            display:none;
+            margin-top:35px;
+        }
+
+
+        .result-wrapper.show{
+            display:block;
+        }
+
+
+        .result-card{
+            width:100%;
+            min-height:350px;
+
+            position:relative;
+            overflow:hidden;
+
+            border-radius:34px;
+
+            background:#fff;
+
+            box-shadow:
+                0 22px 70px rgba(0,0,0,.13);
+
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+
+            padding:45px 30px;
+
+            text-align:center;
+        }
+
+
+        .result-card::before{
+            content:"";
+
+            position:absolute;
+
+            width:260px;
+            height:260px;
+
+            border-radius:50%;
+
+            background:#FFB3C6;
+
+            opacity:.35;
+
+            top:-150px;
+            left:-100px;
+        }
+
+
+        .result-card::after{
+            content:"";
+
+            position:absolute;
+
+            width:240px;
+            height:240px;
+
+            border-radius:50%;
+
+            background:#A8E6CF;
+
+            opacity:.35;
+
+            bottom:-150px;
+            right:-90px;
+        }
+
+
+        .result-content{
+            position:relative;
+            z-index:2;
+        }
+
+
+        .result-small{
+            margin-bottom:8px;
+
+            color:#777;
+
+            font-size:14px;
+            font-weight:800;
+
+            letter-spacing:.12em;
+            text-transform:uppercase;
+        }
+
+
+        .result-score{
+            color:#202333;
+
+            font-family:"Bricolage Grotesque",sans-serif;
+
+            font-size:clamp(100px,18vw,175px);
+            line-height:.85;
+
+            font-weight:800;
+
+            letter-spacing:-.08em;
+        }
+
+
+        .result-out{
+            margin-top:8px;
+
+            font-family:"Bricolage Grotesque",sans-serif;
+            font-size:34px;
+            font-weight:800;
+        }
+
+
+        .result-message{
+            margin-top:15px;
+
+            color:#777;
+
+            font-size:14px;
+        }
+
+
+        /* =========================================================
+           RESULT ANIMATION
+        ========================================================= */
+
+        .result-wrapper.show .result-card{
+            animation:
+                resultAppear .65s cubic-bezier(.16,1,.3,1);
+        }
+
+
+        .result-wrapper.show .result-score{
+            animation:
+                scorePop .75s cubic-bezier(.16,1,.3,1) .1s both;
+        }
+
+
+        @keyframes resultAppear{
+
+            0%{
+                opacity:0;
+
+                transform:
+                    translateY(30px)
+                    scale(.92);
+            }
+
+
+            60%{
+                opacity:1;
+
+                transform:
+                    translateY(-5px)
+                    scale(1.015);
+            }
+
+
+            100%{
+                opacity:1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+        }
+
+
+        @keyframes scorePop{
+
+            0%{
+                opacity:0;
+
+                transform:
+                    scale(.35)
+                    rotate(-5deg);
+            }
+
+
+            60%{
+                opacity:1;
+
+                transform:
+                    scale(1.08)
+                    rotate(1deg);
+            }
+
+
+            100%{
+                opacity:1;
+
+                transform:
+                    scale(1)
+                    rotate(0);
+            }
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media(max-width:700px){
+
+            body{
+                padding:
+                    35px
+                    18px
+                    60px;
+            }
+
+
+            .header{
+                margin-bottom:30px;
+            }
+
+
+            .header h1{
+                font-size:42px;
+            }
+
+
+            .criteria-grid{
+                grid-template-columns:1fr;
+                gap:17px;
+            }
+
+
+            .criterion{
+                min-height:215px;
+                padding:25px;
+            }
+
+
+            .criterion-letter{
+                font-size:45px;
+            }
+
+
+            .score-input{
+                height:64px;
+            }
+
+
+            .calculate-button{
+                min-height:65px;
+            }
+
+
+            .result-card{
+                min-height:280px;
+                border-radius:28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="page">
+
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <header class="header">
+
+            <h1>
+                Calculate Your Final Scaled Mark
+            </h1>
+
+
+            <p>
+                Enter your final criterion marks from 0–8.
+                Make sure all four criteria are filled in before
+                calculating your final MYP scaled mark.
+            </p>
+
+        </header>
+
+
+        <!-- =====================================================
+             CRITERIA
+        ====================================================== -->
+
+        <section class="criteria-grid">
+
+
+            <!-- =================================================
+                 CRITERION A
+            ================================================== -->
+
+            <div class="criterion criterion-a">
+
+                <div>
+
+                    <div class="criterion-top">
+
+                        <div class="criterion-letter">
+                            A
+                        </div>
+
+
+                        <div class="criterion-range">
+                            0–8
+                        </div>
+
+                    </div>
+
+
+                    <div class="criterion-label">
+                        Criterion A
+                    </div>
+
+                </div>
+
+
+                <input
+                    class="score-input"
+                    id="criterionA"
+                    type="number"
+                    min="0"
+                    max="8"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="0–8"
+                    aria-label="Criterion A score"
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 CRITERION B
+            ================================================== -->
+
+            <div class="criterion criterion-b">
+
+                <div>
+
+                    <div class="criterion-top">
+
+                        <div class="criterion-letter">
+                            B
+                        </div>
+
+
+                        <div class="criterion-range">
+                            0–8
+                        </div>
+
+                    </div>
+
+
+                    <div class="criterion-label">
+                        Criterion B
+                    </div>
+
+                </div>
+
+
+                <input
+                    class="score-input"
+                    id="criterionB"
+                    type="number"
+                    min="0"
+                    max="8"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="0–8"
+                    aria-label="Criterion B score"
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 CRITERION C
+            ================================================== -->
+
+            <div class="criterion criterion-c">
+
+                <div>
+
+                    <div class="criterion-top">
+
+                        <div class="criterion-letter">
+                            C
+                        </div>
+
+
+                        <div class="criterion-range">
+                            0–8
+                        </div>
+
+                    </div>
+
+
+                    <div class="criterion-label">
+                        Criterion C
+                    </div>
+
+                </div>
+
+
+                <input
+                    class="score-input"
+                    id="criterionC"
+                    type="number"
+                    min="0"
+                    max="8"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="0–8"
+                    aria-label="Criterion C score"
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 CRITERION D
+            ================================================== -->
+
+            <div class="criterion criterion-d">
+
+                <div>
+
+                    <div class="criterion-top">
+
+                        <div class="criterion-letter">
+                            D
+                        </div>
+
+
+                        <div class="criterion-range">
+                            0–8
+                        </div>
+
+                    </div>
+
+
+                    <div class="criterion-label">
+                        Criterion D
+                    </div>
+
+                </div>
+
+
+                <input
+                    class="score-input"
+                    id="criterionD"
+                    type="number"
+                    min="0"
+                    max="8"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="0–8"
+                    aria-label="Criterion D score"
+                >
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =====================================================
+             CALCULATE
+        ====================================================== -->
+
+        <section class="calculate-area">
+
+            <button
+                class="calculate-button"
+                id="calculateButton"
+                type="button"
+            >
+                Calculate
+            </button>
+
+
+            <div
+                class="error-message"
+                id="errorMessage"
+                aria-live="polite"
+            ></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESULT
+        ====================================================== -->
+
+        <section
+            class="result-wrapper"
+            id="resultWrapper"
+        >
+
+            <div class="result-card">
+
+                <div class="result-content">
+
+                    <div class="result-small">
+                        Your Final Scaled Mark
+                    </div>
+
+
+                    <div
+                        class="result-score"
+                        id="resultScore"
+                    >
+                        0
+                    </div>
+
+
+                    <div class="result-out">
+                        /7
+                    </div>
+
+
+                    <div
+                        class="result-message"
+                        id="resultMessage"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script>
+
+        /* =========================================================
+           ELEMENTS
+        ========================================================= */
+
+        const criterionInputs = [
+
+            document.getElementById(
+                "criterionA"
+            ),
+
+            document.getElementById(
+                "criterionB"
+            ),
+
+            document.getElementById(
+                "criterionC"
+            ),
+
+            document.getElementById(
+                "criterionD"
+            )
+
+        ];
+
+
+        const calculateButton =
+            document.getElementById(
+                "calculateButton"
+            );
+
+
+        const errorMessage =
+            document.getElementById(
+                "errorMessage"
+            );
+
+
+        const resultWrapper =
+            document.getElementById(
+                "resultWrapper"
+            );
+
+
+        const resultScore =
+            document.getElementById(
+                "resultScore"
+            );
+
+
+        const resultMessage =
+            document.getElementById(
+                "resultMessage"
+            );
+
+
+        /* =========================================================
+           GRADE BOUNDARIES
+           
+           These are intentionally kept in one place so the
+           boundaries can be updated for a specific MYP
+           subject/session when needed.
+        ========================================================= */
+
+        const gradeBoundaries = {
+
+            7: 28,
+
+            6: 24,
+
+            5: 19,
+
+            4: 15,
+
+            3: 10,
+
+            2: 6,
+
+            1: 1
+
+        };
+
+
+        /* =========================================================
+           GET FINAL MYP GRADE
+        ========================================================= */
+
+        function getFinalGrade(
+            total
+        ){
+
+            if(
+                total >=
+                gradeBoundaries[7]
+            ){
+                return 7;
+            }
+
+
+            if(
+                total >=
+                gradeBoundaries[6]
+            ){
+                return 6;
+            }
+
+
+            if(
+                total >=
+                gradeBoundaries[5]
+            ){
+                return 5;
+            }
+
+
+            if(
+                total >=
+                gradeBoundaries[4]
+            ){
+                return 4;
+            }
+
+
+            if(
+                total >=
+                gradeBoundaries[3]
+            ){
+                return 3;
+            }
+
+
+            if(
+                total >=
+                gradeBoundaries[2]
+            ){
+                return 2;
+            }
+
+
+            if(
+                total >=
+                gradeBoundaries[1]
+            ){
+                return 1;
+            }
+
+
+            return 0;
+
+        }
+
+
+        /* =========================================================
+           ONLY ALLOW 0–8
+        ========================================================= */
+
+        criterionInputs.forEach(
+            input => {
+
+                input.addEventListener(
+                    "input",
+                    () => {
+
+                        let value =
+                            input.value;
+
+
+                        value =
+                            value.replace(
+                                /[^0-9]/g,
+                                ""
+                            );
+
+
+                        if(
+                            value !== ""
+                        ){
+
+                            let number =
+                                Number(value);
+
+
+                            if(
+                                number > 8
+                            ){
+
+                                number = 8;
+
+                            }
+
+
+                            input.value =
+                                number;
+
+                        }
+
+
+                        input.classList.remove(
+                            "invalid"
+                        );
+
+
+                        errorMessage.textContent =
+                            "";
+
+                    }
+                );
+
+
+                input.addEventListener(
+                    "keydown",
+                    event => {
+
+                        if(
+                            event.key === "." ||
+                            event.key === "-" ||
+                            event.key === "+" ||
+                            event.key === "e" ||
+                            event.key === "E"
+                        ){
+
+                            event.preventDefault();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           CALCULATE
+        ========================================================= */
+
+        calculateButton.addEventListener(
+            "click",
+            () => {
+
+                let valid =
+                    true;
+
+
+                const scores =
+                    criterionInputs.map(
+                        input => {
+
+                            const value =
+                                input.value.trim();
+
+
+                            const number =
+                                Number(value);
+
+
+                            if(
+                                value === "" ||
+                                !Number.isInteger(number) ||
+                                number < 0 ||
+                                number > 8
+                            ){
+
+                                valid =
+                                    false;
+
+
+                                input.classList.add(
+                                    "invalid"
+                                );
+
+                            }
+                            else{
+
+                                input.classList.remove(
+                                    "invalid"
+                                );
+
+                            }
+
+
+                            return number;
+
+                        }
+                    );
+
+
+                /* =============================================
+                   REQUIRE ALL FOUR
+                ============================================== */
+
+                if(
+                    !valid
+                ){
+
+                    errorMessage.textContent =
+                        "Please enter a whole number from 0–8 in all four criteria.";
+
+
+                    resultWrapper.classList.remove(
+                        "show"
+                    );
+
+
+                    return;
+
+                }
+
+
+                errorMessage.textContent =
+                    "";
+
+
+                /* =============================================
+                   TOTAL OUT OF 32
+                ============================================== */
+
+                const total =
+                    scores.reduce(
+                        (
+                            sum,
+                            score
+                        ) =>
+                            sum + score,
+                        0
+                    );
+
+
+                /* =============================================
+                   FINAL SCALED MARK
+                ============================================== */
+
+                const finalGrade =
+                    getFinalGrade(
+                        total
+                    );
+
+
+                resultScore.textContent =
+                    finalGrade;
+
+
+                resultMessage.textContent =
+                    `You scored ${total}/32 across Criteria A–D.`;
+
+
+                /* =============================================
+                   RESTART ANIMATION
+                ============================================== */
+
+                resultWrapper.classList.remove(
+                    "show"
+                );
+
+
+                void resultWrapper.offsetWidth;
+
+
+                resultWrapper.classList.add(
+                    "show"
+                );
+
+
+                /* =============================================
+                   SCROLL TO RESULT
+                ============================================== */
+
+                setTimeout(
+                    () => {
+
+                        resultWrapper.scrollIntoView(
+                            {
+                                behavior:"smooth",
+                                block:"center"
+                            }
+                        );
+
+                    },
+                    100
+                );
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
