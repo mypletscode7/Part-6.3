@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profile | MYP Haven</title>
+
+    <!-- =========================================
+         FONTS
+    ========================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,500;10..48,600;10..48,700;10..48,800&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =========================================
+           RESET
+        ========================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /* =========================================
+           VARIABLES
+        ========================================== */
+
+        :root {
+
+            --ink: #202333;
+            --muted: #737989;
+            --page: #FAF9F6;
+            --white: #FFFFFF;
+
+            --pink: #FF4D6D;
+            --yellow: #FFD23F;
+            --mint: #39D6C0;
+            --purple: #8B5CF6;
+
+            --soft-pink: #FFE5EB;
+            --soft-yellow: #FFF3C4;
+            --soft-mint: #DCF7F2;
+            --soft-purple: #EEE7FF;
+
+            --border: rgba(32, 35, 51, 0.07);
+        }
+
+
+        /* =========================================
+           BODY
+        ========================================== */
+
+        body {
+
+            min-height: 100vh;
+
+            background: var(--page);
+
+            color: var(--ink);
+
+            font-family: "DM Sans", sans-serif;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================== */
+
+        header {
+
+            width: 100%;
+
+            padding: 20px 5vw;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 100;
+
+            background: rgba(250, 249, 246, 0.93);
+
+            backdrop-filter: blur(15px);
+
+            border-bottom: 1px solid var(--border);
+        }
+
+
+        /* =========================================
+           LOGO
+        ========================================== */
+
+        .brand {
+
+            display: flex;
+            align-items: center;
+
+            cursor: pointer;
+
+            user-select: none;
+        }
+
+
+        .logo {
+
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: transparent;
+
+            font-size: 25px;
+
+            box-shadow: none;
+        }
+
+
+        /* =========================================
+           DASHBOARD BUTTON
+        ========================================== */
+
+        .dashboard-button {
+
+            border: none;
+
+            padding: 12px 19px;
+
+            border-radius: 999px;
+
+            background: var(--white);
+
+            color: var(--ink);
+
+            font-family: "DM Sans", sans-serif;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 6px 20px rgba(32, 35, 51, 0.08);
+
+            transition: 0.25s ease;
+        }
+
+
+        .dashboard-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 26px rgba(32, 35, 51, 0.13);
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================== */
+
+        main {
+
+            width: min(1100px, 90%);
+
+            margin: 0 auto;
+
+            padding: 65px 0 85px;
+        }
+
+
+        /* =========================================
+           PAGE HEADING
+        ========================================== */
+
+        .page-heading {
+
+            margin-bottom: 42px;
+        }
+
+
+        .page-heading h1 {
+
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: clamp(48px, 7vw, 76px);
+
+            line-height: 0.95;
+
+            letter-spacing: -3.5px;
+
+            font-weight: 800;
+
+            margin-bottom: 18px;
+        }
+
+
+        .page-heading p {
+
+            max-width: 650px;
+
+            color: var(--muted);
+
+            font-size: 18px;
+
+            line-height: 1.65;
+        }
+
+
+        /* =========================================
+           PROFILE HERO
+        ========================================== */
+
+        .profile-card {
+
+            position: relative;
+
+            display: grid;
+
+            grid-template-columns: auto 1fr;
+
+            align-items: center;
+
+            gap: 28px;
+
+            padding: 34px;
+
+            margin-bottom: 25px;
+
+            border-radius: 32px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #FFE1E8 0%,
+                    #FFF1B9 48%,
+                    #DDF8F4 100%
+                );
+
+            box-shadow:
+                0 15px 40px rgba(32, 35, 51, 0.08);
+
+            overflow: hidden;
+        }
+
+
+        .profile-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            right: -90px;
+            top: -100px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.32);
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================
+           AVATAR
+        ========================================== */
+
+        .avatar-wrapper {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .avatar {
+
+            width: 120px;
+            height: 120px;
+
+            border-radius: 36px;
+
+            background: #FFFFFF;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+
+            border: 5px solid rgba(255,255,255,0.8);
+
+            box-shadow:
+                0 10px 28px rgba(32, 35, 51, 0.12);
+        }
+
+
+        .avatar img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: none;
+        }
+
+
+        .avatar-placeholder {
+
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: 43px;
+
+            font-weight: 800;
+
+            color: var(--ink);
+        }
+
+
+        /* =========================================
+           PROFILE INFORMATION
+        ========================================== */
+
+        .profile-info {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .profile-info h2 {
+
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: clamp(29px, 4vw, 43px);
+
+            line-height: 1;
+
+            letter-spacing: -1.5px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+        }
+
+
+        .profile-info p {
+
+            color: #626877;
+
+            font-size: 15px;
+        }
+
+
+        .profile-badge {
+
+            display: inline-flex;
+
+            margin-top: 15px;
+
+            padding: 8px 13px;
+
+            border-radius: 999px;
+
+            background: rgba(255,255,255,0.72);
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           SETTINGS GRID
+        ========================================== */
+
+        .settings-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 25px;
+        }
+
+
+        .card {
+
+            background: var(--white);
+
+            border-radius: 28px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 10px 30px rgba(32, 35, 51, 0.06);
+        }
+
+
+        .card.full {
+
+            grid-column: span 2;
+        }
+
+
+        /* =========================================
+           CARD HEADINGS
+        ========================================== */
+
+        .card-heading {
+
+            margin-bottom: 24px;
+        }
+
+
+        .card-heading h3 {
+
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: 25px;
+
+            letter-spacing: -0.7px;
+
+            font-weight: 800;
+        }
+
+
+        /* =========================================
+           INFORMATION ROWS
+        ========================================== */
+
+        .info-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .info-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 17px 18px;
+
+            border-radius: 18px;
+
+            background: #F8F8F5;
+        }
+
+
+        .info-label {
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .info-value {
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            text-align: right;
+
+            word-break: break-word;
+        }
+
+
+        /* =========================================
+           SUBJECTS
+        ========================================== */
+
+        .subjects {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+        }
+
+
+        .subject-pill {
+
+            padding: 10px 14px;
+
+            border-radius: 999px;
+
+            background: #F1EEFF;
+
+            color: #514B70;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        .empty-text {
+
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           ACTION BUTTONS
+        ========================================== */
+
+        .action-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .action-button {
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border: none;
+
+            padding: 17px 19px;
+
+            border-radius: 18px;
+
+            background: #F8F8F5;
+
+            color: var(--ink);
+
+            font-family: "DM Sans", sans-serif;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.25s ease;
+        }
+
+
+        .action-button:hover {
+
+            transform: translateX(4px);
+
+            background: #F1F1EC;
+        }
+
+
+        .action-button .arrow {
+
+            color: #8B909B;
+
+            font-size: 18px;
+        }
+
+
+        .danger {
+
+            color: #D93655;
+
+            background: #FFF0F3;
+        }
+
+
+        .danger:hover {
+
+            background: #FFE3E9;
+        }
+
+
+        /* =========================================
+           SECURITY NOTICE
+        ========================================== */
+
+        .security-notice {
+
+            padding: 18px;
+
+            margin-bottom: 15px;
+
+            border-radius: 18px;
+
+            background: #F1EDFF;
+
+            color: #5C4D8C;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           LOADING SCREEN
+        ========================================== */
+
+        #loadingScreen {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 1000;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            background: var(--page);
+        }
+
+
+        .loader {
+
+            width: 46px;
+            height: 46px;
+
+            border: 5px solid #E9E9E5;
+
+            border-top-color: var(--pink);
+
+            border-radius: 50%;
+
+            animation: spin 0.8s linear infinite;
+        }
+
+
+        #loadingScreen p {
+
+            color: var(--muted);
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        /* =========================================
+           TOAST
+        ========================================== */
+
+        #toast {
+
+            position: fixed;
+
+            left: 50%;
+
+            bottom: 30px;
+
+            z-index: 2000;
+
+            max-width: calc(100% - 40px);
+
+            padding: 14px 20px;
+
+            border-radius: 999px;
+
+            background: var(--ink);
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            text-align: center;
+
+            box-shadow:
+                0 12px 30px rgba(32,35,51,0.2);
+
+            transform:
+                translate(-50%, 120px);
+
+            transition: 0.35s ease;
+
+            pointer-events: none;
+        }
+
+
+        #toast.show {
+
+            transform:
+                translate(-50%, 0);
+        }
+
+
+        #toast.error {
+
+            background: #D93655;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 800px) {
+
+            .profile-card {
+
+                grid-template-columns:
+                    auto 1fr;
+            }
+
+
+            .settings-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .card.full {
+
+                grid-column: span 1;
+            }
+        }
+
+
+        @media (max-width: 550px) {
+
+            header {
+
+                padding: 16px 5%;
+            }
+
+
+            .logo {
+
+                width: 39px;
+                height: 39px;
+
+                font-size: 22px;
+            }
+
+
+            .dashboard-button {
+
+                padding: 10px 14px;
+
+                font-size: 12px;
+            }
+
+
+            main {
+
+                padding-top: 45px;
+            }
+
+
+            .profile-card {
+
+                grid-template-columns: 1fr;
+
+                text-align: center;
+
+                justify-items: center;
+
+                border-radius: 27px;
+            }
+
+
+            .profile-info {
+
+                width: 100%;
+            }
+
+
+            .card {
+
+                padding: 23px;
+
+                border-radius: 24px;
+            }
+
+
+            .info-row {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 5px;
+            }
+
+
+            .info-value {
+
+                text-align: left;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     LOADING SCREEN
+========================================== -->
+
+<div id="loadingScreen">
+
+    <div class="loader"></div>
+
+    <p>
+        Loading your profile...
+    </p>
+
+</div>
+
+
+<!-- =========================================
+     HEADER
+========================================== -->
+
+<header>
+
+    <div
+        class="brand"
+        onclick="goDashboard()"
+        aria-label="Go to Dashboard"
+    >
+
+        <div class="logo">
+            🎓
+        </div>
+
+    </div>
+
+
+    <button
+        class="dashboard-button"
+        onclick="goDashboard()"
+    >
+        ← Back to Dashboard
+    </button>
+
+</header>
+
+
+<!-- =========================================
+     MAIN
+========================================== -->
+
+<main>
+
+
+    <!-- PAGE HEADING -->
+
+    <section class="page-heading">
+
+        <h1>
+            Your Profile.
+        </h1>
+
+    </section>
+
+
+    <!-- =========================================
+         PROFILE HERO
+    ========================================== -->
+
+    <section class="profile-card">
+
+
+        <div class="avatar-wrapper">
+
+            <div class="avatar">
+
+                <img
+                    id="profileImage"
+                    src=""
+                    alt="Profile picture"
+                >
+
+
+                <div
+                    class="avatar-placeholder"
+                    id="avatarPlaceholder"
+                >
+                    ?
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-info">
+
+            <h2 id="profileName">
+                Student
+            </h2>
+
+
+            <p id="profileEmail">
+                Loading...
+            </p>
+
+
+            <div
+                class="profile-badge"
+                id="yearBadge"
+            >
+                MYP Student
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SETTINGS GRID
+    ========================================== -->
+
+    <section class="settings-grid">
+
+
+        <!-- =====================================
+             STUDENT INFORMATION
+        ====================================== -->
+
+        <article class="card">
+
+            <div class="card-heading">
+
+                <h3>
+                    Student Information
+                </h3>
+
+            </div>
+
+
+            <div class="info-list">
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Name
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="studentName"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        MYP Year
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="studentYear"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Account Email
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="studentEmail"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </article>
+
+
+        <!-- =====================================
+             SUBJECTS
+        ====================================== -->
+
+        <article class="card">
+
+            <div class="card-heading">
+
+                <h3>
+                    Your Subjects
+                </h3>
+
+            </div>
+
+
+            <div
+                class="subjects"
+                id="subjectsContainer"
+            >
+
+                <p class="empty-text">
+                    Loading your subjects...
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <!-- =====================================
+             UPDATE SURVEY
+        ====================================== -->
+
+        <article class="card">
+
+            <div class="card-heading">
+
+                <h3>
+                    Survey
+                </h3>
+
+            </div>
+
+
+            <p
+                class="empty-text"
+                style="margin-bottom:20px;"
+            >
+                Changed your MYP year or subjects?
+                Update your survey information to keep
+                MYP Haven accurate.
+            </p>
+
+
+            <div class="action-list">
+
+                <button
+                    class="action-button"
+                    onclick="updateSurvey()"
+                >
+
+                    <span>
+                        Update Survey
+                    </span>
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =====================================
+             ACCOUNT SECURITY
+        ====================================== -->
+
+        <article class="card">
+
+            <div class="card-heading">
+
+                <h3>
+                    Account & Security
+                </h3>
+
+            </div>
+
+
+            <div class="security-notice">
+
+                Your account is secured through
+                Firebase Authentication.
+                Your password is never displayed
+                on MYP Haven.
+
+            </div>
+
+
+            <div class="action-list">
+
+                <button
+                    class="action-button"
+                    onclick="sendPasswordReset()"
+                >
+
+                    <span>
+                        Reset Password
+                    </span>
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- =====================================
+             LOGOUT
+        ====================================== -->
+
+        <article class="card full">
+
+            <div class="card-heading">
+
+                <h3>
+                    Account
+                </h3>
+
+            </div>
+
+
+            <div class="action-list">
+
+                <button
+                    class="action-button danger"
+                    onclick="logout()"
+                >
+
+                    <span>
+                        Log Out
+                    </span>
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </article>
+
+
+    </section>
+
+</main>
+
+
+<!-- =========================================
+     TOAST
+========================================== -->
+
+<div id="toast"></div>
+
+
+<!-- =========================================
+     FIREBASE
+========================================== -->
+
+<script type="module">
+
+
+    /* =========================================
+       FIREBASE IMPORTS
+    ========================================== */
+
+    import {
+        initializeApp
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        sendPasswordResetEmail
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+    /* =========================================
+       FIREBASE CONFIG
+    ========================================== */
+
+    const firebaseConfig = {
+
+        apiKey:
+            "AIzaSyBNI4CR26Re0xdh-T0XdVyb6fFN7SPgPNA",
+
+        authDomain:
+            "the-myp-haven.firebaseapp.com",
+
+        projectId:
+            "the-myp-haven",
+
+        storageBucket:
+            "the-myp-haven.firebasestorage.app",
+
+        messagingSenderId:
+            "904577455533",
+
+        appId:
+            "1:904577455533:web:1d918ee8a3caa547eefd24"
+    };
+
+
+    /* =========================================
+       INITIALISE FIREBASE
+    ========================================== */
+
+    const app =
+        initializeApp(firebaseConfig);
+
+
+    const auth =
+        getAuth(app);
+
+
+    const db =
+        getFirestore(app);
+
+
+    /* =========================================
+       CURRENT USER
+    ========================================== */
+
+    let currentUser = null;
+
+
+    /* =========================================
+       AUTH STATE
+    ========================================== */
+
+    onAuthStateChanged(
+        auth,
+        async (user) => {
+
+            if (!user) {
+
+                window.location.href =
+                    "./index.html";
+
+                return;
+            }
+
+
+            currentUser = user;
+
+
+            try {
+
+                await loadProfile(user);
+
+            } catch (error) {
+
+                console.error(
+                    "Profile loading error:",
+                    error
+                );
+
+                showToast(
+                    "Some profile information could not be loaded.",
+                    true
+                );
+
+            }
+
+
+            document
+                .getElementById("loadingScreen")
+                .style.display = "none";
+
+        }
+    );
+
+
+    /* =========================================
+       LOAD PROFILE
+    ========================================== */
+
+    async function loadProfile(user) {
+
+        const email =
+            user.email || "No email";
+
+
+        document
+            .getElementById("profileEmail")
+            .textContent = email;
+
+
+        document
+            .getElementById("studentEmail")
+            .textContent = email;
+
+
+        const profileRef =
+            doc(
+                db,
+                "users",
+                user.uid
+            );
+
+
+        const profileSnap =
+            await getDoc(profileRef);
+
+
+        let data = {};
+
+
+        if (profileSnap.exists()) {
+
+            data =
+                profileSnap.data();
+
+        } else {
+
+            data = {
+
+                name:
+                    user.displayName ||
+                    "Student",
+
+                email:
+                    user.email || "",
+
+                createdAt:
+                    new Date().toISOString()
+            };
+
+
+            await setDoc(
+                profileRef,
+                data,
+                {
+                    merge: true
+                }
+            );
+        }
+
+
+        /* =====================================
+           NAME
+        ====================================== */
+
+        const name =
+            data.name ||
+            data.fullName ||
+            user.displayName ||
+            "Student";
+
+
+        document
+            .getElementById("profileName")
+            .textContent = name;
+
+
+        document
+            .getElementById("studentName")
+            .textContent = name;
+
+
+        updateAvatarInitial(name);
+
+
+        /* =====================================
+           YEAR
+        ====================================== */
+
+        const year =
+            data.mypYear ||
+            data.year ||
+            data.grade ||
+            data.mypYearLevel ||
+            "Not set";
+
+
+        document
+            .getElementById("studentYear")
+            .textContent = year;
+
+
+        document
+            .getElementById("yearBadge")
+            .textContent = year;
+
+
+        /* =====================================
+           SUBJECTS
+        ====================================== */
+
+        displaySubjects(data);
+
+
+        /* =====================================
+           EXISTING PROFILE IMAGE
+        ====================================== */
+
+        const storedPhoto =
+            data.photoURL ||
+            user.photoURL ||
+            "";
+
+
+        if (storedPhoto) {
+
+            showProfileImage(
+                storedPhoto
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       DISPLAY SUBJECTS
+    ========================================== */
+
+    function displaySubjects(data) {
+
+        const container =
+            document.getElementById(
+                "subjectsContainer"
+            );
+
+
+        let subjects = [];
+
+
+        if (
+            Array.isArray(data.subjects)
+        ) {
+
+            subjects =
+                data.subjects;
+
+        } else if (
+            Array.isArray(data.selectedSubjects)
+        ) {
+
+            subjects =
+                data.selectedSubjects;
+
+        } else if (
+            Array.isArray(data.selectedSubjectsList)
+        ) {
+
+            subjects =
+                data.selectedSubjectsList;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (subjects.length === 0) {
+
+            container.innerHTML = `
+
+                <p class="empty-text">
+
+                    No subjects have been added yet.
+                    Complete or update your survey
+                    to add them.
+
+                </p>
+
+            `;
+
+            return;
+        }
+
+
+        subjects.forEach(
+            (subject) => {
+
+                const pill =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                pill.className =
+                    "subject-pill";
+
+
+                if (
+                    typeof subject ===
+                    "string"
+                ) {
+
+                    pill.textContent =
+                        subject;
+
+                } else {
+
+                    pill.textContent =
+                        subject.name ||
+                        subject.subject ||
+                        subject.title ||
+                        "Subject";
+                }
+
+
+                container.appendChild(pill);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================
+       AVATAR INITIALS
+    ========================================== */
+
+    function updateAvatarInitial(name) {
+
+        const placeholder =
+            document.getElementById(
+                "avatarPlaceholder"
+            );
+
+
+        if (
+            !name ||
+            name === "Student"
+        ) {
+
+            placeholder.textContent =
+                "?";
+
+            return;
+        }
+
+
+        const words =
+            name
+                .trim()
+                .split(/\s+/);
+
+
+        let initials =
+            words[0].charAt(0);
+
+
+        if (
+            words.length > 1
+        ) {
+
+            initials +=
+                words[
+                    words.length - 1
+                ].charAt(0);
+
+        }
+
+
+        placeholder.textContent =
+            initials.toUpperCase();
+    }
+
+
+    /* =========================================
+       SHOW PROFILE IMAGE
+    ========================================== */
+
+    function showProfileImage(url) {
+
+        const image =
+            document.getElementById(
+                "profileImage"
+            );
+
+
+        const placeholder =
+            document.getElementById(
+                "avatarPlaceholder"
+            );
+
+
+        image.src =
+            url;
+
+
+        image.style.display =
+            "block";
+
+
+        placeholder.style.display =
+            "none";
+    }
+
+
+    /* =========================================
+       UPDATE SURVEY
+    ========================================== */
+
+    window.updateSurvey =
+        function() {
+
+            window.location.href =
+                "./survey.html";
+        };
+
+
+    /* =========================================
+       PASSWORD RESET
+    ========================================== */
+
+    window.sendPasswordReset =
+        async function() {
+
+            if (
+                !currentUser ||
+                !currentUser.email
+            ) {
+
+                showToast(
+                    "No account email was found.",
+                    true
+                );
+
+                return;
+            }
+
+
+            try {
+
+                await sendPasswordResetEmail(
+                    auth,
+                    currentUser.email
+                );
+
+
+                showToast(
+                    "Password reset email sent!"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Password reset error:",
+                    error
+                );
+
+
+                if (
+                    error.code ===
+                    "auth/too-many-requests"
+                ) {
+
+                    showToast(
+                        "Please wait before requesting another reset email.",
+                        true
+                    );
+
+                } else {
+
+                    showToast(
+                        "Could not send the password reset email.",
+                        true
+                    );
+                }
+
+            }
+
+        };
+
+
+    /* =========================================
+       LOGOUT
+    ========================================== */
+
+    window.logout =
+        async function() {
+
+            try {
+
+                await signOut(auth);
+
+
+                window.location.href =
+                    "./index.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+
+                showToast(
+                    "Could not log out. Please try again.",
+                    true
+                );
+
+            }
+
+        };
+
+
+    /* =========================================
+       DASHBOARD
+    ========================================== */
+
+    window.goDashboard =
+        function() {
+
+            window.location.href =
+                "./dashboard.html";
+
+        };
+
+
+    /* =========================================
+       TOAST
+    ========================================== */
+
+    function showToast(
+        message,
+        isError = false
+    ) {
+
+        const toast =
+            document.getElementById(
+                "toast"
+            );
+
+
+        toast.textContent =
+            message;
+
+
+        toast.classList.toggle(
+            "error",
+            isError
+        );
+
+
+        toast.classList.add(
+            "show"
+        );
+
+
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            3500
+        );
+
+    }
+
+</script>
+
+</body>
+</html>
