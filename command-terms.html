@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Command-Term Database | MYP Haven</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #FAFAFC;
+            color: #202333;
+            font-family: "DM Sans", sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page {
+            width: min(1200px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 70px 0 80px;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            margin-bottom: 48px;
+            animation: headerIn 0.8s ease both;
+        }
+
+        .header h1 {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: clamp(42px, 6vw, 72px);
+            line-height: 0.98;
+            font-weight: 800;
+            letter-spacing: -2.5px;
+            color: #202333;
+            margin-bottom: 16px;
+        }
+
+        .header-intro {
+            font-family: "DM Sans", sans-serif;
+            font-size: 19px;
+            line-height: 1.6;
+            font-weight: 600;
+            color: #202333;
+            max-width: 750px;
+            margin-bottom: 22px;
+        }
+
+        .header-subtext {
+            font-family: "DM Sans", sans-serif;
+            font-size: 17px;
+            line-height: 1.65;
+            font-weight: 400;
+            color: rgba(32, 35, 51, 0.72);
+            max-width: 800px;
+        }
+
+        /* =========================
+           COMMAND TERM GRID
+        ========================= */
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        /* =========================
+           COMMAND CARD
+        ========================= */
+
+        .command-card {
+            position: relative;
+            overflow: hidden;
+
+            min-height: 145px;
+            padding: 28px 30px;
+
+            border-radius: 25px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            transition:
+                transform 0.28s ease,
+                box-shadow 0.28s ease;
+
+            animation: cardIn 0.6s ease both;
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 38px rgba(32, 35, 51, 0.10);
+        }
+
+        .command-number {
+            position: absolute;
+            top: 17px;
+            right: 20px;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: rgba(32, 35, 51, 0.42);
+        }
+
+        .command-term {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 25px;
+            line-height: 1.1;
+            font-weight: 800;
+            color: #202333;
+
+            margin-bottom: 10px;
+            padding-right: 35px;
+        }
+
+        .command-definition {
+            font-family: "DM Sans", sans-serif;
+            font-size: 15px;
+            line-height: 1.55;
+            font-weight: 600;
+            color: rgba(32, 35, 51, 0.76);
+
+            max-width: 850px;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .bottom-navigation {
+            display: flex;
+            justify-content: center;
+            margin-top: 55px;
+        }
+
+        .back-button {
+            border: none;
+            outline: none;
+            cursor: pointer;
+
+            padding: 16px 28px;
+            border-radius: 999px;
+
+            background: #202333;
+            color: white;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            background: #202333;
+            box-shadow: 0 12px 25px rgba(32, 35, 51, 0.18);
+        }
+
+        .back-button:active {
+            transform: translateY(0);
+            background: #202333;
+            box-shadow: 0 6px 14px rgba(32, 35, 51, 0.12);
+        }
+
+        /* =========================
+           ANIMATIONS
+        ========================= */
+
+        @keyframes headerIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+                filter: blur(7px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+            .page {
+                width: min(100% - 30px, 650px);
+                padding-top: 45px;
+            }
+
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                letter-spacing: -1.5px;
+            }
+
+            .header-intro {
+                font-size: 18px;
+            }
+
+            .header-subtext {
+                font-size: 16px;
+            }
+
+            .command-card {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .page {
+                width: calc(100% - 22px);
+                padding-top: 35px;
+                padding-bottom: 50px;
+            }
+
+            .header {
+                margin-bottom: 32px;
+            }
+
+            .header h1 {
+                font-size: 42px;
+            }
+
+            .header-intro {
+                font-size: 16px;
+                margin-bottom: 18px;
+            }
+
+            .header-subtext {
+                font-size: 15px;
+            }
+
+            .command-card {
+                padding: 25px 23px;
+                border-radius: 21px;
+            }
+
+            .command-term {
+                font-size: 22px;
+            }
+
+            .command-definition {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="page">
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <header class="header">
+
+            <h1>Command-Term Database</h1>
+
+            <p class="header-intro">
+                Find every command term needed for success.
+            </p>
+
+            <p class="header-subtext">
+                When using the rubrics, the words in bold are called the command terms.
+                This section is here to provide every single command term which you can
+                use to understand what your work needs to achieve.
+            </p>
+
+        </header>
+
+
+        <!-- =========================
+             COMMAND TERMS
+        ========================== -->
+
+        <section class="command-grid" id="commandGrid"></section>
+
+
+        <!-- =========================
+             NAVIGATION
+        ========================== -->
+
+        <div class="bottom-navigation">
+
+            <button
+                class="back-button"
+                onclick="goToDashboard()"
+            >
+                Back to Dashboard
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        /* ==========================================
+           COMMAND TERM DATABASE
+        ========================================== */
+
+        const commandTerms = [
+
+            {
+                term: "Annotate",
+                definition: "Add brief notes to a diagram or graph.",
+                color: "#F6C1C7"
+            },
+
+            {
+                term: "Apply",
+                definition: "Use knowledge and understanding in response to a given situation or real circumstances. Use an idea, equation, principle, theory or law in relation to a given problem or issue. (See also “Use”.)",
+                color: "#C8E6C9"
+            },
+
+            {
+                term: "Calculate",
+                definition: "Obtain a numerical answer showing the relevant stages in the working.",
+                color: "#B9D7EA"
+            },
+
+            {
+                term: "Classify",
+                definition: "Arrange or order by class or category.",
+                color: "#E4C1D9"
+            },
+
+            {
+                term: "Comment",
+                definition: "Give a judgment based on a given statement or result of a calculation.",
+                color: "#F4D6A7"
+            },
+
+            {
+                term: "Compare",
+                definition: "Give an account of the similarities between two (or more) items or situations, referring to both (all) of them throughout.",
+                color: "#C5D8B4"
+            },
+
+            {
+                term: "Compare and contrast",
+                definition: "Give an account of the similarities and differences between two (or more) items or situations, referring to both (all) of them throughout.",
+                color: "#D7C6E6"
+            },
+
+            {
+                term: "Construct",
+                definition: "Display information in a diagrammatic or logical form.",
+                color: "#B8E0D2"
+            },
+
+            {
+                term: "Contrast",
+                definition: "Give an account of the differences between two (or more) items or situations, referring to both (all) of them throughout.",
+                color: "#F2B8B5"
+            },
+
+            {
+                term: "Create",
+                definition: "To evolve from one’s own thought or imagination, as a work or an invention.",
+                color: "#E8C7A8"
+            },
+
+            {
+                term: "Critique",
+                definition: "Provide a critical review or commentary, especially when dealing with works of art or literature. (See also “Evaluate”.)",
+                color: "#C9C2E8"
+            },
+
+            {
+                term: "Deduce",
+                definition: "Reach a conclusion from the information given.",
+                color: "#BFDCCF"
+            },
+
+            {
+                term: "Define",
+                definition: "Give the precise meaning of a word, phrase, concept or physical quantity.",
+                color: "#F3D9B1"
+            },
+
+            {
+                term: "Demonstrate",
+                definition: "Make clear by reasoning or evidence, illustrating with examples or practical application.",
+                color: "#C1D4E8"
+            },
+
+            {
+                term: "Derive",
+                definition: "Manipulate a mathematical relationship to give a new equation or relationship.",
+                color: "#DCC8B8"
+            },
+
+            {
+                term: "Describe",
+                definition: "Give a detailed account or picture of a situation, event, pattern or process.",
+                color: "#E6BFD3"
+            },
+
+            {
+                term: "Design",
+                definition: "Produce a plan, simulation or model.",
+                color: "#BFD9C1"
+            },
+
+            {
+                term: "Determine",
+                definition: "Obtain the only possible answer.",
+                color: "#D6C4B8"
+            },
+
+            {
+                term: "Develop",
+                definition: "To improve incrementally, elaborate or expand in detail. Evolve to a more advanced or effective state.",
+                color: "#C8D9B9"
+            },
+
+            {
+                term: "Differentiate",
+                definition: "Obtain the derivative of a function.",
+                color: "#BFD0E8"
+            },
+
+            {
+                term: "Discuss",
+                definition: "Offer a considered and balanced review that includes a range of arguments, factors or hypotheses. Opinions or conclusions should be presented clearly and supported by appropriate evidence.",
+                color: "#E4C7C7"
+            },
+
+            {
+                term: "Distinguish",
+                definition: "Make clear the differences between two or more concepts or items.",
+                color: "#D0C5DD"
+            },
+
+            {
+                term: "Document",
+                definition: "Credit sources of information used by referencing (or citing) following a recognized referencing system. References should be included in the text and also at the end of the piece of work in a reference list or bibliography.",
+                color: "#D8D1B0"
+            },
+
+            {
+                term: "Draw",
+                definition: "Represent by means of a labelled, accurate diagram or graph, using a pencil. A ruler (straight edge) should be used for straight lines. Diagrams should be drawn to scale. Graphs should have points correctly plotted (if appropriate) and joined in a straight line or smooth curve.",
+                color: "#B7D8D1"
+            },
+
+            {
+                term: "Estimate",
+                definition: "Obtain an approximate value for an unknown quantity.",
+                color: "#F1C9B8"
+            },
+
+            {
+                term: "Evaluate",
+                definition: "Make an appraisal by weighing up the strengths and limitations. (See also “Critique”.)",
+                color: "#C9BFD8"
+            },
+
+            {
+                term: "Examine",
+                definition: "Consider an argument or concept in a way that uncovers the assumptions and interrelationships of the issue.",
+                color: "#BFD9D9"
+            },
+
+            {
+                term: "Explain",
+                definition: "Give a detailed account including reasons or causes. (See also “Justify”.)",
+                color: "#E8D0B8"
+            },
+
+            {
+                term: "Explore",
+                definition: "Undertake a systematic process of discovery.",
+                color: "#C5D5C0"
+            },
+
+            {
+                term: "Find",
+                definition: "Obtain an answer showing relevant stages in the working.",
+                color: "#D9C1CE"
+            },
+
+            {
+                term: "Formulate",
+                definition: "Express precisely and systematically the relevant concept(s) or argument(s).",
+                color: "#BFCDE0"
+            },
+
+            {
+                term: "Hence",
+                definition: "Use the preceding work to obtain the required result.",
+                color: "#E7D4B5"
+            },
+
+            {
+                term: "Identify",
+                definition: "Provide an answer from a number of possibilities. Recognize and state briefly a distinguishing fact or feature.",
+                color: "#C7DDBF"
+            },
+
+            {
+                term: "Integrate",
+                definition: "Obtain the integral of a function.",
+                color: "#D3C3D9"
+            },
+
+            {
+                term: "Interpret",
+                definition: "Use knowledge and understanding to recognize trends and draw conclusions from given information.",
+                color: "#B8D6C9"
+            },
+
+            {
+                term: "Investigate",
+                definition: "Observe, study, or make a detailed and systematic examination, in order to establish facts and reach new conclusions.",
+                color: "#E6C4B5"
+            },
+
+            {
+                term: "Justify",
+                definition: "Give valid reasons or evidence to support an answer or conclusion. (See also “Explain”.)",
+                color: "#C4CBE0"
+            },
+
+            {
+                term: "Label",
+                definition: "Add a title, labels or brief explanation(s) to a diagram or graph.",
+                color: "#F0D1C1"
+            },
+
+            {
+                term: "List",
+                definition: "Give a sequence of brief answers with no explanation.",
+                color: "#CBD8C0"
+            },
+
+            {
+                term: "Measure",
+                definition: "Obtain a value for a quantity.",
+                color: "#C4D9E2"
+            },
+
+            {
+                term: "Organize",
+                definition: "Put ideas and information into a proper or systematic order.",
+                color: "#DCC9C2"
+            },
+
+            {
+                term: "Outline",
+                definition: "Give a brief account or summary.",
+                color: "#D1C6E1"
+            },
+
+            {
+                term: "Plot",
+                definition: "Mark the position of points on a diagram.",
+                color: "#BFD8D3"
+            },
+
+            {
+                term: "Predict",
+                definition: "Give an expected result of an upcoming action or event.",
+                color: "#F0C6A9"
+            },
+
+            {
+                term: "Present",
+                definition: "Offer for display, observation, examination or consideration.",
+                color: "#C7D0E8"
+            },
+
+            {
+                term: "Prioritize",
+                definition: "Give relative importance to, or put in an order of preference.",
+                color: "#E1C7A5"
+            },
+
+            {
+                term: "Prove",
+                definition: "Use a sequence of logical steps to obtain the required result in a formal way.",
+                color: "#C4D6C4"
+            },
+
+            {
+                term: "Recognize",
+                definition: "Identify or acknowledge something from previous knowledge or information.",
+                color: "#D9C5D0"
+            },
+
+            {
+                term: "Select",
+                definition: "Choose from a list or group.",
+                color: "#C5D5D8"
+            },
+
+            {
+                term: "Show",
+                definition: "Give the steps in a calculation or derivation.",
+                color: "#E5C9B7"
+            },
+
+            {
+                term: "Show that",
+                definition: "Obtain the required result (possibly using information given) without the formality of proof. “Show that” questions do not generally require the use of a calculator.",
+                color: "#CCC4D5"
+            },
+
+            {
+                term: "Sketch",
+                definition: "Represent by means of a diagram or graph (labelled as appropriate). The sketch should give a general idea of the required shape or relationship, and should include relevant features.",
+                color: "#B9D2C4"
+            },
+
+            {
+                term: "Solve",
+                definition: "Obtain the answer(s) using algebraic and/or numerical and/or graphical methods.",
+                color: "#D8C6A9"
+            },
+
+            {
+                term: "State",
+                definition: "Give a specific name, value or other brief answer without explanation or calculation.",
+                color: "#C6D2D9"
+            },
+
+            {
+                term: "Suggest",
+                definition: "Propose a solution, hypothesis or other possible answer.",
+                color: "#E4C0C0"
+            },
+
+            {
+                term: "Summarize",
+                definition: "Abstract a general theme or major point(s).",
+                color: "#D0D5BA"
+            },
+
+            {
+                term: "Synthesize",
+                definition: "Combine different ideas in order to create new understanding.",
+                color: "#CFC0D8"
+            },
+
+            {
+                term: "To what extent",
+                definition: "Consider the merits or otherwise of an argument or concept. Opinions and conclusions should be presented clearly and supported with appropriate evidence and sound argument.",
+                color: "#E5CDBA"
+            },
+
+            {
+                term: "Trace",
+                definition: "Follow and record the action of an algorithm.",
+                color: "#BBD5D5"
+            },
+
+            {
+                term: "Use",
+                definition: "Apply knowledge or rules to put theory into practice. (See also “Apply”.)",
+                color: "#D6D0B8"
+            },
+
+            {
+                term: "Verify",
+                definition: "Provide evidence that validates the result.",
+                color: "#C5C9D8"
+            },
+
+            {
+                term: "Write down",
+                definition: "Obtain the answer(s), usually by extracting information. Working does not need to be shown.",
+                color: "#E7C8D0"
+            }
+
+        ];
+
+
+        /* ==========================================
+           CREATE COMMAND CARDS
+        ========================================== */
+
+        const grid = document.getElementById("commandGrid");
+
+        commandTerms.forEach((command, index) => {
+
+            const card = document.createElement("article");
+
+            card.className = "command-card";
+
+            card.style.backgroundColor = command.color;
+
+            card.style.animationDelay = `${index * 0.025}s`;
+
+            card.innerHTML = `
+                <span class="command-number">
+                    ${index + 1}
+                </span>
+
+                <h2 class="command-term">
+                    ${command.term}
+                </h2>
+
+                <p class="command-definition">
+                    ${command.definition}
+                </p>
+            `;
+
+            grid.appendChild(card);
+
+        });
+
+
+        /* ==========================================
+           DASHBOARD NAVIGATION
+        ========================================== */
+
+        function goToDashboard() {
+            window.location.href = "./dashboard.html";
+        }
+
+    </script>
+
+</body>
+</html>
