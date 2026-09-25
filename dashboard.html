@@ -225,7 +225,7 @@ select{
     inset:0;
     z-index:-2;
 
-    background:rgba(255,255,255,.76);
+    background:rgba(255,255,255,.38);
     backdrop-filter:blur(2px);
 }
 
@@ -249,11 +249,22 @@ select{
 }
 
 .dashboard-logo{
-    font-family:"Bricolage Grotesque",sans-serif;
-    font-size:30px;
-    font-weight:800;
-    color:#8B5CF6;
-    letter-spacing:-.04em;
+    border:none;
+    background:transparent;
+    width:58px;
+    height:58px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:36px;
+    line-height:1;
+    cursor:pointer;
+    padding:0;
+    transition:transform .2s ease;
+}
+
+.dashboard-logo:hover{
+    transform:scale(1.08);
 }
 
 .top-actions{
@@ -264,253 +275,13 @@ select{
     justify-content:flex-end;
 }
 
-
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
-.notification-wrap{
-    position:relative;
-}
-
-.notification-button{
-    border:none;
-    border-radius:18px;
-    min-width:52px;
-    height:48px;
-    padding:0 15px;
-
-    background:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:7px;
-
-    font-family:"DM Sans",sans-serif;
-    font-size:20px;
-    font-weight:700;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 6px 20px rgba(0,0,0,.08);
-
-    transition:.2s ease;
-
-    position:relative;
-}
-
-.notification-button:hover{
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 9px 25px rgba(0,0,0,.10);
-}
-
-.notification-badge{
-    position:absolute;
-    top:-7px;
-    right:-7px;
-
-    min-width:22px;
-    height:22px;
-
-    padding:0 6px;
-
-    border-radius:50px;
-
-    background:#FF4D6D;
-    color:white;
-
-    display:none;
-    align-items:center;
-    justify-content:center;
-
-    font-family:"DM Sans",sans-serif;
-    font-size:11px;
-    font-weight:800;
-
-    border:3px solid white;
-}
-
-.notification-badge.show{
-    display:flex;
-}
-
-
-/* =========================================================
-   NOTIFICATION PANEL
-========================================================= */
-
-.notification-panel{
-    position:absolute;
-
-    top:calc(100% + 12px);
-    right:0;
-
-    width:min(390px,calc(100vw - 30px));
-    max-height:500px;
-
-    background:rgba(255,255,255,.97);
-
-    border-radius:26px;
-
-    padding:18px;
-
-    box-shadow:
-        0 20px 65px rgba(0,0,0,.16);
-
-    backdrop-filter:blur(15px);
-
-    z-index:80;
-
-    display:none;
-
-    animation:
-        notificationIn .22s ease;
-}
-
-.notification-panel.open{
-    display:block;
-}
-
-@keyframes notificationIn{
-
-    from{
-        opacity:0;
-        transform:translateY(-8px) scale(.98);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
-
-}
-
-.notification-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    gap:12px;
-
-    padding:3px 4px 14px;
-}
-
-.notification-title{
-    font-family:"Bricolage Grotesque",sans-serif;
-    font-size:25px;
-    font-weight:800;
-    letter-spacing:-.035em;
-}
-
-.notification-count{
-    font-size:12px;
-    font-weight:700;
-    color:#737373;
-}
-
-.notification-list{
-    display:flex;
-    flex-direction:column;
-    gap:9px;
-
-    max-height:415px;
-    overflow-y:auto;
-
-    padding:2px;
-}
-
-.notification-task{
-    width:100%;
-
-    border:none;
-    border-radius:17px;
-
-    padding:15px 16px;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    color:#202333;
-
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-
-    font-family:"DM Sans",sans-serif;
-    font-weight:700;
-
-    transition:
-        transform .18s ease,
-        box-shadow .18s ease,
-        filter .18s ease;
-}
-
-.notification-task:hover{
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 7px 18px rgba(0,0,0,.10);
-
-    filter:brightness(.98);
-}
-
-.notification-task-name{
-    font-size:15px;
-    line-height:1.35;
-
-    overflow-wrap:anywhere;
-}
-
-.notification-task-subject{
-    font-size:12px;
-    font-weight:600;
-
-    opacity:.72;
-}
-
-.notification-empty{
-    padding:30px 18px;
-
-    border-radius:18px;
-
-    background:#F4F4F4;
-
-    text-align:center;
-
-    color:#777;
-
-    font-size:14px;
-    line-height:1.5;
-}
-
-.notification-empty-title{
-    font-family:"Bricolage Grotesque",sans-serif;
-
-    font-size:21px;
-    font-weight:800;
-
-    color:#333;
-
-    margin-bottom:5px;
-}
-
-
-/* =========================================================
-   BACKGROUND / PROFILE BUTTONS
-========================================================= */
-
 .background-button,
 .profile-button{
     border:none;
     border-radius:18px;
     padding:12px 17px;
 
-    background:white;
+    background:rgba(255,255,255,.68);
 
     font-family:"DM Sans",sans-serif;
     font-weight:700;
@@ -531,7 +302,7 @@ select{
 }
 
 .profile-button{
-    background:#E8DDFB;
+    background:rgba(232,221,251,.68);
 }
 
 
@@ -588,35 +359,35 @@ select{
 }
 
 .side-tab.school{
-    background:#B8DDF2;
+    background:rgba(184,221,242,.68);
 }
 
 .side-tab.email{
-    background:#F9C6D0;
+    background:rgba(249,198,208,.68);
 }
 
 .side-tab.rubrics{
-    background:#C8B9E8;
+    background:rgba(200,185,232,.68);
 }
 
 .side-tab.explanation{
-    background:#B8E3D1;
+    background:rgba(184,227,209,.68);
 }
 
 .side-tab.command{
-    background:#FDE3A7;
+    background:rgba(253,227,167,.68);
 }
 
 .side-tab.grade{
-    background:#BFD7F2;
+    background:rgba(191,215,242,.68);
 }
 
 .side-tab.support{
-    background:#F6C1A5;
+    background:rgba(246,193,165,.68);
 }
 
 .side-tab.exam{
-    background:#D8B4E8;
+    background:rgba(216,180,232,.68);
 }
 
 .dots{
@@ -645,7 +416,7 @@ select{
 ========================================================= */
 
 .calendar-card{
-    background:rgba(255,255,255,.94);
+    background:rgba(255,255,255,.72);
     border-radius:32px;
     padding:25px;
 
@@ -727,9 +498,9 @@ select{
 
 .day-cell{
     min-height:125px;
-    background:white;
+    background:rgba(255,255,255,.62);
 
-    border-right:1px solid #ededed;
+    border-right:1px solid rgba(237,237,237,.7);
     border-bottom:1px solid #ededed;
 
     position:relative;
@@ -839,7 +610,7 @@ select{
 
     overflow:auto;
 
-    background:white;
+    background:rgba(255,255,255,.86);
 
     border-radius:35px;
     padding:45px;
@@ -1391,34 +1162,11 @@ select{
     }
 
     .dashboard-logo{
-        text-align:center;
+        align-self:flex-start;
     }
 
     .top-actions{
         justify-content:center;
-    }
-
-    .notification-wrap{
-        flex:1;
-    }
-
-    .notification-button{
-        width:100%;
-    }
-
-    .notification-panel{
-        position:fixed;
-
-        top:120px;
-        left:15px;
-        right:15px;
-
-        width:auto;
-        max-height:calc(100vh - 140px);
-    }
-
-    .notification-list{
-        max-height:calc(100vh - 230px);
     }
 
     .sidebar{
@@ -1553,9 +1301,7 @@ select{
     ></div>
 
     <div class="dashboard-overlay"></div>
-
-
-    <div class="dashboard-content">
+<div class="dashboard-content">
 
 
         <!-- =================================================
@@ -1564,87 +1310,22 @@ select{
 
         <div class="dashboard-top">
 
-            <div class="dashboard-logo">
-                MYP Haven
-            </div>
+            <button
+                class="dashboard-logo"
+                id="dashboardLogo"
+                type="button"
+                aria-label="Return to main dashboard"
+                title="Main Dashboard"
+            >🎓</button>
 
 
             <div class="top-actions">
-
-
-                <!-- =========================================
-                     NOTIFICATIONS
-                ========================================== -->
-
-                <div
-                    class="notification-wrap"
-                    id="notificationWrap"
-                >
-
-                    <button
-                        class="notification-button"
-                        id="notificationButton"
-                        aria-label="Notifications"
-                        aria-expanded="false"
-                        type="button"
-                    >
-
-                        🔔
-
-                        <span
-                            class="notification-badge"
-                            id="notificationBadge"
-                        >
-                            0
-                        </span>
-
-                    </button>
-
-
-                    <div
-                        class="notification-panel"
-                        id="notificationPanel"
-                    >
-
-                        <div class="notification-header">
-
-                            <div>
-
-                                <div class="notification-title">
-                                    Due Today
-                                </div>
-
-                                <div
-                                    class="notification-count"
-                                    id="notificationCount"
-                                >
-                                    No tasks due today
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="notification-list"
-                            id="notificationList"
-                        ></div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =========================================
-                     CHANGE BACKGROUND
-                ========================================== -->
 
                 <button
                     class="background-button"
                     id="backgroundUploadButton"
                 >
-                    🖼️ Change Background
+                    Change Background
                 </button>
 
 
@@ -1656,15 +1337,11 @@ select{
                 >
 
 
-                <!-- =========================================
-                     PROFILE
-                ========================================== -->
-
                 <button
                     class="profile-button"
                     id="profileButton"
                 >
-                    👤 Profile & Settings
+                    Profile & Settings
                 </button>
 
             </div>
@@ -1692,7 +1369,7 @@ select{
                         class="side-tab school"
                         id="schoolButton"
                     >
-                        🏫 School Web
+                        School Web
                     </button>
 
                     <button
@@ -1712,7 +1389,7 @@ select{
                         class="side-tab email"
                         id="emailButton"
                     >
-                        📧 Email
+                        Email
                     </button>
 
                     <button
@@ -1730,7 +1407,7 @@ select{
                     class="side-tab rubrics"
                     id="rubricsButton"
                 >
-                    📚 Rubrics
+                    Rubrics
                 </button>
 
 
@@ -1738,7 +1415,7 @@ select{
                     class="side-tab explanation"
                     id="explanationButton"
                 >
-                    📖 Explanation Pages
+                    Explanation Pages
                 </button>
 
 
@@ -1746,7 +1423,7 @@ select{
                     class="side-tab command"
                     id="commandButton"
                 >
-                    🧠 Command-Term Database
+                    Command-Term Database
                 </button>
 
 
@@ -1754,7 +1431,7 @@ select{
                     class="side-tab grade"
                     id="gradeButton"
                 >
-                    🧮 Grade Calculator
+                    Grade Calculator
                 </button>
 
 
@@ -1762,7 +1439,7 @@ select{
                     class="side-tab support"
                     id="supportButton"
                 >
-                    💡 Study & Work Support
+                    Study & Work Support
                 </button>
 
 
@@ -1770,7 +1447,7 @@ select{
                     class="side-tab exam"
                     id="examButton"
                 >
-                    🎓 Exam Season ’27
+                    Exam Season ’27
                 </button>
 
             </aside>
@@ -2258,6 +1935,20 @@ const dashboardBackground =
         "dashboardBackground"
     );
 
+
+const dashboardLogo =
+    document.getElementById(
+        "dashboardLogo"
+    );
+
+dashboardLogo.addEventListener(
+    "click",
+    () => {
+        window.location.href =
+            "./dashboard.html";
+    }
+);
+
 const backgroundInput =
     document.getElementById(
         "backgroundInput"
@@ -2331,41 +2022,6 @@ const assignmentOptions =
 const celebration =
     document.getElementById(
         "celebration"
-    );
-
-
-/* =========================================================
-   NOTIFICATION ELEMENTS
-========================================================= */
-
-const notificationButton =
-    document.getElementById(
-        "notificationButton"
-    );
-
-const notificationPanel =
-    document.getElementById(
-        "notificationPanel"
-    );
-
-const notificationList =
-    document.getElementById(
-        "notificationList"
-    );
-
-const notificationBadge =
-    document.getElementById(
-        "notificationBadge"
-    );
-
-const notificationCount =
-    document.getElementById(
-        "notificationCount"
-    );
-
-const notificationWrap =
-    document.getElementById(
-        "notificationWrap"
     );
 
 
@@ -3011,6 +2667,10 @@ async function loadUserData(){
             }
 
 
+            /*
+             * Keep local copies too.
+             */
+
             if(schoolWebUrl){
 
                 localStorage.setItem(
@@ -3035,8 +2695,12 @@ async function loadUserData(){
 
             renderCalendar();
 
-            updateNotifications();
 
+            /*
+             * Returning users who have
+             * already locked in skip
+             * the lock-in screen.
+             */
 
             if(data.lockedIn === true){
 
@@ -3082,8 +2746,6 @@ async function loadUserData(){
             renderCourses();
 
             renderCalendar();
-
-            updateNotifications();
 
         }
 
@@ -3172,8 +2834,6 @@ function loadLocalFallback(){
 
     renderCalendar();
 
-    updateNotifications();
-
 }
 
 
@@ -3251,291 +2911,6 @@ async function saveDashboard(){
     }
 
 }
-
-
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
-function getTodayDateKey(){
-
-    const today =
-        new Date();
-
-    return makeDateKey(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate()
-    );
-
-}
-
-
-function getTasksDueToday(){
-
-    const todayKey =
-        getTodayDateKey();
-
-
-    return tasks.filter(
-        task =>
-
-            task.dueDate ===
-            todayKey
-
-            &&
-
-            task.status !==
-            "Done"
-
-    );
-
-}
-
-
-function updateNotifications(){
-
-    const dueTodayTasks =
-        getTasksDueToday();
-
-
-    notificationList.innerHTML =
-        "";
-
-
-    const count =
-        dueTodayTasks.length;
-
-
-    if(count > 0){
-
-        notificationBadge.textContent =
-            count;
-
-        notificationBadge.classList.add(
-            "show"
-        );
-
-        notificationCount.textContent =
-            count === 1
-            ? "1 task needs your attention"
-            : `${count} tasks need your attention`;
-
-
-        dueTodayTasks.forEach(
-            task => {
-
-                const taskButton =
-                    document.createElement(
-                        "button"
-                    );
-
-
-                taskButton.type =
-                    "button";
-
-
-                taskButton.className =
-                    "notification-task";
-
-
-                /*
-                 * The entire notification uses
-                 * the task's subject colour.
-                 */
-
-                taskButton.style.background =
-                    subjectColors[
-                        task.course
-                    ] ||
-                    "#E8B8D4";
-
-
-                const taskName =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                taskName.className =
-                    "notification-task-name";
-
-
-                taskName.textContent =
-                    task.title ||
-                    "Untitled Task";
-
-
-                const taskSubject =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                taskSubject.className =
-                    "notification-task-subject";
-
-
-                taskSubject.textContent =
-                    task.course ||
-                    "Other";
-
-
-                taskButton.appendChild(
-                    taskName
-                );
-
-
-                taskButton.appendChild(
-                    taskSubject
-                );
-
-
-                taskButton.addEventListener(
-                    "click",
-                    () => {
-
-                        closeNotifications();
-
-                        openTaskEditor(
-                            task.id
-                        );
-
-                    }
-                );
-
-
-                notificationList.appendChild(
-                    taskButton
-                );
-
-            }
-        );
-
-    }else{
-
-        notificationBadge.classList.remove(
-            "show"
-        );
-
-
-        notificationCount.textContent =
-            "No tasks due today";
-
-
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-
-        empty.className =
-            "notification-empty";
-
-
-        empty.innerHTML = `
-
-            <div class="notification-empty-title">
-                You're all caught up!
-            </div>
-
-            <div>
-                You have no unfinished tasks due today.
-            </div>
-
-        `;
-
-
-        notificationList.appendChild(
-            empty
-        );
-
-    }
-
-}
-
-
-function openNotifications(){
-
-    updateNotifications();
-
-    notificationPanel.classList.add(
-        "open"
-    );
-
-    notificationButton.setAttribute(
-        "aria-expanded",
-        "true"
-    );
-
-}
-
-
-function closeNotifications(){
-
-    notificationPanel.classList.remove(
-        "open"
-    );
-
-    notificationButton.setAttribute(
-        "aria-expanded",
-        "false"
-    );
-
-}
-
-
-notificationButton.addEventListener(
-    "click",
-    event => {
-
-        event.stopPropagation();
-
-
-        if(
-            notificationPanel.classList.contains(
-                "open"
-            )
-        ){
-
-            closeNotifications();
-
-        }else{
-
-            openNotifications();
-
-        }
-
-    }
-);
-
-
-notificationPanel.addEventListener(
-    "click",
-    event => {
-
-        event.stopPropagation();
-
-    }
-);
-
-
-document.addEventListener(
-    "click",
-    event => {
-
-        if(
-            !notificationWrap.contains(
-                event.target
-            )
-        ){
-
-            closeNotifications();
-
-        }
-
-    }
-);
 
 
 /* =========================================================
@@ -3951,9 +3326,6 @@ function renderCalendar(){
         );
 
     }
-
-
-    updateNotifications();
 
 }
 
@@ -4596,10 +3968,6 @@ function createCustomCategory(
 }
 
 
-/* =========================================================
-   CUSTOM CATEGORIES
-========================================================= */
-
 function manageCustomCategory(
     category
 ){
@@ -4823,8 +4191,6 @@ setInterval(
 
         renderCalendar();
 
-        updateNotifications();
-
     },
     60000
 );
@@ -4959,8 +4325,6 @@ document
             closeTaskPanel();
 
             renderCalendar();
-
-            updateNotifications();
 
             await saveDashboard();
 
@@ -5377,6 +4741,9 @@ document
 
 
 /* =========================================================
+   DASHBOARD HOME BUTTON
+========================================================= */
+/* =========================================================
    MAIN PAGE NAVIGATION
 ========================================================= */
 
@@ -5499,8 +4866,6 @@ document.addEventListener(
 
             closeTaskPanel();
 
-            closeNotifications();
-
             linkPopup.classList.remove(
                 "open"
             );
@@ -5517,9 +4882,8 @@ document.addEventListener(
 
 renderCalendar();
 
-updateNotifications();
-
 </script>
 
 </body>
 </html>
+
