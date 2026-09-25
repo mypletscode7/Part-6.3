@@ -4,1524 +4,1861 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard | MYP Haven</title>
+<title>MYP Haven — Dashboard</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
->
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
-:root {
-    --text: #202333;
-    --muted: #73798a;
-    --background: #FAFAF8;
-    --white: #ffffff;
+/* =========================================================
+   RESET
+========================================================= */
 
-    --pink: #FF4D6D;
-    --yellow: #FFD23F;
-    --mint: #39D6C0;
-    --purple: #8B5CF6;
-
-    --shadow:
-        0 12px 35px rgba(32, 35, 51, 0.08);
-
-    --soft-shadow:
-        0 8px 24px rgba(32, 35, 51, 0.06);
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+html,
+body{
+    width:100%;
+    min-height:100%;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: "DM Sans", sans-serif;
-    background: var(--background);
-    color: var(--text);
-    min-height: 100vh;
+body{
+    font-family:"DM Sans",sans-serif;
+    background:#A855F7;
+    color:#171717;
+    overflow-x:hidden;
 }
 
 button,
 input,
 textarea,
-select {
-    font: inherit;
+select{
+    font:inherit;
 }
 
-button {
-    border: none;
+
+/* =========================================================
+   LOCK-IN SCREEN
+========================================================= */
+
+.lock-screen{
+    min-height:100vh;
+    width:100%;
+    padding:35px 18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    transition:
+        opacity .9s ease,
+        transform .9s ease,
+        visibility .9s ease;
 }
 
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-    outline: 3px solid rgba(57, 214, 192, 0.35);
-    outline-offset: 2px;
+.lock-screen.hidden{
+    opacity:0;
+    transform:translateY(-35px) scale(.98);
+    visibility:hidden;
+    pointer-events:none;
+    position:absolute;
 }
+
+.current-date{
+    color:#D946EF;
+    font-size:18px;
+    font-weight:700;
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.welcome-title{
+    color:white;
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-size:clamp(3.5rem,8vw,7rem);
+    font-weight:800;
+    letter-spacing:-.055em;
+    line-height:.95;
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.lock-slider{
+    width:calc(100vw - 36px);
+    max-width:1700px;
+    height:125px;
+    border-radius:100px;
+    background:#eeeeee;
+    position:relative;
+    overflow:hidden;
+    user-select:none;
+    touch-action:none;
+
+    box-shadow:
+        inset 0 1px 2px rgba(0,0,0,.04),
+        0 12px 40px rgba(0,0,0,.10);
+}
+
+.lock-progress{
+    position:absolute;
+    inset:0 auto 0 0;
+    width:0%;
+    border-radius:100px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #FF4D6D 0%,
+            #FF8A3D 5.88%,
+            #FFD23F 11.76%,
+            #7ED957 17.64%,
+            #39D6C0 23.52%,
+            #34D399 29.40%,
+            #00C2FF 35.28%,
+            #3B82F6 41.16%,
+            #8B5CF6 47.04%,
+            #A855F7 52.92%,
+            #FF6FB5 58.80%,
+            #D946EF 64.68%,
+            #C026D3 70.56%,
+            #A21CAF 76.44%,
+            #86198F 82.32%,
+            #6366F1 88.20%,
+            #818CF8 94.10%,
+            #22D3EE 100%
+        );
+
+    transition:width .04s linear;
+}
+
+.lock-text{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:clamp(1.2rem,2.5vw,2rem);
+    font-weight:700;
+    pointer-events:none;
+    z-index:5;
+}
+
+.cap-handle{
+    width:108px;
+    height:108px;
+    border-radius:50%;
+    background:white;
+    position:absolute;
+    left:8px;
+    top:8.5px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:55px;
+    cursor:grab;
+    z-index:10;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.16),
+        0 2px 7px rgba(0,0,0,.10);
+
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+.cap-handle.dragging{
+    cursor:grabbing;
+    transform:scale(.94);
+
+    box-shadow:
+        0 5px 14px rgba(0,0,0,.18);
+}
+
+
+/* =========================================================
+   MAIN DASHBOARD
+========================================================= */
+
+.dashboard{
+    min-height:100vh;
+    position:relative;
+    padding:25px;
+
+    display:none;
+    opacity:0;
+    transform:translateY(30px);
+
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.dashboard.visible{
+    display:block;
+}
+
+.dashboard.entered{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.dashboard-background{
+    position:fixed;
+    inset:0;
+    z-index:-3;
+
+    background:#f5f5f5 center/cover no-repeat;
+}
+
+.dashboard-overlay{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+
+    background:rgba(255,255,255,.76);
+    backdrop-filter:blur(2px);
+}
+
+.dashboard-content{
+    width:100%;
+    max-width:1550px;
+    margin:0 auto;
+}
+
+
+/* =========================================================
+   DASHBOARD HOME CAP
+========================================================= */
+
+.dashboard-home-cap{
+    position:fixed;
+    left:25px;
+    bottom:25px;
+    width:58px;
+    height:58px;
+    border:none;
+    border-radius:18px;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    line-height:1;
+    cursor:pointer;
+    z-index:50;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.dashboard-home-cap:hover{
+    transform:translateY(-3px) scale(1.03);
+    box-shadow:0 12px 30px rgba(0,0,0,.16);
+}
+
+.dashboard-home-cap:active{
+    transform:scale(.96);
+}
+
 
 /* =========================================================
    TOP BAR
 ========================================================= */
 
-.topbar {
-    width: min(1150px, calc(100% - 40px));
-    margin: 0 auto;
-    padding: 22px 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-
-    position: relative;
-    z-index: 100;
+.dashboard-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    margin-bottom:22px;
 }
 
-.brand {
-    display: flex;
-    align-items: center;
+.dashboard-logo{
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-size:30px;
+    font-weight:800;
+    color:#8B5CF6;
+    letter-spacing:-.04em;
 }
 
-.logo-button {
-    width: 52px;
-    height: 52px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: white;
-    border-radius: 18px;
-
-    cursor: pointer;
-
-    font-size: 25px;
-
-    box-shadow: var(--soft-shadow);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
 }
 
-.logo-button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-}
+.background-button,
+.profile-button{
+    border:none;
+    border-radius:18px;
+    padding:12px 17px;
 
-.top-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
+    background:white;
 
-    position: relative;
-    flex-wrap: wrap;
-}
+    font-family:"DM Sans",sans-serif;
+    font-weight:700;
 
-.top-action {
-    min-height: 48px;
-
-    padding: 0 17px;
-
-    border-radius: 16px;
-
-    background: white;
-    color: var(--text);
-
-    cursor: pointer;
-
-    font-size: 13px;
-    font-weight: 700;
-
-    box-shadow: var(--soft-shadow);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.top-action:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-}
-
-.dashboard-button {
-    background: var(--text);
-    color: white;
-}
-
-.dashboard-button:hover {
-    background: #303447;
-}
-
-.background-input {
-    display: none;
-}
-
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
-.notification-wrap {
-    position: relative;
-}
-
-.notification-button {
-    position: relative;
-
-    width: 52px;
-    height: 48px;
-
-    border-radius: 18px;
-
-    background: white;
-    color: var(--text);
-
-    cursor: pointer;
-
-    font-size: 21px;
-
-    box-shadow: var(--soft-shadow);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.notification-button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-}
-
-.notification-badge {
-    position: absolute;
-
-    top: -5px;
-    right: -5px;
-
-    min-width: 21px;
-    height: 21px;
-
-    padding: 0 5px;
-
-    border-radius: 50px;
-
-    background: var(--pink);
-    color: white;
-
-    border: 3px solid white;
-
-    font-size: 11px;
-    font-weight: 800;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.notification-badge.hidden {
-    display: none;
-}
-
-.notification-panel {
-    position: absolute;
-
-    right: 0;
-    top: calc(100% + 12px);
-
-    width: min(390px, calc(100vw - 30px));
-
-    background: rgba(255, 255, 255, 0.98);
-
-    border-radius: 24px;
-
-    padding: 18px;
+    cursor:pointer;
 
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.16);
+        0 6px 20px rgba(0,0,0,.08);
 
-    border: 1px solid rgba(0, 0, 0, 0.05);
-
-    display: none;
-
-    z-index: 300;
+    transition:.2s ease;
 }
 
-.notification-panel.open {
-    display: block;
-
-    animation:
-        notificationIn 0.2s ease;
+.background-button:hover,
+.profile-button:hover{
+    transform:translateY(-2px);
+    box-shadow:
+        0 9px 25px rgba(0,0,0,.10);
 }
 
-@keyframes notificationIn {
-    from {
-        opacity: 0;
-        transform: translateY(-6px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+.profile-button{
+    background:#E8DDFB;
 }
 
-.notification-header {
-    padding: 4px 4px 13px;
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.dashboard-layout{
+    display:grid;
+    grid-template-columns:230px minmax(0,1fr);
+    gap:20px;
+    align-items:start;
 }
 
-.notification-header h3 {
-    font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 25px;
-    font-weight: 800;
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
-    letter-spacing: -0.03em;
+.sidebar{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
 }
 
-.notification-header p {
-    margin-top: 4px;
-
-    font-size: 13px;
-
-    color: var(--muted);
+.side-tab-wrap{
+    position:relative;
 }
 
-.notification-list {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
+.side-tab{
+    width:100%;
+    border:none;
+    padding:17px 16px;
 
-    max-height: 420px;
+    border-radius:18px;
 
-    overflow-y: auto;
-}
+    font-family:"DM Sans",sans-serif;
+    font-size:15px;
+    font-weight:700;
+    text-align:left;
 
-.notification-task {
-    width: 100%;
-
-    border-radius: 16px;
-
-    padding: 14px 15px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    gap: 3px;
-
-    text-align: left;
-
-    cursor: pointer;
-
-    color: var(--text);
+    cursor:pointer;
 
     transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease,
-        filter 0.18s ease;
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
-.notification-task:hover {
-    transform: translateY(-2px);
+.side-tab:hover{
+    transform:translateX(4px);
 
     box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.08);
-
-    filter: brightness(0.98);
+        0 7px 20px rgba(0,0,0,.08);
 }
 
-.notification-task-title {
-    font-size: 15px;
-    font-weight: 800;
-    line-height: 1.3;
+.side-tab.school{
+    background:#B8DDF2;
 }
 
-.notification-task-subject {
-    font-size: 12px;
-    font-weight: 700;
-    opacity: 0.72;
+.side-tab.email{
+    background:#F9C6D0;
 }
 
-.notification-empty {
-    border-radius: 16px;
-
-    background: #F5F5F5;
-
-    padding: 20px 16px;
-
-    text-align: center;
+.side-tab.rubrics{
+    background:#C8B9E8;
 }
 
-.notification-empty-title {
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 19px;
-    font-weight: 800;
+.side-tab.explanation{
+    background:#B8E3D1;
 }
 
-.notification-empty-text {
-    margin-top: 5px;
-
-    color: #777;
-
-    font-size: 13px;
-    line-height: 1.45;
+.side-tab.command{
+    background:#FDE3A7;
 }
 
-/* =========================================================
-   MAIN
-========================================================= */
-
-.page {
-    width: min(1150px, calc(100% - 40px));
-    margin: 0 auto;
-    padding-bottom: 70px;
+.side-tab.grade{
+    background:#BFD7F2;
 }
 
-.hero {
-    padding: 30px 0 30px;
+.side-tab.support{
+    background:#F6C1A5;
 }
 
-.hero h1 {
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: clamp(42px, 7vw, 72px);
-
-    line-height: 0.98;
-
-    letter-spacing: -0.055em;
-
-    font-weight: 800;
+.side-tab.exam{
+    background:#D8B4E8;
 }
 
-.hero h1 span {
-    display: block;
+.dots{
+    position:absolute;
+    right:8px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:32px;
+    height:32px;
+
+    border:none;
+    background:rgba(255,255,255,.45);
+
+    border-radius:50%;
+
+    cursor:pointer;
+    font-size:18px;
+    z-index:3;
 }
 
-.hero h1 .accent {
-    color: var(--pink);
-}
-
-.hero-text {
-    max-width: 650px;
-
-    margin-top: 18px;
-
-    color: var(--muted);
-
-    font-size: 17px;
-
-    line-height: 1.6;
-}
-
-/* =========================================================
-   LOCK-IN / PROGRESS
-========================================================= */
-
-.lock-card {
-    margin-top: 20px;
-
-    background: white;
-
-    border-radius: 26px;
-
-    padding: 24px;
-
-    box-shadow: var(--soft-shadow);
-}
-
-.lock-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    margin-bottom: 16px;
-}
-
-.lock-title {
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 21px;
-    font-weight: 800;
-}
-
-.lock-percent {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--pink);
-}
-
-.lock-track {
-    width: 100%;
-    height: 13px;
-
-    background: #EFEFF2;
-
-    border-radius: 999px;
-
-    overflow: hidden;
-}
-
-.lock-fill {
-    height: 100%;
-
-    width: 0%;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            #FF4D6D,
-            #22D3EE
-        );
-
-    transition: width 0.3s ease;
-}
-
-/* =========================================================
-   DASHBOARD GRID
-========================================================= */
-
-.dashboard-grid {
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 1.55fr)
-        minmax(300px, 0.85fr);
-
-    gap: 22px;
-
-    margin-top: 24px;
-}
-
-.card {
-    background: white;
-
-    border-radius: 26px;
-
-    padding: 24px;
-
-    box-shadow: var(--soft-shadow);
-}
-
-.card-heading {
-    display: flex;
-
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    margin-bottom: 18px;
-}
-
-.card-heading h2 {
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 25px;
-
-    font-weight: 800;
-
-    letter-spacing: -0.035em;
-}
-
-.card-heading p {
-    margin-top: 4px;
-
-    color: var(--muted);
-
-    font-size: 13px;
-}
 
 /* =========================================================
    CALENDAR
 ========================================================= */
 
-.calendar {
-    display: grid;
-
-    grid-template-columns:
-        repeat(7, minmax(0, 1fr));
-
-    gap: 9px;
-}
-
-.day-column {
-    min-width: 0;
-}
-
-.day-header {
-    text-align: center;
-
-    margin-bottom: 9px;
-}
-
-.day-name {
-    font-size: 11px;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.08em;
-
-    font-weight: 800;
-
-    color: #85899A;
-}
-
-.day-number {
-    width: 32px;
-    height: 32px;
-
-    margin: 5px auto 0;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.day-number.today {
-    background: var(--pink);
-    color: white;
-}
-
-.day-column.weekend .day-name {
-    color: #B8BBC4;
-}
-
-.day-column.weekend .day-number {
-    color: #B8BBC4;
-}
-
-.day-tasks {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.task-card {
-    width: 100%;
-
-    border-radius: 15px;
-
-    padding: 12px 10px;
-
-    min-height: 74px;
-
-    border: none;
-
-    text-align: left;
-
-    cursor: pointer;
-
-    color: var(--text);
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 5px;
-
-    transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
-}
-
-.task-card:hover {
-    transform: translateY(-2px);
+.calendar-card{
+    background:rgba(255,255,255,.94);
+    border-radius:32px;
+    padding:25px;
 
     box-shadow:
-        0 8px 18px rgba(32, 35, 51, 0.09);
+        0 15px 50px rgba(0,0,0,.08);
+
+    backdrop-filter:blur(12px);
 }
 
-.task-card-title {
-    font-size: 12px;
+.calendar-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
 
-    font-weight: 800;
-
-    line-height: 1.3;
-
-    word-break: break-word;
+    margin-bottom:20px;
 }
 
-.task-card-course {
-    font-size: 10px;
-
-    font-weight: 700;
-
-    opacity: 0.65;
+.month-title{
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-size:clamp(1.8rem,4vw,3rem);
+    font-weight:800;
+    letter-spacing:-.045em;
 }
 
-.task-card.done {
-    background: #D8B9E8 !important;
+.calendar-nav{
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
-.no-tasks {
-    min-height: 74px;
+.calendar-nav button{
+    border:none;
+    background:transparent;
 
-    border-radius: 15px;
+    font-family:"DM Sans",sans-serif;
+    font-weight:700;
 
-    background: #F6F6F5;
+    cursor:pointer;
+    color:#777;
 
-    color: #A0A2AC;
+    padding:7px 10px;
+    border-radius:12px;
 
-    font-size: 11px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 8px;
+    transition:.2s ease;
 }
+
+.calendar-nav button:hover{
+    background:#f3f3f3;
+    color:#222;
+}
+
+.weekdays,
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+}
+
+.weekday{
+    padding:12px 6px;
+    text-align:center;
+    font-size:13px;
+    font-weight:700;
+}
+
+.weekday.weekend{
+    background:#eeeeee;
+}
+
+.weekday.weekday-week{
+    background:white;
+}
+
+.calendar-grid{
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid #ededed;
+}
+
+.day-cell{
+    min-height:125px;
+    background:white;
+
+    border-right:1px solid #ededed;
+    border-bottom:1px solid #ededed;
+
+    position:relative;
+    padding:8px;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+}
+
+.day-cell:hover{
+    background:#fafafa;
+}
+
+.day-cell:nth-child(7n),
+.day-cell:nth-child(7n-1){
+    background:#f1f1f1;
+}
+
+.day-cell.empty{
+    cursor:default;
+    background:#f7f7f7;
+}
+
+.day-number{
+    position:absolute;
+    top:8px;
+    right:9px;
+
+    width:28px;
+    height:28px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:13px;
+    font-weight:700;
+}
+
+.today-number{
+    background:#FF4D6D;
+    color:white;
+    border-radius:50%;
+}
+
+.task-list{
+    position:absolute;
+    left:7px;
+    right:7px;
+    top:43px;
+
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.calendar-task{
+    border-radius:8px;
+    padding:5px 7px;
+
+    font-size:11px;
+    font-weight:700;
+
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+}
+
+.calendar-task:hover{
+    transform:translateY(-1px);
+}
+
 
 /* =========================================================
-   ON MY PLATE
+   TASK PANEL
 ========================================================= */
 
-.plate-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.modal-backdrop{
+    position:fixed;
+    inset:0;
+
+    background:rgba(255,255,255,.34);
+    backdrop-filter:blur(10px);
+
+    z-index:100;
+
+    display:none;
+
+    padding:18px;
+    overflow:auto;
 }
 
-.plate-item {
-    padding: 14px 15px;
-
-    background: #F7F7F6;
-
-    border-radius: 16px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
+.modal-backdrop.open{
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.plate-main {
-    min-width: 0;
-}
+.task-panel{
+    width:min(1250px,100%);
+    max-height:calc(100vh - 36px);
 
-.plate-title {
-    font-size: 14px;
+    overflow:auto;
 
-    font-weight: 800;
+    background:white;
 
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.plate-course {
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 11px;
-
-    font-weight: 600;
-}
-
-.plate-date {
-    flex-shrink: 0;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    color: var(--pink);
-}
-
-.empty-state {
-    padding: 20px;
-
-    background: #F7F7F6;
-
-    border-radius: 16px;
-
-    color: var(--muted);
-
-    text-align: center;
-
-    font-size: 13px;
-}
-
-/* =========================================================
-   COMING UP
-========================================================= */
-
-.coming-up {
-    margin-top: 22px;
-}
-
-.coming-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-}
-
-.coming-item {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 15px;
-
-    padding: 14px 15px;
-
-    border-radius: 16px;
-
-    background: #F7F7F6;
-}
-
-.coming-main {
-    min-width: 0;
-}
-
-.coming-title {
-    font-size: 14px;
-
-    font-weight: 800;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-}
-
-.coming-course {
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 11px;
-
-    font-weight: 600;
-}
-
-.coming-days {
-    flex-shrink: 0;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    padding: 7px 9px;
-
-    border-radius: 999px;
-
-    background: #FFF0F3;
-
-    color: var(--pink);
-}
-
-/* =========================================================
-   TASK MODAL
-========================================================= */
-
-.modal-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(32, 35, 51, 0.35);
-
-    backdrop-filter: blur(7px);
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    z-index: 500;
-}
-
-.modal-overlay.open {
-    display: flex;
-}
-
-.modal {
-    width: min(550px, 100%);
-
-    max-height: calc(100vh - 40px);
-
-    overflow-y: auto;
-
-    background: white;
-
-    border-radius: 28px;
-
-    padding: 27px;
+    border-radius:35px;
+    padding:45px;
 
     box-shadow:
-        0 30px 90px rgba(0, 0, 0, 0.2);
+        0 25px 90px rgba(0,0,0,.18);
+
+    position:relative;
+
+    animation:panelIn .35s ease;
+}
+
+@keyframes panelIn{
+    from{
+        opacity:0;
+        transform:translateY(25px) scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+.close-panel{
+    position:absolute;
+    right:25px;
+    top:22px;
+
+    width:43px;
+    height:43px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#f2f2f2;
+
+    cursor:pointer;
+    font-size:22px;
+}
+
+.task-title{
+    border:none;
+    outline:none;
+
+    width:100%;
+
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-size:clamp(2.5rem,6vw,5rem);
+    font-weight:800;
+
+    color:#222;
+
+    letter-spacing:-.055em;
+
+    margin-bottom:35px;
+}
+
+.task-title::placeholder{
+    color:#cfcfcf;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:28px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field-label{
+    font-size:13px;
+    font-weight:700;
+    color:#777;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+
+    border:1px solid #e5e5e5;
+    background:#fafafa;
+
+    border-radius:15px;
+
+    padding:14px 15px;
+
+    font-family:"DM Sans",sans-serif;
+    font-size:15px;
+
+    outline:none;
+
+    transition:.2s ease;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+    border-color:#A855F7;
+    background:white;
+}
+
+.field textarea{
+    min-height:130px;
+    resize:vertical;
+}
+
+
+/* =========================================================
+   COURSE CHOICES
+========================================================= */
+
+.course-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+}
+
+.course-option{
+    border:2px solid transparent;
+    border-radius:13px;
+
+    padding:11px 14px;
+
+    font-family:"DM Sans",sans-serif;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.course-option:hover{
+    transform:translateY(-1px);
+}
+
+.course-option.selected{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.09);
+
+    outline:
+        3px solid rgba(139,92,246,.18);
+}
+
+
+/* =========================================================
+   MASTERY
+========================================================= */
+
+.status-options{
+    display:flex;
+    flex-direction:column;
+
+    border:1px solid #ececec;
+    border-radius:17px;
+
+    overflow:hidden;
+}
+
+.status-group{
+    padding:14px;
+    border-bottom:1px solid #e5e5e5;
+}
+
+.status-group:last-child{
+    border-bottom:none;
+}
+
+.status-group-title{
+    font-size:12px;
+    font-weight:800;
+
+    text-transform:uppercase;
+
+    color:#777;
+
+    margin-bottom:8px;
+}
+
+.status-option{
+    display:inline-flex;
+    align-items:center;
+
+    border:none;
+    border-radius:11px;
+
+    padding:9px 13px;
+
+    font-family:"DM Sans",sans-serif;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.status-option.selected{
+    outline:3px solid rgba(0,0,0,.08);
+}
+
+
+/* =========================================================
+   ASSIGNMENTS
+========================================================= */
+
+.assignment-search{
+    margin-bottom:12px;
+}
+
+.assignment-options{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.assignment-option{
+    border:none;
+    border-radius:13px;
+
+    padding:13px 15px;
+
+    font-family:"DM Sans",sans-serif;
+    font-weight:700;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.assignment-option:hover{
+    filter:brightness(.97);
+}
+
+.assignment-menu{
+    border:none;
+    background:rgba(255,255,255,.45);
+
+    width:28px;
+    height:28px;
+
+    border-radius:50%;
+
+    cursor:pointer;
+}
+
+.create-custom{
+    border:2px dashed #bbb;
+    border-radius:13px;
+
+    padding:12px;
+
+    background:white;
+
+    cursor:pointer;
+
+    font-family:"DM Sans",sans-serif;
+    font-weight:700;
+
+    text-align:left;
+}
+
+
+/* =========================================================
+   ADD TASK
+========================================================= */
+
+.add-task{
+    margin-top:35px;
+
+    width:100%;
+
+    border:none;
+
+    background:#A7E8BD;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    font-family:"DM Sans",sans-serif;
+    font-size:17px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.add-task:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.08);
+}
+
+
+/* =========================================================
+   CELEBRATION
+========================================================= */
+
+.celebration{
+    position:fixed;
+    inset:0;
+
+    z-index:300;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+
+    background:rgba(255,255,255,.5);
+    backdrop-filter:blur(14px);
+}
+
+.celebration.show{
+    display:flex;
+}
+
+.checkmark{
+    width:110px;
+    height:110px;
+
+    border-radius:50%;
+
+    background:#A7E8BD;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:60px;
 
     animation:
-        modalIn 0.2s ease;
+        checkPop .65s cubic-bezier(.17,.89,.32,1.35);
 }
 
-@keyframes modalIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
+@keyframes checkPop{
+    0%{
+        transform:scale(.3);
+        opacity:0;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+    70%{
+        transform:scale(1.12);
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
     }
 }
 
-.modal-header {
-    display: flex;
+.celebration h2{
+    font-family:"Bricolage Grotesque",sans-serif;
 
-    align-items: flex-start;
-    justify-content: space-between;
+    font-size:
+        clamp(2.4rem,6vw,5rem);
 
-    gap: 20px;
+    margin-top:20px;
 
-    margin-bottom: 22px;
+    letter-spacing:-.05em;
 }
 
-.modal-header h2 {
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 29px;
-
-    font-weight: 800;
-
-    letter-spacing: -0.04em;
+.celebration p{
+    margin-top:7px;
+    color:#666;
 }
 
-.close-modal {
-    width: 38px;
-    height: 38px;
+.confetti{
+    position:absolute;
 
-    border-radius: 12px;
+    width:9px;
+    height:14px;
 
-    background: #F3F3F4;
+    border-radius:3px;
 
-    cursor: pointer;
-
-    font-size: 18px;
-
-    transition: 0.2s ease;
+    animation:
+        confettiFall 1.8s ease-out forwards;
 }
 
-.close-modal:hover {
-    background: #EAEAED;
+@keyframes confettiFall{
+    from{
+        transform:
+            translate(0,0)
+            rotate(0);
+
+        opacity:1;
+    }
+
+    to{
+        transform:
+            translate(var(--x),var(--y))
+            rotate(600deg);
+
+        opacity:0;
+    }
 }
 
-.form-group {
-    margin-bottom: 17px;
-}
 
-.form-group label {
-    display: block;
+/* =========================================================
+   LINK POPUP
+========================================================= */
 
-    margin-bottom: 7px;
+.small-popup{
+    position:fixed;
 
-    font-size: 12px;
+    z-index:250;
 
-    font-weight: 800;
+    left:50%;
+    top:50%;
 
-    color: #535869;
-}
+    transform:
+        translate(-50%,-50%);
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
+    background:white;
 
-    border: 1px solid #E2E3E7;
+    width:min(500px,calc(100% - 30px));
 
-    background: #FAFAFA;
-
-    border-radius: 13px;
-
-    padding: 12px 13px;
-
-    color: var(--text);
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    border-color: #39D6C0;
+    border-radius:25px;
+    padding:28px;
 
     box-shadow:
-        0 0 0 4px rgba(57, 214, 192, 0.1);
+        0 25px 80px rgba(0,0,0,.2);
+
+    display:none;
 }
 
-.form-group textarea {
-    min-height: 100px;
-
-    resize: vertical;
+.small-popup.open{
+    display:block;
 }
 
-.modal-actions {
-    display: flex;
+.small-popup h3{
+    font-family:"Bricolage Grotesque",sans-serif;
 
-    justify-content: flex-end;
+    font-size:28px;
 
-    gap: 9px;
-
-    margin-top: 22px;
+    margin-bottom:17px;
 }
 
-.modal-button {
-    min-height: 44px;
+.small-popup input{
+    width:100%;
 
-    padding: 0 17px;
+    border:1px solid #ddd;
 
-    border-radius: 13px;
+    border-radius:13px;
 
-    cursor: pointer;
+    padding:13px;
 
-    font-size: 13px;
-
-    font-weight: 800;
-
-    transition: 0.2s ease;
+    font-family:"DM Sans",sans-serif;
 }
 
-.modal-button:hover {
-    transform: translateY(-1px);
+.popup-buttons{
+    display:flex;
+    gap:8px;
+
+    margin-top:15px;
 }
 
-.cancel-button {
-    background: #F1F1F2;
+.popup-buttons button{
+    flex:1;
 
-    color: var(--text);
+    border:none;
+    border-radius:13px;
+
+    padding:12px;
+
+    font-family:"DM Sans",sans-serif;
+    font-weight:700;
+
+    cursor:pointer;
 }
 
-.save-button {
-    background: var(--text);
-
-    color: white;
+.save-link{
+    background:#A7E8BD;
 }
+
+.cancel-link{
+    background:#eee;
+}
+
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 900px) {
+@media(max-width:1000px){
 
-    .dashboard-grid {
-        grid-template-columns: 1fr;
+    .dashboard-layout{
+        grid-template-columns:1fr;
     }
 
-    .calendar {
-        overflow-x: auto;
+    .sidebar{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .day-column {
-        min-width: 105px;
+    .side-tab{
+        text-align:center;
     }
+
 }
 
-@media (max-width: 650px) {
+@media(max-width:700px){
 
-    .topbar {
-        width: min(100% - 24px, 1150px);
-
-        align-items: flex-start;
+    .lock-slider{
+        height:95px;
     }
 
-    .top-actions {
-        justify-content: flex-end;
+    .cap-handle{
+        width:81px;
+        height:81px;
+
+        top:7px;
+        left:7px;
+
+        font-size:40px;
     }
 
-    .top-action {
-        padding: 0 13px;
-
-        font-size: 12px;
+    .lock-text{
+        font-size:1rem;
+        padding-left:65px;
     }
 
-    .page {
-        width: calc(100% - 24px);
+    .dashboard{
+        padding:12px;
     }
 
-    .hero {
-        padding-top: 20px;
+    .dashboard-home-cap{
+        left:14px;
+        bottom:14px;
+        width:50px;
+        height:50px;
+        border-radius:15px;
+        font-size:27px;
     }
 
-    .hero h1 {
-        font-size: 47px;
+    .dashboard-top{
+        flex-direction:column;
+        align-items:stretch;
     }
 
-    .card,
-    .lock-card {
-        padding: 18px;
-
-        border-radius: 21px;
+    .dashboard-logo{
+        text-align:center;
     }
 
-    .notification-panel {
-        right: -8px;
-    }
-}
-
-@media (max-width: 500px) {
-
-    .topbar {
-        flex-direction: column;
+    .top-actions{
+        justify-content:center;
     }
 
-    .top-actions {
-        width: 100%;
-
-        justify-content: flex-start;
+    .sidebar{
+        grid-template-columns:1fr;
     }
 
-    .dashboard-button {
-        flex: 1;
+    .calendar-card{
+        padding:12px;
+        border-radius:24px;
     }
 
-    .notification-panel {
-        position: fixed;
-
-        left: 12px;
-        right: 12px;
-
-        top: 82px;
-
-        width: auto;
+    .calendar-header{
+        gap:5px;
     }
 
-    .calendar {
-        grid-template-columns:
-            repeat(7, 96px);
-
-        overflow-x: auto;
-
-        padding-bottom: 8px;
+    .month-title{
+        font-size:1.7rem;
     }
+
+    .day-cell{
+        min-height:80px;
+        padding:4px;
+    }
+
+    .day-number{
+        top:4px;
+        right:4px;
+
+        width:24px;
+        height:24px;
+
+        font-size:11px;
+    }
+
+    .task-list{
+        top:33px;
+        left:3px;
+        right:3px;
+    }
+
+    .calendar-task{
+        font-size:8px;
+        padding:3px;
+    }
+
+    .task-panel{
+        padding:28px 18px;
+        border-radius:25px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .background-button,
+    .profile-button{
+        flex:1;
+    }
+
 }
 
 </style>
 </head>
 
+
 <body>
 
+
 <!-- =========================================================
-     TOP BAR
+     LOCK-IN SCREEN
 ========================================================= -->
 
-<header class="topbar">
+<section
+    class="lock-screen"
+    id="lockScreen"
+>
 
-    <div class="brand">
+    <div
+        class="current-date"
+        id="welcomeDate"
+    ></div>
 
-        <button
-            class="logo-button"
-            onclick="goDashboard()"
-            aria-label="MYP Haven Dashboard"
+    <h1 class="welcome-title">
+        Welcome Back!
+    </h1>
+
+    <div
+        class="lock-slider"
+        id="lockSlider"
+    >
+
+        <div
+            class="lock-progress"
+            id="lockProgress"
+        ></div>
+
+        <div
+            class="lock-text"
+            id="lockText"
+        >
+            Are we ready to lock in?
+        </div>
+
+        <div
+            class="cap-handle"
+            id="capHandle"
         >
             🎓
-        </button>
+        </div>
 
     </div>
 
-    <div class="top-actions">
+</section>
 
-        <!-- NOTIFICATIONS -->
-        <div class="notification-wrap">
 
-            <button
-                class="notification-button"
-                id="notificationButton"
-                aria-label="Notifications"
-                aria-expanded="false"
-            >
-                🔔
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
 
-                <span
-                    class="notification-badge hidden"
-                    id="notificationBadge"
+<main
+    class="dashboard"
+    id="dashboard"
+>
+
+    <div
+        class="dashboard-background"
+        id="dashboardBackground"
+    ></div>
+
+    <div class="dashboard-overlay"></div>
+
+
+    <button
+    class="dashboard-home-cap"
+    id="dashboardHomeCap"
+    type="button"
+    aria-label="Return to main dashboard"
+    title="Main Dashboard"
+>
+    🎓
+</button>
+
+
+    <div class="dashboard-content">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================= -->
+
+        <div class="dashboard-top">
+
+            <div class="dashboard-logo">
+                MYP Haven
+            </div>
+
+
+            <div class="top-actions">
+
+                <button
+                    class="background-button"
+                    id="backgroundUploadButton"
                 >
-                    0
-                </span>
+                    Change Background
+                </button>
 
-            </button>
 
-            <div
-                class="notification-panel"
-                id="notificationPanel"
-            >
+                <input
+                    type="file"
+                    id="backgroundInput"
+                    accept="image/*"
+                    hidden
+                >
 
-                <div class="notification-header">
 
-                    <h3>Due Today</h3>
+                <button
+                    class="profile-button"
+                    id="profileButton"
+                >
+                    Profile & Settings
+                </button>
 
-                    <p id="notificationSummary">
-                        No unfinished tasks due today.
-                    </p>
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MAIN LAYOUT
+        ================================================= -->
+
+        <div class="dashboard-layout">
+
+
+            <!-- =============================================
+                 SIDEBAR
+            ============================================== -->
+
+            <aside class="sidebar">
+
+
+                <div class="side-tab-wrap">
+
+                    <button
+                        class="side-tab school"
+                        id="schoolButton"
+                    >
+                        School Web
+                    </button>
+
+                    <button
+                        class="dots"
+                        data-link="school"
+                        aria-label="School Web settings"
+                    >
+                        ⋯
+                    </button>
 
                 </div>
 
-                <div
-                    class="notification-list"
-                    id="notificationList"
-                ></div>
 
-            </div>
+                <div class="side-tab-wrap">
 
-        </div>
+                    <button
+                        class="side-tab email"
+                        id="emailButton"
+                    >
+                        Email
+                    </button>
 
-        <!-- CHANGE BACKGROUND -->
-        <button
-            class="top-action"
-            id="backgroundButton"
-        >
-            🎨 Change Background
-        </button>
-
-        <input
-            type="file"
-            id="backgroundInput"
-            class="background-input"
-            accept="image/*"
-        >
-
-        <!-- PROFILE -->
-        <button
-            class="top-action"
-            onclick="goProfile()"
-        >
-            ⚙️ Profile & Settings
-        </button>
-
-    </div>
-
-</header>
-
-
-<main class="page">
-
-    <!-- =====================================================
-         HERO
-    ====================================================== -->
-
-    <section class="hero">
-
-        <h1>
-            Master the MYP.
-            <span class="accent">
-                Achieve Your Academic Goals.
-            </span>
-        </h1>
-
-        <p class="hero-text">
-            Your student dashboard for keeping track of MYP work,
-            deadlines, subjects and everything you need to stay
-            organised.
-        </p>
-
-    </section>
-
-
-    <!-- =====================================================
-         LOCK-IN PROGRESS
-    ====================================================== -->
-
-    <section class="lock-card">
-
-        <div class="lock-top">
-
-            <div class="lock-title">
-                Your MYP Progress
-            </div>
-
-            <div
-                class="lock-percent"
-                id="lockPercent"
-            >
-                0%
-            </div>
-
-        </div>
-
-        <div class="lock-track">
-
-            <div
-                class="lock-fill"
-                id="lockFill"
-            ></div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         MAIN DASHBOARD
-    ====================================================== -->
-
-    <section class="dashboard-grid">
-
-        <!-- CALENDAR -->
-
-        <div class="card">
-
-            <div class="card-heading">
-
-                <div>
-
-                    <h2>
-                        My Week
-                    </h2>
-
-                    <p>
-                        Keep track of what needs to get done.
-                    </p>
+                    <button
+                        class="dots"
+                        data-link="email"
+                        aria-label="Email settings"
+                    >
+                        ⋯
+                    </button>
 
                 </div>
 
-            </div>
 
-            <div
-                class="calendar"
-                id="calendar"
-            ></div>
-
-        </div>
-
-
-        <!-- ON MY PLATE -->
-
-        <div class="card">
-
-            <div class="card-heading">
-
-                <div>
-
-                    <h2>
-                        On My Plate
-                    </h2>
-
-                    <p>
-                        Tasks you should keep an eye on.
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div
-                class="plate-list"
-                id="plateList"
-            ></div>
+                <button
+                    class="side-tab rubrics"
+                    id="rubricsButton"
+                >
+                    Rubrics
+                </button>
 
 
-            <div class="coming-up">
+                <button
+                    class="side-tab explanation"
+                    id="explanationButton"
+                >
+                    Explanation Pages
+                </button>
 
-                <div class="card-heading">
 
-                    <div>
+                <button
+                    class="side-tab command"
+                    id="commandButton"
+                >
+                    Command-Term Database
+                </button>
 
-                        <h2>
-                            Coming Up
-                        </h2>
+
+                <button
+                    class="side-tab grade"
+                    id="gradeButton"
+                >
+                    Grade Calculator
+                </button>
+
+
+                <button
+                    class="side-tab support"
+                    id="supportButton"
+                >
+                    Study & Work Support
+                </button>
+
+
+                <button
+                    class="side-tab exam"
+                    id="examButton"
+                >
+                    Exam Season ’27
+                </button>
+
+            </aside>
+
+
+            <!-- =============================================
+                 MAIN CALENDAR
+            ============================================== -->
+
+            <section id="dashboardMain">
+
+                <div class="calendar-card">
+
+
+                    <div class="calendar-header">
+
+                        <h2
+                            class="month-title"
+                            id="monthTitle"
+                        ></h2>
+
+
+                        <div class="calendar-nav">
+
+                            <button
+                                id="previousMonth"
+                            >
+                                ←
+                            </button>
+
+                            <button
+                                id="todayButton"
+                            >
+                                Today
+                            </button>
+
+                            <button
+                                id="nextMonth"
+                            >
+                                →
+                            </button>
+
+                        </div>
 
                     </div>
 
+
+                    <div class="weekdays">
+
+                        <div class="weekday weekend">
+                            Sun
+                        </div>
+
+                        <div class="weekday weekday-week">
+                            Mon
+                        </div>
+
+                        <div class="weekday weekday-week">
+                            Tue
+                        </div>
+
+                        <div class="weekday weekday-week">
+                            Wed
+                        </div>
+
+                        <div class="weekday weekday-week">
+                            Thu
+                        </div>
+
+                        <div class="weekday weekday-week">
+                            Fri
+                        </div>
+
+                        <div class="weekday weekend">
+                            Sat
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="calendar-grid"
+                        id="calendarGrid"
+                    ></div>
+
                 </div>
 
-                <div
-                    class="coming-list"
-                    id="comingList"
-                ></div>
-
-            </div>
+            </section>
 
         </div>
 
-    </section>
+    </div>
 
 </main>
 
 
 <!-- =========================================================
-     TASK MODAL
+     TASK CREATION / EDITING PANEL
 ========================================================= -->
 
 <div
-    class="modal-overlay"
+    class="modal-backdrop"
     id="taskModal"
 >
 
-    <div class="modal">
+    <div class="task-panel">
 
-        <div class="modal-header">
 
-            <h2>
-                Edit Task
-            </h2>
+        <button
+            class="close-panel"
+            id="closeTaskPanel"
+        >
+            ×
+        </button>
 
-            <button
-                class="close-modal"
-                id="closeTaskModal"
-                aria-label="Close"
-            >
-                ×
-            </button>
+
+        <input
+            class="task-title"
+            id="taskTitle"
+            placeholder="New Page"
+            autocomplete="off"
+        >
+
+
+        <div class="form-grid">
+
+
+            <div class="field full">
+
+                <div class="field-label">
+                    Course
+                </div>
+
+                <div
+                    class="course-options"
+                    id="courseOptions"
+                ></div>
+
+            </div>
+
+
+            <div class="field">
+
+                <div class="field-label">
+                    Last Review
+                </div>
+
+                <input
+                    type="date"
+                    id="lastReview"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <div class="field-label">
+                    Mastery
+                </div>
+
+                <div class="status-options">
+
+
+                    <div class="status-group">
+
+                        <div class="status-group-title">
+                            To-do
+                        </div>
+
+                        <button
+                            class="status-option"
+                            data-status="Not Started"
+                            style="background:#D9D6E8"
+                        >
+                            Not Started
+                        </button>
+
+                    </div>
+
+
+                    <div class="status-group">
+
+                        <div class="status-group-title">
+                            In Progress
+                        </div>
+
+                        <button
+                            class="status-option"
+                            data-status="Pending"
+                            style="background:#B8DDF2"
+                        >
+                            Pending
+                        </button>
+
+                    </div>
+
+
+                    <div class="status-group">
+
+                        <div class="status-group-title">
+                            Complete
+                        </div>
+
+                        <button
+                            class="status-option"
+                            data-status="Done"
+                            style="background:#D8B9E8"
+                        >
+                            Done
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="field full">
+
+                <div class="field-label">
+                    Assignment is…
+                </div>
+
+                <input
+                    class="assignment-search"
+                    id="assignmentSearch"
+                    placeholder="Search for an option"
+                >
+
+                <div
+                    class="assignment-options"
+                    id="assignmentOptions"
+                ></div>
+
+            </div>
+
+
+            <div class="field">
+
+                <div class="field-label">
+                    Date
+                </div>
+
+                <input
+                    type="date"
+                    id="taskDate"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <div class="field-label">
+                    Due Date
+                </div>
+
+                <input
+                    type="date"
+                    id="dueDate"
+                >
+
+            </div>
+
+
+            <div class="field full">
+
+                <div class="field-label">
+                    Notes
+                </div>
+
+                <textarea
+                    id="taskNotes"
+                    placeholder="Add any information you need..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="field full">
+
+                <div class="field-label">
+                    Days Left
+                </div>
+
+                <input
+                    id="daysLeft"
+                    readonly
+                    placeholder="Select a due date"
+                >
+
+            </div>
 
         </div>
 
 
-        <div class="form-group">
+        <button
+            class="add-task"
+            id="addTaskButton"
+        >
+            Save Task
+        </button>
 
-            <label for="taskTitle">
-                Task name
-            </label>
+    </div>
 
-            <input
-                id="taskTitle"
-                type="text"
-            >
-
-        </div>
+</div>
 
 
-        <div class="form-group">
+<!-- =========================================================
+     TASK CELEBRATION
+========================================================= -->
 
-            <label for="taskCourse">
-                Subject
-            </label>
+<div
+    class="celebration"
+    id="celebration"
+>
 
-            <select id="taskCourse"></select>
+    <div class="checkmark">
+        ✓
+    </div>
 
-        </div>
+    <h2>
+        Task Added! ✨
+    </h2>
 
+    <p>
+        Another task which needs to be completed!
+    </p>
 
-        <div class="form-group">
-
-            <label for="taskStatus">
-                Status
-            </label>
-
-            <select id="taskStatus">
-
-                <option value="Not Started">
-                    Not Started
-                </option>
-
-                <option value="In Progress">
-                    In Progress
-                </option>
-
-                <option value="Done">
-                    Done
-                </option>
-
-            </select>
-
-        </div>
+</div>
 
 
-        <div class="form-group">
+<!-- =========================================================
+     SCHOOL / EMAIL LINK POPUP
+========================================================= -->
 
-            <label for="taskDate">
-                Date
-            </label>
+<div
+    class="small-popup"
+    id="linkPopup"
+>
 
-            <input
-                id="taskDate"
-                type="date"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="taskDueDate">
-                Due date
-            </label>
-
-            <input
-                id="taskDueDate"
-                type="date"
-            >
-
-        </div>
+    <h3 id="linkPopupTitle">
+        Save Website
+    </h3>
 
 
-        <div class="form-group">
-
-            <label for="taskNotes">
-                Notes
-            </label>
-
-            <textarea
-                id="taskNotes"
-                placeholder="Add any notes for this task..."
-            ></textarea>
-
-        </div>
+    <input
+        id="linkInput"
+        type="url"
+        placeholder="https://..."
+    >
 
 
-        <div class="modal-actions">
+    <div class="popup-buttons">
 
-            <button
-                class="modal-button cancel-button"
-                id="cancelTask"
-            >
-                Cancel
-            </button>
+        <button
+            class="save-link"
+            id="saveLink"
+        >
+            Save
+        </button>
 
-            <button
-                class="modal-button save-button"
-                id="saveTask"
-            >
-                Save Changes
-            </button>
-
-        </div>
+        <button
+            class="cancel-link"
+            id="cancelLink"
+        >
+            Cancel
+        </button>
 
     </div>
 
@@ -1536,12 +1873,14 @@ select:focus-visible {
 
 import {
     initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
     getAuth,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
     getFirestore,
@@ -1549,7 +1888,7 @@ import {
     getDoc,
     setDoc,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -1576,7 +1915,9 @@ const firebaseConfig = {
 
 
 const app =
-    initializeApp(firebaseConfig);
+    initializeApp(
+        firebaseConfig
+    );
 
 const auth =
     getAuth(app);
@@ -1585,94 +1926,167 @@ const db =
     getFirestore(app);
 
 
+await setPersistence(
+    auth,
+    browserLocalPersistence
+);
+
+
 /* =========================================================
    ELEMENTS
 ========================================================= */
 
-const calendar =
-    document.getElementById("calendar");
+const lockScreen =
+    document.getElementById(
+        "lockScreen"
+    );
 
-const plateList =
-    document.getElementById("plateList");
+const dashboard =
+    document.getElementById(
+        "dashboard"
+    );
 
-const comingList =
-    document.getElementById("comingList");
+const welcomeDate =
+    document.getElementById(
+        "welcomeDate"
+    );
 
-const lockFill =
-    document.getElementById("lockFill");
+const lockSlider =
+    document.getElementById(
+        "lockSlider"
+    );
 
-const lockPercent =
-    document.getElementById("lockPercent");
+const lockProgress =
+    document.getElementById(
+        "lockProgress"
+    );
 
-const backgroundButton =
-    document.getElementById("backgroundButton");
+const lockText =
+    document.getElementById(
+        "lockText"
+    );
+
+const capHandle =
+    document.getElementById(
+        "capHandle"
+    );
+
+const dashboardBackground =
+    document.getElementById(
+        "dashboardBackground"
+    );
 
 const backgroundInput =
-    document.getElementById("backgroundInput");
+    document.getElementById(
+        "backgroundInput"
+    );
 
-const notificationButton =
-    document.getElementById("notificationButton");
+const backgroundUploadButton =
+    document.getElementById(
+        "backgroundUploadButton"
+    );
 
-const notificationBadge =
-    document.getElementById("notificationBadge");
+const calendarGrid =
+    document.getElementById(
+        "calendarGrid"
+    );
 
-const notificationPanel =
-    document.getElementById("notificationPanel");
-
-const notificationList =
-    document.getElementById("notificationList");
-
-const notificationSummary =
-    document.getElementById("notificationSummary");
+const monthTitle =
+    document.getElementById(
+        "monthTitle"
+    );
 
 const taskModal =
-    document.getElementById("taskModal");
-
-const closeTaskModal =
-    document.getElementById("closeTaskModal");
-
-const cancelTask =
-    document.getElementById("cancelTask");
-
-const saveTask =
-    document.getElementById("saveTask");
+    document.getElementById(
+        "taskModal"
+    );
 
 const taskTitle =
-    document.getElementById("taskTitle");
+    document.getElementById(
+        "taskTitle"
+    );
 
-const taskCourse =
-    document.getElementById("taskCourse");
-
-const taskStatus =
-    document.getElementById("taskStatus");
+const courseOptions =
+    document.getElementById(
+        "courseOptions"
+    );
 
 const taskDate =
-    document.getElementById("taskDate");
+    document.getElementById(
+        "taskDate"
+    );
 
-const taskDueDate =
-    document.getElementById("taskDueDate");
+const lastReview =
+    document.getElementById(
+        "lastReview"
+    );
+
+const dueDate =
+    document.getElementById(
+        "dueDate"
+    );
 
 const taskNotes =
-    document.getElementById("taskNotes");
+    document.getElementById(
+        "taskNotes"
+    );
+
+const daysLeft =
+    document.getElementById(
+        "daysLeft"
+    );
+
+const assignmentSearch =
+    document.getElementById(
+        "assignmentSearch"
+    );
+
+const assignmentOptions =
+    document.getElementById(
+        "assignmentOptions"
+    );
+
+const celebration =
+    document.getElementById(
+        "celebration"
+    );
 
 
 /* =========================================================
-   DATA
+   STATE
 ========================================================= */
 
 let currentUser = null;
 
+let selectedSubjects = [];
+
+let selectedCourse = "";
+
+let selectedStatus = "Not Started";
+
+let selectedAssignment = "";
+
 let tasks = [];
 
-let subjects = [];
+let customAssignmentCategories = [];
+
+let currentCalendarDate = new Date();
 
 let editingTaskId = null;
 
-let backgroundImage = null;
+let linkType = "";
+
+let dragging = false;
+
+let completed = false;
+
+let schoolWebUrl = "";
+
+let emailUrl = "";
 
 
 /* =========================================================
-   SUBJECT COLOURS
+   SUBJECT COLORS
 ========================================================= */
 
 const subjectColors = {
@@ -1683,16 +2097,94 @@ const subjectColors = {
     "English Language & Literature":
         "#F9A8B8",
 
-    "German":
+    "French":
         "#FDBA9A",
 
-    "French":
+    "French Language & Literature":
+        "#FDBA9A",
+
+    "Chinese":
+        "#FDBA9A",
+
+    "Chinese Language & Literature":
         "#FDBA9A",
 
     "Spanish":
         "#FDBA9A",
 
-    "Language Acquisition":
+    "Spanish Language & Literature":
+        "#FDBA9A",
+
+    "Kiswahili":
+        "#FDBA9A",
+
+    "Kiswahili Language & Literature":
+        "#FDBA9A",
+
+    "Korean":
+        "#FDBA9A",
+
+    "Korean Language & Literature":
+        "#FDBA9A",
+
+    "German":
+        "#FDBA9A",
+
+    "German Language & Literature":
+        "#FDBA9A",
+
+    "Arabic":
+        "#FDBA9A",
+
+    "Arabic Language & Literature":
+        "#FDBA9A",
+
+    "Portuguese":
+        "#FDBA9A",
+
+    "Portuguese Language & Literature":
+        "#FDBA9A",
+
+    "Dutch":
+        "#FDBA9A",
+
+    "Dutch Language & Literature":
+        "#FDBA9A",
+
+    "English Language Acquisition":
+        "#FDBA9A",
+
+    "French Language Acquisition":
+        "#FDBA9A",
+
+    "Chinese Language Acquisition":
+        "#FDBA9A",
+
+    "Spanish Language Acquisition":
+        "#FDBA9A",
+
+    "Hindi":
+        "#FDBA9A",
+
+    "Hindi Language Acquisition":
+        "#FDBA9A",
+
+    "Urdu":
+        "#FDBA9A",
+
+    "Urdu Language Acquisition":
+        "#FDBA9A",
+
+    "German Language Acquisition":
+        "#FDBA9A",
+
+    "Arabic Language Acquisition":
+        "#FDBA9A",
+
+    "Portuguese Language Acquisition":
+        "#FDBA9A",
+
+    "Dutch Language Acquisition":
         "#FDBA9A",
 
     "Integrated Humanities":
@@ -1704,10 +2196,7 @@ const subjectColors = {
     "Geography":
         "#FDE68A",
 
-    "Individuals & Societies":
-        "#FDE68A",
-
-    "Science":
+    "Integrated Sciences":
         "#A7E8BD",
 
     "Biology":
@@ -1722,19 +2211,28 @@ const subjectColors = {
     "Mathematics":
         "#FDE68A",
 
-    "Maths":
+    "Mathematics (MYP1-5)":
         "#FDE68A",
 
-    "Arts":
+    "Extended Mathematics":
+        "#FDE68A",
+
+    "Extended Mathematics (MYP4-5)":
+        "#FDE68A",
+
+    "Dance":
         "#C4B5FD",
 
-    "Visual Arts":
+    "Media Arts":
         "#C4B5FD",
 
     "Music":
         "#C4B5FD",
 
-    "Drama":
+    "Theatre":
+        "#C4B5FD",
+
+    "Visual Arts":
         "#C4B5FD",
 
     "Physical and Health Education":
@@ -1753,261 +2251,77 @@ const subjectColors = {
 
 
 /* =========================================================
-   NAVIGATION
+   ASSIGNMENT CATEGORIES
 ========================================================= */
 
-window.goDashboard = function() {
+const permanentAssignments = [
 
-    window.location.href =
-        "./dashboard.html";
+    {
+        name:"Formative Assessment",
+        color:"#B8E3F0"
+    },
 
-};
+    {
+        name:"Summative Assessment",
+        color:"#C8B9E8"
+    },
 
+    {
+        name:"Random Assignment",
+        color:"#F2C3A5"
+    },
 
-window.goProfile = function() {
+    {
+        name:"Other",
+        color:"#E8B8D4"
+    }
 
-    window.location.href =
-        "./profile.html";
-
-};
+];
 
 
 /* =========================================================
-   DATE HELPERS
+   WELCOME DATE
 ========================================================= */
 
-function makeDateKey(
-    year,
-    month,
-    day
-) {
-
-    return [
-        year,
-        String(month + 1).padStart(2, "0"),
-        String(day).padStart(2, "0")
-    ].join("-");
-
-}
-
-
-function getTodayDateKey() {
+function formatWelcomeDate(){
 
     const now =
         new Date();
 
-    return makeDateKey(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-    );
-
-}
-
-
-function parseDateKey(key) {
-
-    if (!key) {
-        return null;
-    }
-
-    const parts =
-        key.split("-").map(Number);
-
-    if (parts.length !== 3) {
-        return null;
-    }
-
-    return new Date(
-        parts[0],
-        parts[1] - 1,
-        parts[2]
-    );
-
-}
-
-
-function formatDate(key) {
-
-    const date =
-        parseDateKey(key);
-
-    if (!date) {
-        return "No date";
-    }
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            day: "numeric",
-            month: "short"
-        }
-    );
-
-}
-
-
-/* =========================================================
-   TASK COLOURS
-========================================================= */
-
-function getTaskColor(task) {
-
-    if (task.status === "Done") {
-        return "#D8B9E8";
-    }
-
-    return (
-        subjectColors[task.course] ||
-        subjectColors["Other"]
-    );
-
-}
-
-
-/*
- * Notification tasks deliberately do NOT use
- * getTaskColor(), because completed tasks never appear
- * inside the notification panel.
- */
-function getNotificationTaskColor(task) {
-
-    return (
-        subjectColors[task.course] ||
-        subjectColors["Other"]
-    );
-
-}
-
-
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
-function getTasksDueToday() {
-
-    const today =
-        getTodayDateKey();
-
-    return tasks.filter(task =>
-
-        task.dueDate === today &&
-        task.status !== "Done"
-
-    );
-
-}
-
-
-function updateNotifications() {
-
-    const dueToday =
-        getTasksDueToday();
-
-    notificationBadge.textContent =
-        dueToday.length;
-
-    notificationBadge.classList.toggle(
-        "hidden",
-        dueToday.length === 0
-    );
-
-    notificationList.innerHTML = "";
-
-
-    if (dueToday.length === 0) {
-
-        notificationSummary.textContent =
-            "No unfinished tasks due today.";
-
-        notificationList.innerHTML = `
-
-            <div class="notification-empty">
-
-                <div class="notification-empty-title">
-                    You're all clear!
-                </div>
-
-                <div class="notification-empty-text">
-                    There are no unfinished tasks due today.
-                </div>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    notificationSummary.textContent =
-        `${dueToday.length} unfinished task${dueToday.length === 1 ? "" : "s"} due today`;
-
-
-    dueToday.forEach(task => {
-
-        const item =
-            document.createElement("button");
-
-        item.type = "button";
-
-        item.className =
-            "notification-task";
-
-        item.style.background =
-            getNotificationTaskColor(task);
-
-
-        const title =
-            document.createElement("span");
-
-        title.className =
-            "notification-task-title";
-
-        title.textContent =
-            task.title || "Untitled";
-
-
-        const subject =
-            document.createElement("span");
-
-        subject.className =
-            "notification-task-subject";
-
-        subject.textContent =
-            task.course || "Other";
-
-
-        item.append(
-            title,
-            subject
-        );
-
-
-        item.addEventListener(
-            "click",
-            () => {
-
-                notificationPanel.classList.remove(
-                    "open"
-                );
-
-                notificationButton.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-                openTaskEditor(
-                    task.id
-                );
-
+    welcomeDate.textContent =
+        now.toLocaleDateString(
+            undefined,
+            {
+                weekday:"long",
+                month:"long",
+                day:"numeric",
+                year:"numeric"
             }
         );
 
+}
 
-        notificationList.appendChild(
-            item
+formatWelcomeDate();
+
+
+/* =========================================================
+   SHOW DASHBOARD
+========================================================= */
+
+function showDashboard(){
+
+    lockScreen.classList.add(
+        "hidden"
+    );
+
+    dashboard.classList.add(
+        "visible"
+    );
+
+    requestAnimationFrame(() => {
+
+        dashboard.classList.add(
+            "entered"
         );
 
     });
@@ -2016,963 +2330,462 @@ function updateNotifications() {
 
 
 /* =========================================================
-   NOTIFICATION OPEN / CLOSE
+   LOCK-IN SLIDER
 ========================================================= */
 
-notificationButton.addEventListener(
-    "click",
-    event => {
+function updateSlider(clientX){
 
-        event.stopPropagation();
+    if(completed){
+        return;
+    }
 
-        const open =
-            notificationPanel.classList.toggle(
-                "open"
-            );
 
-        notificationButton.setAttribute(
-            "aria-expanded",
-            String(open)
+    const rect =
+        lockSlider.getBoundingClientRect();
+
+
+    const handleSize =
+        capHandle.offsetWidth;
+
+
+    const min = 8;
+
+
+    const max =
+        Math.max(
+            min,
+            rect.width -
+            handleSize -
+            8
         );
 
-        if (open) {
-            updateNotifications();
-        }
+
+    let x =
+        clientX -
+        rect.left -
+        handleSize / 2;
+
+
+    x =
+        Math.max(
+            min,
+            Math.min(
+                x,
+                max
+            )
+        );
+
+
+    const percentage =
+        (x - min) /
+        (max - min);
+
+
+    const percent =
+        percentage * 100;
+
+
+    capHandle.style.left =
+        `${x}px`;
+
+
+    lockProgress.style.width =
+        `${percent}%`;
+
+
+    if(percent >= 98){
+
+        completeLockIn();
 
     }
-);
 
+}
+
+
+/* =========================================================
+   DRAGGING
+========================================================= */
+
+function startDrag(event){
+
+    if(completed){
+        return;
+    }
+
+    dragging = true;
+
+    capHandle.classList.add(
+        "dragging"
+    );
+
+
+    const point =
+        event.touches
+        ? event.touches[0]
+        : event;
+
+
+    updateSlider(
+        point.clientX
+    );
+
+
+    if(event.cancelable){
+        event.preventDefault();
+    }
+
+}
+
+
+function drag(event){
+
+    if(
+        !dragging ||
+        completed
+    ){
+        return;
+    }
+
+
+    const point =
+        event.touches
+        ? event.touches[0]
+        : event;
+
+
+    updateSlider(
+        point.clientX
+    );
+
+
+    if(event.cancelable){
+        event.preventDefault();
+    }
+
+}
+
+
+function stopDrag(){
+
+    dragging = false;
+
+    capHandle.classList.remove(
+        "dragging"
+    );
+
+}
+
+
+capHandle.addEventListener(
+    "mousedown",
+    startDrag
+);
 
 document.addEventListener(
-    "click",
-    event => {
+    "mousemove",
+    drag
+);
 
-        if (
-            !notificationPanel.contains(
-                event.target
-            ) &&
-            !event.target.closest(
-                ".notification-button"
-            )
-        ) {
+document.addEventListener(
+    "mouseup",
+    stopDrag
+);
 
-            notificationPanel.classList.remove(
-                "open"
-            );
-
-            notificationButton.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-
+capHandle.addEventListener(
+    "touchstart",
+    startDrag,
+    {
+        passive:false
     }
+);
+
+document.addEventListener(
+    "touchmove",
+    drag,
+    {
+        passive:false
+    }
+);
+
+document.addEventListener(
+    "touchend",
+    stopDrag
 );
 
 
 /* =========================================================
-   SUBJECT DROPDOWN
+   COMPLETE LOCK-IN
 ========================================================= */
 
-function renderSubjectOptions() {
+async function completeLockIn(){
 
-    taskCourse.innerHTML = "";
-
-    const availableSubjects =
-        subjects.length
-            ? subjects
-            : Object.keys(subjectColors);
+    if(completed){
+        return;
+    }
 
 
-    availableSubjects.forEach(subject => {
+    completed = true;
 
-        const option =
-            document.createElement("option");
-
-        option.value =
-            subject;
-
-        option.textContent =
-            subject;
-
-        taskCourse.appendChild(
-            option
-        );
-
-    });
-
-}
+    dragging = false;
 
 
-/* =========================================================
-   CALENDAR
-========================================================= */
-
-function renderCalendar() {
-
-    calendar.innerHTML = "";
-
-    const today =
-        new Date();
-
-    today.setHours(
-        0,
-        0,
-        0,
-        0
+    capHandle.classList.remove(
+        "dragging"
     );
 
 
-    const dayNames = [
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat"
-    ];
-
-
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const date =
-            new Date(today);
-
-        date.setDate(
-            today.getDate() - today.getDay() + i
+    const finalPosition =
+        Math.max(
+            8,
+            lockSlider.offsetWidth -
+            capHandle.offsetWidth -
+            8
         );
 
 
-        const dateKey =
-            makeDateKey(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate()
-            );
+    capHandle.style.left =
+        `${finalPosition}px`;
 
 
-        const dayColumn =
-            document.createElement("div");
-
-        dayColumn.className =
-            "day-column";
+    lockProgress.style.width =
+        "100%";
 
 
-        if (
-            i === 0 ||
-            i === 6
-        ) {
-
-            dayColumn.classList.add(
-                "weekend"
-            );
-
-        }
+    lockText.textContent =
+        "We're locked in!";
 
 
-        const header =
-            document.createElement("div");
+    if(currentUser){
 
-        header.className =
-            "day-header";
+        try{
 
-
-        const name =
-            document.createElement("div");
-
-        name.className =
-            "day-name";
-
-        name.textContent =
-            dayNames[i];
-
-
-        const number =
-            document.createElement("div");
-
-        number.className =
-            "day-number";
-
-        number.textContent =
-            date.getDate();
-
-
-        if (
-            dateKey ===
-            getTodayDateKey()
-        ) {
-
-            number.classList.add(
-                "today"
-            );
-
-        }
-
-
-        header.append(
-            name,
-            number
-        );
-
-
-        const taskContainer =
-            document.createElement("div");
-
-        taskContainer.className =
-            "day-tasks";
-
-
-        const dayTasks =
-            tasks.filter(
-                task =>
-                    task.date === dateKey
-            );
-
-
-        if (
-            dayTasks.length === 0
-        ) {
-
-            const empty =
-                document.createElement("div");
-
-            empty.className =
-                "no-tasks";
-
-            empty.textContent =
-                "No tasks";
-
-            taskContainer.appendChild(
-                empty
-            );
-
-        } else {
-
-            dayTasks.forEach(task => {
-
-                const taskButton =
-                    document.createElement("button");
-
-                taskButton.type =
-                    "button";
-
-                taskButton.className =
-                    "task-card";
-
-
-                if (
-                    task.status ===
-                    "Done"
-                ) {
-
-                    taskButton.classList.add(
-                        "done"
-                    );
-
+            await setDoc(
+                doc(
+                    db,
+                    "users",
+                    currentUser.uid
+                ),
+                {
+                    lockedIn:true,
+                    updatedAt:
+                        serverTimestamp()
+                },
+                {
+                    merge:true
                 }
-
-
-                taskButton.style.background =
-                    getTaskColor(task);
-
-
-                const title =
-                    document.createElement("span");
-
-                title.className =
-                    "task-card-title";
-
-                title.textContent =
-                    task.title || "Untitled";
-
-
-                const course =
-                    document.createElement("span");
-
-                course.className =
-                    "task-card-course";
-
-                course.textContent =
-                    task.course || "Other";
-
-
-                taskButton.append(
-                    title,
-                    course
-                );
-
-
-                taskButton.addEventListener(
-                    "click",
-                    () => {
-
-                        openTaskEditor(
-                            task.id
-                        );
-
-                    }
-                );
-
-
-                taskContainer.appendChild(
-                    taskButton
-                );
-
-            });
-
-        }
-
-
-        dayColumn.append(
-            header,
-            taskContainer
-        );
-
-
-        calendar.appendChild(
-            dayColumn
-        );
-
-    }
-
-
-    renderOnMyPlate();
-
-    renderComingUp();
-
-    updateNotifications();
-
-}
-
-
-/* =========================================================
-   ON MY PLATE
-========================================================= */
-
-function renderOnMyPlate() {
-
-    plateList.innerHTML = "";
-
-
-    const activeTasks =
-        tasks
-            .filter(
-                task =>
-                    task.status !== "Done"
-            )
-            .sort(
-                (a, b) =>
-                    (a.dueDate || "")
-                    .localeCompare(
-                        b.dueDate || ""
-                    )
-            )
-            .slice(0, 5);
-
-
-    if (
-        activeTasks.length === 0
-    ) {
-
-        plateList.innerHTML = `
-
-            <div class="empty-state">
-                You're all caught up.
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    activeTasks.forEach(task => {
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "plate-item";
-
-
-        const main =
-            document.createElement("div");
-
-        main.className =
-            "plate-main";
-
-
-        const title =
-            document.createElement("div");
-
-        title.className =
-            "plate-title";
-
-        title.textContent =
-            task.title || "Untitled";
-
-
-        const course =
-            document.createElement("div");
-
-        course.className =
-            "plate-course";
-
-        course.textContent =
-            task.course || "Other";
-
-
-        main.append(
-            title,
-            course
-        );
-
-
-        const date =
-            document.createElement("div");
-
-        date.className =
-            "plate-date";
-
-        date.textContent =
-            formatDate(
-                task.dueDate
             );
 
+        }catch(error){
 
-        item.append(
-            main,
-            date
-        );
-
-
-        item.addEventListener(
-            "click",
-            () => openTaskEditor(task.id)
-        );
-
-        item.style.cursor =
-            "pointer";
-
-
-        plateList.appendChild(
-            item
-        );
-
-    });
-
-}
-
-
-/* =========================================================
-   COMING UP
-========================================================= */
-
-function renderComingUp() {
-
-    comingList.innerHTML = "";
-
-
-    const today =
-        getTodayDateKey();
-
-
-    const upcoming =
-        tasks
-            .filter(
-                task =>
-                    task.status !== "Done" &&
-                    task.dueDate &&
-                    task.dueDate >= today
-            )
-            .sort(
-                (a, b) =>
-                    a.dueDate.localeCompare(
-                        b.dueDate
-                    )
-            )
-            .slice(0, 4);
-
-
-    if (
-        upcoming.length === 0
-    ) {
-
-        comingList.innerHTML = `
-
-            <div class="empty-state">
-                Nothing coming up yet.
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    upcoming.forEach(task => {
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "coming-item";
-
-
-        const main =
-            document.createElement("div");
-
-        main.className =
-            "coming-main";
-
-
-        const title =
-            document.createElement("div");
-
-        title.className =
-            "coming-title";
-
-        title.textContent =
-            task.title || "Untitled";
-
-
-        const course =
-            document.createElement("div");
-
-        course.className =
-            "coming-course";
-
-        course.textContent =
-            task.course || "Other";
-
-
-        main.append(
-            title,
-            course
-        );
-
-
-        const days =
-            document.createElement("div");
-
-        days.className =
-            "coming-days";
-
-        days.textContent =
-            getDaysUntil(
-                task.dueDate
+            console.warn(
+                "Lock-in state could not be saved. Continuing.",
+                error
             );
-
-
-        item.append(
-            main,
-            days
-        );
-
-
-        item.addEventListener(
-            "click",
-            () => openTaskEditor(task.id)
-        );
-
-        item.style.cursor =
-            "pointer";
-
-
-        comingList.appendChild(
-            item
-        );
-
-    });
-
-}
-
-
-function getDaysUntil(dateKey) {
-
-    const today =
-        parseDateKey(
-            getTodayDateKey()
-        );
-
-    const target =
-        parseDateKey(
-            dateKey
-        );
-
-
-    if (
-        !today ||
-        !target
-    ) {
-
-        return "";
-
-    }
-
-
-    const difference =
-        Math.round(
-            (
-                target - today
-            ) /
-            86400000
-        );
-
-
-    if (
-        difference === 0
-    ) {
-
-        return "Today";
-
-    }
-
-
-    if (
-        difference === 1
-    ) {
-
-        return "Tomorrow";
-
-    }
-
-
-    return `${difference} days`;
-
-}
-
-
-/* =========================================================
-   TASK EDITOR
-========================================================= */
-
-function openTaskEditor(taskId) {
-
-    const task =
-        tasks.find(
-            item =>
-                item.id === taskId
-        );
-
-
-    if (!task) {
-        return;
-    }
-
-
-    editingTaskId =
-        taskId;
-
-
-    taskTitle.value =
-        task.title || "";
-
-
-    taskCourse.value =
-        task.course || "";
-
-
-    taskStatus.value =
-        task.status || "Not Started";
-
-
-    taskDate.value =
-        task.date || "";
-
-
-    taskDueDate.value =
-        task.dueDate || "";
-
-
-    taskNotes.value =
-        task.notes || "";
-
-
-    taskModal.classList.add(
-        "open"
-    );
-
-}
-
-
-window.openTaskEditor =
-    openTaskEditor;
-
-
-/* =========================================================
-   CLOSE TASK EDITOR
-========================================================= */
-
-function closeTaskEditor() {
-
-    editingTaskId =
-        null;
-
-    taskModal.classList.remove(
-        "open"
-    );
-
-}
-
-
-closeTaskModal.addEventListener(
-    "click",
-    closeTaskEditor
-);
-
-
-cancelTask.addEventListener(
-    "click",
-    closeTaskEditor
-);
-
-
-taskModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            taskModal
-        ) {
-
-            closeTaskEditor();
 
         }
 
     }
-);
+
+
+    setTimeout(() => {
+
+        showDashboard();
+
+    },700);
+
+}
 
 
 /* =========================================================
-   SAVE TASK
+   AUTH
 ========================================================= */
 
-saveTask.addEventListener(
-    "click",
-    async () => {
+onAuthStateChanged(
+    auth,
+    async user => {
 
-        if (!editingTaskId) {
+        if(!user){
+
+            window.location.href =
+                "./account.html";
+
             return;
+
         }
 
 
-        const index =
-            tasks.findIndex(
-                task =>
-                    task.id ===
-                    editingTaskId
-            );
+        currentUser =
+            user;
 
 
-        if (index === -1) {
-            return;
-        }
-
-
-        tasks[index] = {
-
-            ...tasks[index],
-
-            title:
-                taskTitle.value.trim(),
-
-            course:
-                taskCourse.value,
-
-            status:
-                taskStatus.value,
-
-            date:
-                taskDate.value,
-
-            dueDate:
-                taskDueDate.value,
-
-            notes:
-                taskNotes.value.trim()
-
-        };
-
-
-        renderCalendar();
-
-        closeTaskEditor();
-
-        await saveDashboard();
+        await loadUserData();
 
     }
 );
-
-
-/* =========================================================
-   SAVE DASHBOARD
-========================================================= */
-
-async function saveDashboard() {
-
-    if (!currentUser) {
-
-        localStorage.setItem(
-            "mypHavenTasks",
-            JSON.stringify(tasks)
-        );
-
-        localStorage.setItem(
-            "mypHavenSubjects",
-            JSON.stringify(subjects)
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        await setDoc(
-
-            doc(
-                db,
-                "users",
-                currentUser.uid
-            ),
-
-            {
-
-                tasks: tasks,
-
-                subjects: subjects,
-
-                backgroundImage:
-                    backgroundImage,
-
-                updatedAt:
-                    serverTimestamp()
-
-            },
-
-            {
-                merge: true
-            }
-
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Could not save dashboard:",
-            error
-        );
-
-
-        localStorage.setItem(
-            "mypHavenTasks",
-            JSON.stringify(tasks)
-        );
-
-    }
-
-}
 
 
 /* =========================================================
    LOAD USER DATA
 ========================================================= */
 
-async function loadUserData(user) {
+async function loadUserData(){
 
-    currentUser =
-        user;
+    try{
 
-
-    try {
-
-        const snapshot =
-            await getDoc(
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                )
+        const userRef =
+            doc(
+                db,
+                "users",
+                currentUser.uid
             );
 
 
-        if (
-            snapshot.exists()
-        ) {
+        const snapshot =
+            await getDoc(
+                userRef
+            );
+
+
+        if(snapshot.exists()){
 
             const data =
                 snapshot.data();
 
 
+            selectedSubjects =
+                Array.isArray(
+                    data.subjects
+                )
+                ? data.subjects
+                : [];
+
+
             tasks =
-                Array.isArray(data.tasks)
-                    ? data.tasks
-                    : [];
+                Array.isArray(
+                    data.tasks
+                )
+                ? data.tasks
+                : [];
 
 
-            subjects =
-                Array.isArray(data.subjects)
-                    ? data.subjects
-                    : [];
+            customAssignmentCategories =
+                Array.isArray(
+                    data.customAssignmentCategories
+                )
+                ? data.customAssignmentCategories
+                : [];
 
 
-            backgroundImage =
-                data.backgroundImage ||
-                null;
+            schoolWebUrl =
+                data.schoolWebUrl ||
+                "";
 
 
-            if (
-                backgroundImage
-            ) {
+            emailUrl =
+                data.emailUrl ||
+                "";
 
-                document.body.style.backgroundImage =
-                    `url("${backgroundImage}")`;
 
-                document.body.style.backgroundSize =
-                    "cover";
+            if(data.backgroundImageUrl){
 
-                document.body.style.backgroundAttachment =
-                    "fixed";
-
-                document.body.style.backgroundPosition =
-                    "center";
+                dashboardBackground.style.backgroundImage =
+                    `url("${data.backgroundImageUrl}")`;
 
             }
 
-        } else {
 
-            loadLocalFallback();
+            /*
+             * Keep local copies too.
+             */
+
+            if(schoolWebUrl){
+
+                localStorage.setItem(
+                    `mypHaven_school_${currentUser.uid}`,
+                    schoolWebUrl
+                );
+
+            }
+
+
+            if(emailUrl){
+
+                localStorage.setItem(
+                    `mypHaven_email_${currentUser.uid}`,
+                    emailUrl
+                );
+
+            }
+
+
+            renderCourses();
+
+            renderCalendar();
+
+
+            /*
+             * Returning users who have
+             * already locked in skip
+             * the lock-in screen.
+             */
+
+            if(data.lockedIn === true){
+
+                completed = true;
+
+                lockProgress.style.width =
+                    "100%";
+
+
+                const finalPosition =
+                    Math.max(
+                        8,
+                        lockSlider.offsetWidth -
+                        capHandle.offsetWidth -
+                        8
+                    );
+
+
+                capHandle.style.left =
+                    `${finalPosition}px`;
+
+
+                lockText.textContent =
+                    "We're locked in!";
+
+
+                setTimeout(() => {
+
+                    showDashboard();
+
+                },100);
+
+            }
+
+        }else{
+
+            selectedSubjects = [];
+
+            tasks = [];
+
+            customAssignmentCategories = [];
+
+            renderCourses();
+
+            renderCalendar();
 
         }
 
-    } catch (error) {
+    }catch(error){
 
         console.error(
-            "Could not load user data:",
+            "Could not load dashboard:",
             error
         );
 
         loadLocalFallback();
 
     }
-
-
-    renderSubjectOptions();
-
-    renderCalendar();
-
-    updateLockProgress();
 
 }
 
@@ -2981,45 +2794,144 @@ async function loadUserData(user) {
    LOCAL FALLBACK
 ========================================================= */
 
-function loadLocalFallback() {
+function loadLocalFallback(){
 
-    try {
+    try{
 
-        const savedTasks =
-            localStorage.getItem(
-                "mypHavenTasks"
+        const local =
+            JSON.parse(
+                localStorage.getItem(
+                    `mypHavenDashboard_${currentUser.uid}`
+                ) || "{}"
             );
 
 
-        const savedSubjects =
+        tasks =
+            local.tasks ||
+            [];
+
+
+        selectedSubjects =
+            local.subjects ||
+            [];
+
+
+        customAssignmentCategories =
+            local.customAssignmentCategories ||
+            [];
+
+
+        const savedBackground =
+            local.backgroundImage ||
             localStorage.getItem(
-                "mypHavenSubjects"
+                `mypHavenBackground_${currentUser.uid}`
             );
 
 
-        if (savedTasks) {
+        if(savedBackground){
 
-            tasks =
-                JSON.parse(
-                    savedTasks
-                );
+            dashboardBackground.style.backgroundImage =
+                `url("${savedBackground}")`;
 
         }
 
 
-        if (savedSubjects) {
+        schoolWebUrl =
+            localStorage.getItem(
+                `mypHaven_school_${currentUser.uid}`
+            ) || "";
 
-            subjects =
-                JSON.parse(
-                    savedSubjects
-                );
 
-        }
+        emailUrl =
+            localStorage.getItem(
+                `mypHaven_email_${currentUser.uid}`
+            ) || "";
 
-    } catch (error) {
+    }catch(error){
 
-        console.error(
-            "Could not load local data:",
+        console.warn(
+            "Could not load local dashboard data:",
+            error
+        );
+
+    }
+
+
+    renderCourses();
+
+    renderCalendar();
+
+}
+
+
+/* =========================================================
+   SAVE DASHBOARD
+========================================================= */
+
+async function saveDashboard(){
+
+    if(!currentUser){
+        return;
+    }
+
+
+    const background =
+        dashboardBackground.style.backgroundImage;
+
+
+    const localData = {
+
+        tasks,
+
+        subjects:
+            selectedSubjects,
+
+        customAssignmentCategories,
+
+        backgroundImage:
+            background
+
+    };
+
+
+    localStorage.setItem(
+        `mypHavenDashboard_${currentUser.uid}`,
+        JSON.stringify(
+            localData
+        )
+    );
+
+
+    try{
+
+        await setDoc(
+            doc(
+                db,
+                "users",
+                currentUser.uid
+            ),
+            {
+
+                tasks,
+
+                subjects:
+                    selectedSubjects,
+
+                customAssignmentCategories,
+
+                updatedAt:
+                    serverTimestamp()
+
+            },
+            {
+                merge:true
+            }
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Dashboard saved locally:",
             error
         );
 
@@ -3029,59 +2941,10 @@ function loadLocalFallback() {
 
 
 /* =========================================================
-   PROGRESS
-========================================================= */
-
-function updateLockProgress() {
-
-    const total =
-        tasks.length;
-
-
-    if (total === 0) {
-
-        lockFill.style.width =
-            "0%";
-
-        lockPercent.textContent =
-            "0%";
-
-        return;
-
-    }
-
-
-    const completed =
-        tasks.filter(
-            task =>
-                task.status === "Done"
-        ).length;
-
-
-    const percentage =
-        Math.round(
-            (
-                completed /
-                total
-            ) *
-            100
-        );
-
-
-    lockFill.style.width =
-        `${percentage}%`;
-
-    lockPercent.textContent =
-        `${percentage}%`;
-
-}
-
-
-/* =========================================================
    BACKGROUND
 ========================================================= */
 
-backgroundButton.addEventListener(
+backgroundUploadButton.addEventListener(
     "click",
     () => {
 
@@ -3093,13 +2956,13 @@ backgroundButton.addEventListener(
 
 backgroundInput.addEventListener(
     "change",
-    async event => {
+    event => {
 
         const file =
             event.target.files[0];
 
 
-        if (!file) {
+        if(!file){
             return;
         }
 
@@ -3109,26 +2972,52 @@ backgroundInput.addEventListener(
 
 
         reader.onload =
-            async () => {
+            async e => {
 
-                backgroundImage =
-                    reader.result;
-
-
-                document.body.style.backgroundImage =
-                    `url("${backgroundImage}")`;
-
-                document.body.style.backgroundSize =
-                    "cover";
-
-                document.body.style.backgroundAttachment =
-                    "fixed";
-
-                document.body.style.backgroundPosition =
-                    "center";
+                const image =
+                    e.target.result;
 
 
-                await saveDashboard();
+                dashboardBackground.style.backgroundImage =
+                    `url("${image}")`;
+
+
+                localStorage.setItem(
+                    `mypHavenBackground_${currentUser.uid}`,
+                    image
+                );
+
+
+                try{
+
+                    await setDoc(
+                        doc(
+                            db,
+                            "users",
+                            currentUser.uid
+                        ),
+                        {
+
+                            backgroundImageUrl:
+                                image,
+
+                            updatedAt:
+                                serverTimestamp()
+
+                        },
+                        {
+                            merge:true
+                        }
+                    );
+
+                }catch(error){
+
+                    console.warn(
+                        "Background saved locally:",
+                        error
+                    );
+
+                }
 
             };
 
@@ -3142,29 +3031,1171 @@ backgroundInput.addEventListener(
 
 
 /* =========================================================
-   AUTH
+   COURSE OPTIONS
 ========================================================= */
 
-onAuthStateChanged(
-    auth,
-    async user => {
+function renderCourses(){
 
-        if (!user) {
+    courseOptions.innerHTML =
+        "";
 
-            window.location.href =
-                "./account.html";
 
-            return;
+    const subjects = [
+
+        ...selectedSubjects,
+
+        "Other"
+
+    ];
+
+
+    const unique =
+        [
+            ...new Set(
+                subjects
+            )
+        ];
+
+
+    unique.forEach(
+        subject => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "course-option";
+
+
+            button.textContent =
+                subject;
+
+
+            button.style.background =
+                subjectColors[
+                    subject
+                ] ||
+                "#E8B8D4";
+
+
+            if(
+                selectedCourse ===
+                subject
+            ){
+
+                button.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedCourse =
+                        subject;
+
+
+                    document
+                        .querySelectorAll(
+                            ".course-option"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                }
+            );
+
+
+            courseOptions.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+function renderCalendar(){
+
+    const year =
+        currentCalendarDate.getFullYear();
+
+
+    const month =
+        currentCalendarDate.getMonth();
+
+
+    monthTitle.textContent =
+        new Date(
+            year,
+            month,
+            1
+        ).toLocaleDateString(
+            undefined,
+            {
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+
+    calendarGrid.innerHTML =
+        "";
+
+
+    const firstDay =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    for(
+        let i = 0;
+        i < firstDay;
+        i++
+    ){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.className =
+            "day-cell empty";
+
+
+        calendarGrid.appendChild(
+            empty
+        );
+
+    }
+
+
+    for(
+        let day = 1;
+        day <= daysInMonth;
+        day++
+    ){
+
+        const cell =
+            document.createElement(
+                "div"
+            );
+
+
+        cell.className =
+            "day-cell";
+
+
+        const number =
+            document.createElement(
+                "div"
+            );
+
+
+        number.className =
+            "day-number";
+
+
+        number.textContent =
+            day;
+
+
+        const now =
+            new Date();
+
+
+        if(
+            day === now.getDate() &&
+            month === now.getMonth() &&
+            year === now.getFullYear()
+        ){
+
+            number.classList.add(
+                "today-number"
+            );
 
         }
 
 
-        await loadUserData(
-            user
+        cell.appendChild(
+            number
+        );
+
+
+        const list =
+            document.createElement(
+                "div"
+            );
+
+
+        list.className =
+            "task-list";
+
+
+        const dateKey =
+            makeDateKey(
+                year,
+                month,
+                day
+            );
+
+
+        const dayTasks =
+            tasks.filter(
+                task =>
+                    task.date ===
+                    dateKey
+            );
+
+
+        dayTasks.forEach(
+            task => {
+
+                const taskElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                taskElement.className =
+                    "calendar-task";
+
+
+                taskElement.textContent =
+                    task.title ||
+                    "Untitled";
+
+
+                taskElement.style.background =
+                    getTaskColor(
+                        task
+                    );
+
+
+                taskElement.addEventListener(
+                    "click",
+                    event => {
+
+                        event.stopPropagation();
+
+
+                        openTaskEditor(
+                            task.id
+                        );
+
+                    }
+                );
+
+
+                list.appendChild(
+                    taskElement
+                );
+
+            }
+        );
+
+
+        cell.appendChild(
+            list
+        );
+
+
+        cell.addEventListener(
+            "dblclick",
+            () => {
+
+                openTaskCreator(
+                    dateKey
+                );
+
+            }
+        );
+
+
+        calendarGrid.appendChild(
+            cell
         );
 
     }
+
+}
+
+
+/* =========================================================
+   DATE KEY
+========================================================= */
+
+function makeDateKey(
+    year,
+    month,
+    day
+){
+
+    return [
+
+        year,
+
+        String(
+            month + 1
+        ).padStart(
+            2,
+            "0"
+        ),
+
+        String(
+            day
+        ).padStart(
+            2,
+            "0"
+        )
+
+    ].join("-");
+
+}
+
+
+/* =========================================================
+   TASK COLOR
+========================================================= */
+
+function getTaskColor(task){
+
+    if(
+        task.status ===
+        "Done"
+    ){
+
+        return "#D8B9E8";
+
+    }
+
+
+    if(task.course){
+
+        return (
+            subjectColors[
+                task.course
+            ] ||
+            "#E8B8D4"
+        );
+
+    }
+
+
+    return "#D9D6E8";
+
+}
+
+
+/* =========================================================
+   CALENDAR NAVIGATION
+========================================================= */
+
+document
+    .getElementById(
+        "previousMonth"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            currentCalendarDate =
+                new Date(
+                    currentCalendarDate.getFullYear(),
+                    currentCalendarDate.getMonth() - 1,
+                    1
+                );
+
+
+            renderCalendar();
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "nextMonth"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            currentCalendarDate =
+                new Date(
+                    currentCalendarDate.getFullYear(),
+                    currentCalendarDate.getMonth() + 1,
+                    1
+                );
+
+
+            renderCalendar();
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "todayButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            currentCalendarDate =
+                new Date();
+
+
+            renderCalendar();
+
+        }
+    );
+
+
+/* =========================================================
+   TASK CREATOR
+========================================================= */
+
+function openTaskCreator(
+    date
+){
+
+    editingTaskId =
+        null;
+
+
+    taskTitle.value =
+        "";
+
+
+    selectedCourse =
+        "";
+
+
+    selectedStatus =
+        "Not Started";
+
+
+    selectedAssignment =
+        "";
+
+
+    taskDate.value =
+        date;
+
+
+    lastReview.value =
+        "";
+
+
+    dueDate.value =
+        date;
+
+
+    taskNotes.value =
+        "";
+
+
+    updateDaysLeft();
+
+    renderCourses();
+
+    renderAssignments();
+
+    updateStatusButtons();
+
+
+    document
+        .getElementById(
+            "addTaskButton"
+        )
+        .textContent =
+        "Add Task";
+
+
+    taskModal.classList.add(
+        "open"
+    );
+
+}
+
+
+function openTaskEditor(
+    taskId
+){
+
+    const task =
+        tasks.find(
+            item =>
+                item.id ===
+                taskId
+        );
+
+
+    if(!task){
+        return;
+    }
+
+
+    editingTaskId =
+        taskId;
+
+
+    taskTitle.value =
+        task.title ||
+        "";
+
+
+    selectedCourse =
+        task.course ||
+        "";
+
+
+    selectedStatus =
+        task.status ||
+        "Not Started";
+
+
+    selectedAssignment =
+        task.assignment ||
+        "";
+
+
+    taskDate.value =
+        task.date ||
+        "";
+
+
+    lastReview.value =
+        task.lastReview ||
+        "";
+
+
+    dueDate.value =
+        task.dueDate ||
+        "";
+
+
+    taskNotes.value =
+        task.notes ||
+        "";
+
+
+    renderCourses();
+
+    renderAssignments();
+
+    updateStatusButtons();
+
+    updateDaysLeft();
+
+
+    document
+        .getElementById(
+            "addTaskButton"
+        )
+        .textContent =
+        "Save Task";
+
+
+    taskModal.classList.add(
+        "open"
+    );
+
+}
+
+
+document
+    .getElementById(
+        "closeTaskPanel"
+    )
+    .addEventListener(
+        "click",
+        closeTaskPanel
+    );
+
+
+function closeTaskPanel(){
+
+    taskModal.classList.remove(
+        "open"
+    );
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".status-option"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedStatus =
+                        button.dataset.status;
+
+
+                    updateStatusButtons();
+
+                    updateDaysLeft();
+
+                }
+            );
+
+        }
+    );
+
+
+function updateStatusButtons(){
+
+    document
+        .querySelectorAll(
+            ".status-option"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "selected",
+                    button.dataset.status ===
+                    selectedStatus
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   ASSIGNMENTS
+========================================================= */
+
+function renderAssignments(){
+
+    assignmentOptions.innerHTML =
+        "";
+
+
+    const all = [
+
+        ...permanentAssignments,
+
+        ...customAssignmentCategories
+
+    ];
+
+
+    const search =
+        assignmentSearch.value
+            .trim()
+            .toLowerCase();
+
+
+    const filtered =
+        all.filter(
+            option =>
+                option.name
+                    .toLowerCase()
+                    .includes(search)
+        );
+
+
+    filtered.forEach(
+        option => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "assignment-option";
+
+
+            row.style.background =
+                option.color;
+
+
+            const text =
+                document.createElement(
+                    "span"
+                );
+
+
+            text.textContent =
+                option.name;
+
+
+            row.appendChild(
+                text
+            );
+
+
+            const permanent =
+                permanentAssignments.some(
+                    item =>
+                        item.name ===
+                        option.name
+                );
+
+
+            if(!permanent){
+
+                const menu =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                menu.type =
+                    "button";
+
+
+                menu.className =
+                    "assignment-menu";
+
+
+                menu.textContent =
+                    "⋯";
+
+
+                menu.addEventListener(
+                    "click",
+                    event => {
+
+                        event.stopPropagation();
+
+                        manageCustomCategory(
+                            option
+                        );
+
+                    }
+                );
+
+
+                row.appendChild(
+                    menu
+                );
+
+            }
+
+
+            if(
+                selectedAssignment ===
+                option.name
+            ){
+
+                row.style.outline =
+                    "3px solid rgba(0,0,0,.10)";
+
+            }
+
+
+            row.addEventListener(
+                "click",
+                () => {
+
+                    selectedAssignment =
+                        option.name;
+
+
+                    document
+                        .querySelectorAll(
+                            ".assignment-option"
+                        )
+                        .forEach(
+                            item =>
+                                item.style.outline =
+                                    "none"
+                        );
+
+
+                    row.style.outline =
+                        "3px solid rgba(0,0,0,.10)";
+
+                }
+            );
+
+
+            assignmentOptions.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    if(
+        search &&
+        !all.some(
+            option =>
+                option.name
+                    .toLowerCase() ===
+                search
+        )
+    ){
+
+        const create =
+            document.createElement(
+                "button"
+            );
+
+
+        create.type =
+            "button";
+
+
+        create.className =
+            "create-custom";
+
+
+        create.textContent =
+            `Create ${assignmentSearch.value}`;
+
+
+        create.addEventListener(
+            "click",
+            () => {
+
+                createCustomCategory(
+                    assignmentSearch.value.trim()
+                );
+
+            }
+        );
+
+
+        assignmentOptions.appendChild(
+            create
+        );
+
+    }
+
+}
+
+
+assignmentSearch.addEventListener(
+    "input",
+    renderAssignments
 );
+
+
+function createCustomCategory(
+    name
+){
+
+    if(!name){
+        return;
+    }
+
+
+    const exists =
+        permanentAssignments.some(
+            item =>
+                item.name.toLowerCase() ===
+                name.toLowerCase()
+        ) ||
+        customAssignmentCategories.some(
+            item =>
+                item.name.toLowerCase() ===
+                name.toLowerCase()
+        );
+
+
+    if(exists){
+
+        selectedAssignment =
+            name;
+
+        renderAssignments();
+
+        return;
+
+    }
+
+
+    const category = {
+
+        id:
+            "custom_" +
+            Date.now(),
+
+        name,
+
+        color:
+            "#E8B8D4"
+
+    };
+
+
+    customAssignmentCategories.push(
+        category
+    );
+
+
+    selectedAssignment =
+        name;
+
+
+    assignmentSearch.value =
+        "";
+
+
+    renderAssignments();
+
+    saveDashboard();
+
+}
+
+
+function manageCustomCategory(
+    category
+){
+
+    const action =
+        prompt(
+            `${category.name}\n\nType:\nrename\ncolor\ndelete`
+        );
+
+
+    if(!action){
+        return;
+    }
+
+
+    if(
+        action.toLowerCase() ===
+        "rename"
+    ){
+
+        const name =
+            prompt(
+                "New category name:",
+                category.name
+            );
+
+
+        if(name){
+
+            category.name =
+                name;
+
+            renderAssignments();
+
+            saveDashboard();
+
+        }
+
+    }
+
+
+    else if(
+        action.toLowerCase() ===
+        "color"
+    ){
+
+        const color =
+            prompt(
+                "Enter a HEX color:",
+                category.color
+            );
+
+
+        if(
+            color &&
+            /^#[0-9A-F]{6}$/i.test(
+                color
+            )
+        ){
+
+            category.color =
+                color;
+
+            renderAssignments();
+
+            saveDashboard();
+
+        }
+
+    }
+
+
+    else if(
+        action.toLowerCase() ===
+        "delete"
+    ){
+
+        const confirmed =
+            confirm(
+                "Delete this custom category?"
+            );
+
+
+        if(confirmed){
+
+            customAssignmentCategories =
+                customAssignmentCategories.filter(
+                    item =>
+                        item.id !==
+                        category.id
+                );
+
+
+            if(
+                selectedAssignment ===
+                category.name
+            ){
+
+                selectedAssignment =
+                    "";
+
+            }
+
+
+            renderAssignments();
+
+            saveDashboard();
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   DAYS LEFT
+========================================================= */
+
+dueDate.addEventListener(
+    "change",
+    updateDaysLeft
+);
+
+
+function updateDaysLeft(){
+
+    if(!dueDate.value){
+
+        daysLeft.value =
+            "Select a due date";
+
+        return;
+
+    }
+
+
+    if(
+        selectedStatus ===
+        "Done"
+    ){
+
+        daysLeft.value =
+            "COMPLETED";
+
+        return;
+
+    }
+
+
+    const today =
+        new Date();
+
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    const due =
+        new Date(
+            dueDate.value +
+            "T00:00:00"
+        );
+
+
+    const difference =
+        Math.round(
+            (
+                due.getTime() -
+                today.getTime()
+            ) /
+            86400000
+        );
+
+
+    if(difference > 0){
+
+        daysLeft.value =
+            `${difference} Days Left`;
+
+    }
+
+    else if(difference === 0){
+
+        daysLeft.value =
+            "Due Today";
+
+    }
+
+    else{
+
+        daysLeft.value =
+            `🚨 DUE DATE Passed — ${difference} Days Late`;
+
+    }
+
+}
 
 
 /* =========================================================
@@ -3174,9 +4205,18 @@ onAuthStateChanged(
 setInterval(
     () => {
 
-        renderCalendar();
+        if(
+            taskModal.classList.contains(
+                "open"
+            )
+        ){
 
-        updateLockProgress();
+            updateDaysLeft();
+
+        }
+
+
+        renderCalendar();
 
     },
     60000
@@ -3184,47 +4224,694 @@ setInterval(
 
 
 /* =========================================================
-   KEYBOARD CONTROLS
+   ADD / SAVE TASK
 ========================================================= */
+
+document
+    .getElementById(
+        "addTaskButton"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            const title =
+                taskTitle.value.trim();
+
+
+            if(!title){
+
+                alert(
+                    "Please give your task a name."
+                );
+
+                taskTitle.focus();
+
+                return;
+
+            }
+
+
+            if(!selectedCourse){
+
+                alert(
+                    "Please select a course."
+                );
+
+                return;
+
+            }
+
+
+            if(!selectedAssignment){
+
+                alert(
+                    "Please select what the assignment is."
+                );
+
+                return;
+
+            }
+
+
+            if(!taskDate.value){
+
+                alert(
+                    "Please select a date."
+                );
+
+                return;
+
+            }
+
+
+            const existingTask =
+                tasks.find(
+                    item =>
+                        item.id ===
+                        editingTaskId
+                );
+
+
+            const task = {
+
+                id:
+                    editingTaskId ||
+                    `task_${Date.now()}`,
+
+                title,
+
+                course:
+                    selectedCourse,
+
+                status:
+                    selectedStatus,
+
+                assignment:
+                    selectedAssignment,
+
+                date:
+                    taskDate.value,
+
+                lastReview:
+                    lastReview.value,
+
+                dueDate:
+                    dueDate.value,
+
+                notes:
+                    taskNotes.value.trim(),
+
+                createdAt:
+                    existingTask?.createdAt ||
+                    new Date().toISOString()
+
+            };
+
+
+            if(editingTaskId){
+
+                tasks =
+                    tasks.map(
+                        item =>
+                            item.id ===
+                            editingTaskId
+                            ? task
+                            : item
+                    );
+
+            }else{
+
+                tasks.push(
+                    task
+                );
+
+            }
+
+
+            closeTaskPanel();
+
+            renderCalendar();
+
+            await saveDashboard();
+
+            showTaskCelebration();
+
+        }
+    );
+
+
+/* =========================================================
+   TASK CELEBRATION
+========================================================= */
+
+function showTaskCelebration(){
+
+    celebration.classList.add(
+        "show"
+    );
+
+
+    createConfetti(
+        70
+    );
+
+
+    setTimeout(
+        () => {
+
+            celebration.classList.remove(
+                "show"
+            );
+
+        },
+        2600
+    );
+
+}
+
+
+function createConfetti(
+    count
+){
+
+    const pastelColors = [
+
+        "#FFB6C1",
+        "#FFD6A5",
+        "#FDFFB6",
+        "#CAFFBF",
+        "#BDE0FE",
+        "#CDB4DB"
+
+    ];
+
+
+    for(
+        let i = 0;
+        i < count;
+        i++
+    ){
+
+        const piece =
+            document.createElement(
+                "div"
+            );
+
+
+        piece.className =
+            "confetti";
+
+
+        piece.style.background =
+            pastelColors[
+                Math.floor(
+                    Math.random() *
+                    pastelColors.length
+                )
+            ];
+
+
+        piece.style.left =
+            "50%";
+
+
+        piece.style.top =
+            "50%";
+
+
+        piece.style.setProperty(
+            "--x",
+            `${(Math.random()-.5)*700}px`
+        );
+
+
+        piece.style.setProperty(
+            "--y",
+            `${(Math.random()-.5)*500}px`
+        );
+
+
+        document.body.appendChild(
+            piece
+        );
+
+
+        setTimeout(
+            () =>
+                piece.remove(),
+            2000
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SCHOOL / EMAIL
+========================================================= */
+
+const schoolButton =
+    document.getElementById(
+        "schoolButton"
+    );
+
+const emailButton =
+    document.getElementById(
+        "emailButton"
+    );
+
+const linkPopup =
+    document.getElementById(
+        "linkPopup"
+    );
+
+const linkPopupTitle =
+    document.getElementById(
+        "linkPopupTitle"
+    );
+
+const linkInput =
+    document.getElementById(
+        "linkInput"
+    );
+
+
+document
+    .querySelectorAll(
+        ".dots"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+
+                    if(!currentUser){
+                        return;
+                    }
+
+
+                    linkType =
+                        button.dataset.link;
+
+
+                    linkPopupTitle.textContent =
+                        linkType === "school"
+                        ? "School Web"
+                        : "Email";
+
+
+                    const firebaseUrl =
+                        linkType === "school"
+                        ? schoolWebUrl
+                        : emailUrl;
+
+
+                    const saved =
+                        firebaseUrl ||
+                        localStorage.getItem(
+                            `mypHaven_${linkType}_${currentUser.uid}`
+                        ) ||
+                        "";
+
+
+                    linkInput.value =
+                        saved;
+
+
+                    linkPopup.classList.add(
+                        "open"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+schoolButton.addEventListener(
+    "click",
+    () =>
+        openSavedLink(
+            "school"
+        )
+);
+
+
+emailButton.addEventListener(
+    "click",
+    () =>
+        openSavedLink(
+            "email"
+        )
+);
+
+
+function openSavedLink(
+    type
+){
+
+    if(!currentUser){
+        return;
+    }
+
+
+    const firebaseUrl =
+        type === "school"
+        ? schoolWebUrl
+        : emailUrl;
+
+
+    const url =
+        firebaseUrl ||
+        localStorage.getItem(
+            `mypHaven_${type}_${currentUser.uid}`
+        );
+
+
+    if(!url){
+
+        linkType =
+            type;
+
+
+        linkPopupTitle.textContent =
+            type === "school"
+            ? "School Web"
+            : "Email";
+
+
+        linkInput.value =
+            "";
+
+
+        linkPopup.classList.add(
+            "open"
+        );
+
+
+        return;
+
+    }
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+document
+    .getElementById(
+        "saveLink"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            if(!currentUser){
+                return;
+            }
+
+
+            let url =
+                linkInput.value.trim();
+
+
+            if(!url){
+                return;
+            }
+
+
+            if(
+                !url.startsWith(
+                    "http://"
+                ) &&
+                !url.startsWith(
+                    "https://"
+                )
+            ){
+
+                url =
+                    "https://" +
+                    url;
+
+            }
+
+
+            localStorage.setItem(
+                `mypHaven_${linkType}_${currentUser.uid}`,
+                url
+            );
+
+
+            if(linkType === "school"){
+
+                schoolWebUrl =
+                    url;
+
+            }else{
+
+                emailUrl =
+                    url;
+
+            }
+
+
+            try{
+
+                await setDoc(
+                    doc(
+                        db,
+                        "users",
+                        currentUser.uid
+                    ),
+                    {
+
+                        [
+                            linkType === "school"
+                            ? "schoolWebUrl"
+                            : "emailUrl"
+                        ]:
+                            url,
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    },
+                    {
+                        merge:true
+                    }
+                );
+
+            }catch(error){
+
+                console.warn(
+                    "Link saved locally.",
+                    error
+                );
+
+            }
+
+
+            linkPopup.classList.remove(
+                "open"
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "cancelLink"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            linkPopup.classList.remove(
+                "open"
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+document
+    .getElementById(
+        "profileButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "./profile.html";
+
+        }
+    );
+
+
+/* =========================================================
+   DASHBOARD HOME BUTTON
+========================================================= */
+
+const dashboardHomeCap =
+    document.getElementById(
+        "dashboardHomeCap"
+    );
+
+dashboardHomeCap.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "./dashboard.html";
+
+    }
+);
+
+
+/* =========================================================
+   MAIN PAGE NAVIGATION
+========================================================= */
+
+document
+    .getElementById(
+        "rubricsButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "./rubrics.html";
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "explanationButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "./explanation.html";
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "commandButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "./command-terms.html";
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "gradeButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "./grade-calculator.html";
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "supportButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "./study-support.html";
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "examButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "./exam-season-27.html";
+
+        }
+    );
+
+
+/* =========================================================
+   CLOSE POPUPS / MODALS
+========================================================= */
+
+taskModal.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target ===
+            taskModal
+        ){
+
+            closeTaskPanel();
+
+        }
+
+    }
+);
+
 
 document.addEventListener(
     "keydown",
     event => {
 
-        if (
-            event.key !==
-            "Escape"
-        ) {
+        if(event.key === "Escape"){
 
-            return;
+            closeTaskPanel();
 
-        }
-
-
-        if (
-            taskModal.classList.contains(
+            linkPopup.classList.remove(
                 "open"
-            )
-        ) {
-
-            closeTaskEditor();
-
-        }
-
-
-        if (
-            notificationPanel.classList.contains(
-                "open"
-            )
-        ) {
-
-            notificationPanel.classList.remove(
-                "open"
-            );
-
-            notificationButton.setAttribute(
-                "aria-expanded",
-                "false"
             );
 
         }
@@ -3234,14 +4921,10 @@ document.addEventListener(
 
 
 /* =========================================================
-   INITIAL STATE
+   INITIAL CALENDAR
 ========================================================= */
 
-renderSubjectOptions();
-
 renderCalendar();
-
-updateLockProgress();
 
 </script>
 
