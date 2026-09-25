@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Explanation | MYP Haven</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #FAFAF8;
+            color: #202333;
+            font-family: "DM Sans", sans-serif;
+            min-height: 100vh;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+            width: min(1150px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 35px 0 70px;
+        }
+
+        /* =========================================================
+           TOP NAVIGATION
+        ========================================================= */
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo-button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+
+            width: 44px;
+            height: 44px;
+            padding: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+            line-height: 1;
+
+            transition: transform 0.2s ease;
+        }
+
+        .logo-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .dashboard-button {
+            border: none;
+            background: #202333;
+            color: white;
+
+            padding: 13px 20px;
+            border-radius: 999px;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .dashboard-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(32, 35, 51, 0.16);
+        }
+
+        /* =========================================================
+           MAIN HEADING
+        ========================================================= */
+
+        .hero {
+            margin-top: 75px;
+            margin-bottom: 48px;
+        }
+
+        .hero h1 {
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: clamp(50px, 7vw, 82px);
+            line-height: 0.95;
+            letter-spacing: -3px;
+
+            font-weight: 800;
+
+            margin-bottom: 17px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.6;
+            font-weight: 600;
+
+            color: #73798A;
+        }
+
+        /* =========================================================
+           TOPIC BUTTONS
+        ========================================================= */
+
+        .topic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        .topic-button {
+            width: 100%;
+
+            border: none;
+            border-radius: 25px;
+
+            padding: 27px 31px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            color: #202333;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                filter 0.25s ease;
+        }
+
+        .topic-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 17px 35px rgba(32, 35, 51, 0.10);
+            filter: brightness(1.015);
+        }
+
+        .topic-button:active {
+            transform: translateY(-1px);
+        }
+
+        .topic-content {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+
+            padding-right: 25px;
+        }
+
+        .topic-title {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 26px;
+            line-height: 1.15;
+            font-weight: 800;
+        }
+
+        .topic-description {
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 600;
+
+            color: rgba(32, 35, 51, 0.72);
+        }
+
+        .topic-arrow {
+            flex-shrink: 0;
+
+            width: 43px;
+            height: 43px;
+
+            border-radius: 50%;
+
+            display: grid;
+            place-items: center;
+
+            background: rgba(32, 35, 51, 0.10);
+            color: #202333;
+
+            font-size: 21px;
+            font-weight: 800;
+
+            transition: transform 0.25s ease;
+        }
+
+        .topic-button:hover .topic-arrow {
+            transform: translateX(5px);
+        }
+
+        /* =========================================================
+           RESOURCE VIEW
+        ========================================================= */
+
+        .resource-view {
+            display: none;
+            animation: resourceIn 0.45s ease both;
+        }
+
+        .resource-view.active {
+            display: block;
+        }
+
+        @keyframes resourceIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .resource-header {
+            margin-bottom: 40px;
+        }
+
+        .resource-header h1 {
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: clamp(40px, 6vw, 65px);
+            line-height: 1;
+
+            letter-spacing: -2px;
+
+            font-weight: 800;
+
+            margin-bottom: 15px;
+        }
+
+        .resource-header .accent-line {
+            width: 65px;
+            height: 6px;
+
+            border-radius: 999px;
+
+            margin-top: 20px;
+        }
+
+        .resource-content {
+            font-family: "DM Sans", sans-serif;
+
+            font-size: 17px;
+            line-height: 1.75;
+
+            font-weight: 600;
+        }
+
+        .resource-content p {
+            margin-bottom: 25px;
+        }
+
+        .resource-content strong {
+            font-weight: 800;
+        }
+
+        .resource-content h2 {
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: 32px;
+            line-height: 1.1;
+
+            margin: 45px 0 20px;
+        }
+
+        .resource-content h3 {
+            font-family: "Bricolage Grotesque", sans-serif;
+
+            font-size: 23px;
+
+            margin-bottom: 10px;
+        }
+
+        .resource-content ul {
+            padding-left: 25px;
+            margin-bottom: 25px;
+        }
+
+        .resource-content li {
+            margin-bottom: 10px;
+        }
+
+        /* =========================================================
+           YEAR CARDS
+        ========================================================= */
+
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 17px;
+
+            margin: 30px 0 45px;
+        }
+
+        .year-card {
+            padding: 27px;
+
+            border-radius: 23px;
+
+            background: white;
+
+            box-shadow: 0 8px 25px rgba(32, 35, 51, 0.06);
+        }
+
+        .year-card h3 {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 24px;
+
+            margin-bottom: 8px;
+        }
+
+        .year-card h4 {
+            font-size: 15px;
+            margin-bottom: 11px;
+        }
+
+        .year-card p {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* =========================================================
+           SUBJECT CARDS
+        ========================================================= */
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+
+            margin: 25px 0 35px;
+        }
+
+        .subject-card {
+            padding: 21px 23px;
+
+            border-radius: 19px;
+
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 19px;
+            font-weight: 800;
+
+            text-align: center;
+        }
+
+        /* =========================================================
+           FLOW
+        ========================================================= */
+
+        .assessment-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            gap: 13px;
+
+            margin: 30px 0;
+        }
+
+        .flow-card {
+            width: min(100%, 760px);
+
+            background: white;
+
+            padding: 25px 28px;
+
+            border-radius: 22px;
+
+            box-shadow: 0 8px 25px rgba(32, 35, 51, 0.06);
+
+            text-align: center;
+        }
+
+        .flow-arrow {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           TABLES
+        ========================================================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 25px 0 35px;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: separate;
+            border-spacing: 0;
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow: 0 8px 25px rgba(32, 35, 51, 0.05);
+        }
+
+        th,
+        td {
+            padding: 16px 17px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #ECECF0;
+
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        th {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 15px;
+
+            background: #F5F3F0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* =========================================================
+           EXAMPLE BOX
+        ========================================================= */
+
+        .example-box {
+            padding: 27px;
+
+            border-radius: 24px;
+
+            background: white;
+
+            box-shadow: 0 8px 25px rgba(32, 35, 51, 0.06);
+
+            margin: 30px 0;
+        }
+
+        .example-box p {
+            margin-bottom: 8px;
+        }
+
+        .example-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* =========================================================
+           BACK BUTTON
+        ========================================================= */
+
+        .back-area {
+            margin-top: 50px;
+
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+            border: none;
+
+            background: #202333;
+            color: white;
+
+            padding: 14px 23px;
+
+            border-radius: 999px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            transition: 0.25s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(32, 35, 51, 0.15);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 700px) {
+
+            .page {
+                width: calc(100% - 28px);
+                padding-top: 25px;
+            }
+
+            .hero {
+                margin-top: 55px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .topic-button {
+                padding: 23px;
+                border-radius: 21px;
+            }
+
+            .topic-title {
+                font-size: 22px;
+            }
+
+            .topic-description {
+                font-size: 13px;
+            }
+
+            .year-grid,
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-content {
+                font-size: 16px;
+            }
+
+            .resource-content h2 {
+                font-size: 28px;
+            }
+
+            th,
+            td {
+                min-width: 180px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- =========================================================
+         TOP BAR
+    ========================================================== -->
+
+    <header class="topbar">
+
+        <button
+            class="logo-button"
+            onclick="location.reload()"
+            aria-label="Refresh page"
+            title="Refresh page"
+        >
+            🎓
+        </button>
+
+        <button
+            class="dashboard-button"
+            onclick="goDashboard()"
+        >
+            Back to Dashboard
+        </button>
+
+    </header>
+
+
+    <!-- =========================================================
+         LIBRARY / TOPIC SELECTION
+    ========================================================== -->
+
+    <section id="libraryView">
+
+        <div class="hero">
+
+            <h1>Open a Book</h1>
+
+            <p>
+                Explore the MYP and understand how everything fits together.
+            </p>
+
+        </div>
+
+
+        <div class="topic-list">
+
+            <!-- 1 -->
+
+            <button
+                class="topic-button"
+                style="background:#F4B6A6;"
+                onclick="openResource('what-myp')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        What is the MYP?
+                    </span>
+
+                    <span class="topic-description">
+                        Understand what the Middle Years Programme actually is.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <!-- 2 -->
+
+            <button
+                class="topic-button"
+                style="background:#C9E3B4;"
+                onclick="openResource('years-phases')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        MYP Years &amp; Phases
+                    </span>
+
+                    <span class="topic-description">
+                        Understand MYP years, grades and Language Acquisition phases.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <!-- 3 -->
+
+            <button
+                class="topic-button"
+                style="background:#B7DCE8;"
+                onclick="openResource('subjects')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        MYP Subjects
+                    </span>
+
+                    <span class="topic-description">
+                        See the different subjects that make up the MYP.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <!-- 4 -->
+
+            <button
+                class="topic-button"
+                style="background:#A8DDE0;"
+                onclick="openResource('assessment')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        How MYP Assessment Works
+                    </span>
+
+                    <span class="topic-description">
+                        Learn how criteria, achievement levels and final grades connect.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <!-- 5 -->
+
+            <button
+                class="topic-button"
+                style="background:#E8B7C8;"
+                onclick="openResource('criteria')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        MYP Criteria
+                    </span>
+
+                    <span class="topic-description">
+                        Understand the four criteria and how they are assessed.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <!-- 6 -->
+
+            <button
+                class="topic-button"
+                style="background:#BFD8B2;"
+                onclick="openResource('achievement')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        Achievement Levels
+                    </span>
+
+                    <span class="topic-description">
+                        Understand achievement levels from 0–8.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <!-- 7 -->
+
+            <button
+                class="topic-button"
+                style="background:#F2E1B8;"
+                onclick="openResource('formative-summative')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        Formative vs Summative Assessments : What’s the Difference?
+                    </span>
+
+                    <span class="topic-description">
+                        Learn why both types of assessment matter.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <!-- 8 -->
+
+            <button
+                class="topic-button"
+                style="background:#B8D8EA;"
+                onclick="openResource('eassessments')"
+            >
+
+                <div class="topic-content">
+
+                    <span class="topic-title">
+                        The MYP eAssessments(Only for MYP5)
+                    </span>
+
+                    <span class="topic-description">
+                        Understand the MYP eAssessment system and certificate.
+                    </span>
+
+                </div>
+
+                <span class="topic-arrow">
+                    →
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         RESOURCE VIEW
+    ========================================================== -->
+
+    <section
+        id="resourceView"
+        class="resource-view"
+    >
+
+        <div class="resource-header">
+
+            <h1 id="resourceTitle"></h1>
+
+            <div
+                id="resourceAccent"
+                class="accent-line"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="resourceContent"
+            class="resource-content"
+        ></div>
+
+
+        <div class="back-area">
+
+            <button
+                class="back-button"
+                onclick="backToBooks()"
+            >
+                ← Back to Books
+            </button>
+
+            <button
+                class="back-button"
+                onclick="goDashboard()"
+            >
+                Back to Dashboard
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    /* =========================================================
+       DASHBOARD
+    ========================================================== */
+
+    function goDashboard() {
+
+        window.location.href = "./dashboard.html";
+
+    }
+
+
+    /* =========================================================
+       RESOURCE DATA
+    ========================================================== */
+
+    const resources = {
+
+        "what-myp": {
+
+            title: "What is the MYP?",
+
+            color: "#F4B6A6",
+
+            content: `
+
+                <p>
+                    The MYP stands for the
+                    <strong style="color:#F4B6A6;">
+                        Middle Years Programme
+                    </strong>,
+                    an
+                    <strong style="color:#F4B6A6;">
+                        educational framework
+                    </strong>
+                    created by the
+                    <strong style="color:#F4B6A6;">
+                        International Baccalaureate (IB)
+                    </strong>
+                    for students aged
+                    <strong style="color:#F4B6A6;">
+                        11 to 16
+                    </strong>.
+                </p>
+
+                <p>
+                    The MYP is designed as a
+                    <strong style="color:#F4B6A6;">
+                        five-year programme
+                    </strong>,
+                    known as
+                    <strong style="color:#F4B6A6;">
+                        MYP years 1 to 5
+                    </strong>.
+                    Some schools offer only part of it.
+                </p>
+
+                <p>
+                    The MYP is a
+                    <strong style="color:#F4B6A6;">
+                        school programme
+                    </strong>,
+                    rather than one
+                    <strong style="color:#F4B6A6;">
+                        universal syllabus
+                    </strong>.
+                    It's a framework meant to support a curriculum.
+                </p>
+
+                <p>
+                    The
+                    <strong style="color:#F4B6A6;">
+                        MYP meaning
+                    </strong>
+                    is straightforward:
+                    <strong style="color:#F4B6A6;">
+                        MYP
+                    </strong>
+                    stands for Middle Years Programme, the
+                    <strong style="color:#F4B6A6;">
+                        IB framework
+                    </strong>
+                    for students aged
+                    <strong style="color:#F4B6A6;">
+                        11 to 16
+                    </strong>.
+                </p>
+
+            `
+
+        },
+
+
+        /* =====================================================
+           YEARS & PHASES
+        ===================================================== */
+
+        "years-phases": {
+
+            title: "MYP Years & Phases",
+
+            color: "#C9E3B4",
+
+            content: `
+
+                <h2>The Five MYP Years</h2>
+
+                <p>
+                    The full MYP is designed as a
+                    <strong>five-year programme</strong>,
+                    known as
+                    <strong>MYP Years 1 to 5</strong>.
+                    Some schools offer only part of the programme.
+                </p>
+
+
+                <div class="year-grid">
+
+                    <div class="year-card" style="background:#CDE8BF;">
+
+                        <h3>MYP 1 · Grade 6</h3>
+
+                        <h4>First Year</h4>
+
+                        <p>
+                            The beginning of your MYP journey.
+                        </p>
+
+                    </div>
+
+
+                    <div class="year-card" style="background:#F6E79A;">
+
+                        <h3>MYP 2 · Grade 7</h3>
+
+                        <h4>Second Year</h4>
+
+                        <p>
+                            Building confidence and developing new skills.
+                        </p>
+
+                    </div>
+
+
+                    <div class="year-card" style="background:#DDD2F4;">
+
+                        <h3>MYP 3 · Grade 8</h3>
+
+                        <h4>Third Year</h4>
+
+                        <p>
+                            Growing your knowledge and independence.
+                        </p>
+
+                    </div>
+
+
+                    <div class="year-card" style="background:#BFDFF0;">
+
+                        <h3>MYP 4 · Grade 9</h3>
+
+                        <h4>Fourth Year</h4>
+
+                        <p>
+                            Taking on greater challenges and responsibility.
+                        </p>
+
+                    </div>
+
+
+                    <div class="year-card" style="background:#F6C9A8;">
+
+                        <h3>MYP 5 · Grade 10</h3>
+
+                        <h4>Fifth Year: The Final Stretch</h4>
+
+                        <p>
+                            Applying everything you have learnt to complete the programme.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <h2>What Are Phases?</h2>
+
+                <p>
+                    <strong>Phases are mainly applied to Language Acquisition.</strong>
+                    Whether you are taking German, Chinese, Spanish, or another MYP Language Acquisition subject, your learning is organized into phases.
+                    In Language Acquisition, there are three levels:
+                    <strong>Emergent, Capable, and Proficient.</strong>
+                    Your given phase is your current abilities in that language.
+                </p>
+
+                <p>
+                    <strong>Emergent = Phases 1–2</strong>
+                </p>
+
+                <p>
+                    <strong>Capable = Phases 3–4</strong>
+                </p>
+
+                <p>
+                    <strong>Proficient = Phases 5–6</strong>
+                </p>
+
+                <p>
+                    Your phase is not a grade or a mark. It is where you are in your language that matches your abilities.
+                </p>
+
+                <p>
+                    The important thing is that Phase 1 does not mean Grade 6, Phase 2 does not mean Grade 7, and so on.
+                    A student's phase is based on their language ability and development, not simply their school year.
+                    For example, two students in MYP5 could be in completely different phases of German.
+                    One might be in Phase 2, while another could be in Phase 5.
+                </p>
+
+            `
+
+        },
+
+
+        /* =====================================================
+           SUBJECTS
+        ===================================================== */
+
+        "subjects": {
+
+            title: "What are all the MYP Subjects?",
+
+            color: "#B7DCE8",
+
+            content: `
+
+                <p>
+                    The MYP includes a range of subject groups designed to develop different areas of knowledge and skills.
+                </p>
+
+                <div class="subject-grid">
+
+                    <div class="subject-card" style="background:#F7B2C4;">
+                        Language and Literature
+                    </div>
+
+                    <div class="subject-card" style="background:#C6E6A8;">
+                        Language Acquisition
+                    </div>
+
+                    <div class="subject-card" style="background:#C6E6A8;">
+                        Language Acquisition
+                    </div>
+
+                    <div class="subject-card" style="background:#D8C4F1;">
+                        Individuals and Societies
+                    </div>
+
+                    <div class="subject-card" style="background:#A9DDE5;">
+                        Sciences
+                    </div>
+
+                    <div class="subject-card" style="background:#F5DFA7;">
+                        Mathematics
+                    </div>
+
+                    <div class="subject-card" style="background:#E8B4C8;">
+                        Arts
+                    </div>
+
+                    <div class="subject-card" style="background:#F3C6A5;">
+                        Design
+                    </div>
+
+                    <div class="subject-card" style="background:#B6D7C5;">
+                        Physical and Health Education
+                    </div>
+
+                </div>
+
+            `
+
+        },
+
+
+        /* =====================================================
+           ASSESSMENT
+        ===================================================== */
+
+        "assessment": {
+
+            title: "How MYP Assessment Works",
+
+            color: "#A8DDE0",
+
+            content: `
+
+                <div class="assessment-flow">
+
+                    <div class="flow-card">
+                        Your teacher gives you a summative assignment. It might be one or more criteria.
+                    </div>
+
+                    <div class="flow-arrow">↓</div>
+
+                    <div class="flow-card">
+                        Your work is marked using one the MYP criteria for that subject.
+                    </div>
+
+                    <div class="flow-arrow">↓</div>
+
+                    <div class="flow-card">
+                        Your teacher uses the criterion descriptors to decide which achievement level from 0 to 8 best matches your work.
+                    </div>
+
+                    <div class="flow-arrow">↓</div>
+
+                    <div class="flow-card">
+                        Your achievement levels across the four criteria are added together to create a total out of 32.
+                        Your total mark will be matched to a grade level from 1–7.
+                    </div>
+
+                </div>
+
+
+                <h2>Example</h2>
+
+                <div class="example-box">
+
+                    <p>Criterion A: <strong>7</strong></p>
+
+                    <p>Criterion B: <strong>6</strong></p>
+
+                    <p>Criterion C: <strong>7</strong></p>
+
+                    <p>Criterion D: <strong>6</strong></p>
+
+                    <p><strong>Total = 26/32</strong></p>
+
+                    <p><strong>Final Mark : 6/7 (no pun intended)</strong></p>
+
+                </div>
+
+
+                <p>
+                    That total is then converted into your final 1–7 subject grade.
+                    The 6/7 was determined using this system:
+                </p>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Grade</th>
+                                <th>Total Criterion Points</th>
+                                <th>Performance Level</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>1</td>
+                                <td>0–5</td>
+                                <td>Excellent</td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td>6–9</td>
+                                <td>Basic Awareness</td>
+                            </tr>
+
+                            <tr>
+                                <td>3</td>
+                                <td>10–14</td>
+                                <td>Developing</td>
+                            </tr>
+
+                            <tr>
+                                <td>4</td>
+                                <td>15–18</td>
+                                <td>Satisfactory</td>
+                            </tr>
+
+                            <tr>
+                                <td>5</td>
+                                <td>19–23</td>
+                                <td>Strong</td>
+                            </tr>
+
+                            <tr>
+                                <td>6</td>
+                                <td>24–27</td>
+                                <td>High Quality</td>
+                            </tr>
+
+                            <tr>
+                                <td>7</td>
+                                <td>28–32</td>
+                                <td>Excellent</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <p>
+                    In a school year, you will most likely complete the cycle of A–D at least two times.
+                </p>
+
+            `
+
+        },
+
+
+        /* =====================================================
+           CRITERIA
+        ===================================================== */
+
+        "criteria": {
+
+            title: "MYP Criteria",
+
+            color: "#E8B7C8",
+
+            content: `
+
+                <p>
+                    The main MYP subjects (Language and Literature, Language Acquisition, Individual and Societies, Science, Mathematics, Arts, Design, and Physical and Health Education) all have four criteria (A–D).
+                    Each subject’s criteria is different.
+                    For example, Science Criterion A and Language & Literature Criterion A assess different things.
+                </p>
+
+                <p>
+                    Each criterion is assessed using
+                    <strong>achievement levels from 0–8.</strong>
+                    Think of the achievement level as a score from 0–8 that shows how well you did.
+                </p>
+
+                <p>
+                    Your teacher looks at the criterion descriptors and decides which level best matches your work.
+                </p>
+
+                <p>
+                    Your criterion level and your final MYP grade are not the same thing.
+                </p>
+
+
+                <div class="example-box">
+
+                    <h3>Criterion level</h3>
+
+                    <p>
+                        <strong>0–8</strong>
+                    </p>
+
+                    <br>
+
+                    <h3>Final MYP subject grade</h3>
+
+                    <p>
+                        <strong>1–7</strong>
+                    </p>
+
+                </div>
+
+
+                <p>
+                    The total value of your marks from A to D determine your final subject grade.
+                </p>
+
+                <p>
+                    So, Your subject has four criteria → your work is assessed against those criteria → you receive an achievement level → those results make your final 1–7 grade.
+                </p>
+
+            `
+
+        },
+
+
+        /* =====================================================
+           ACHIEVEMENT LEVELS
+        ===================================================== */
+
+        "achievement": {
+
+            title: "Achievement Levels",
+
+            color: "#BFD8B2",
+
+            content: `
+
+                <p>
+                    For each of your subject’s criteria, there are achievement levels from 0–8.
+                    An achievement level shows what you work achieved, and is matched with a boundary:
+                    0, 1–2, 3–4, 5–6, and 7–8.
+                </p>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Level</th>
+                                <th>What it generally means</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>0</td>
+                                <td>The work does not meet the minimum described level.</td>
+                            </tr>
+
+                            <tr>
+                                <td>1–2</td>
+                                <td>You have demonstrated a limited level of achievement.</td>
+                            </tr>
+
+                            <tr>
+                                <td>3–4</td>
+                                <td>You have demonstrated a developing level of achievement.</td>
+                            </tr>
+
+                            <tr>
+                                <td>5–6</td>
+                                <td>You have demonstrated a good level of achievement.</td>
+                            </tr>
+
+                            <tr>
+                                <td>7–8</td>
+                                <td>You have demonstrated a high level of achievement.</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <p>
+                    To reach that 7–8 achievement level, understand what is being assessed, read each descriptor, compare and improve your work.
+                    If you really want to achieve 7–8’s, you have to go beyond the mindset of “I want a 7/8”; you need to ask yourself “What does my work require to reach the level 7-8 descriptors?”
+                </p>
+
+                <p>
+                    So, within the different criterions you have achievement levels.
+                    Each achievement has different descriptors, which your teacher will use to determine your final grade.
+                    For success, really understand what your work needs to achieve to reach your desired achievement level.
+                </p>
+
+            `
+
+        },
+
+
+        /* =====================================================
+           FORMATIVE VS SUMMATIVE
+        ===================================================== */
+
+        "formative-summative": {
+
+            title: "Formative vs Summative Assessments : What’s the Difference?",
+
+            color: "#F2E1B8",
+
+            content: `
+
+                <p>
+                    The best way to understand the difference between a formative and summative assessment is to think of it as a school presentation.
+                    Before the presentation, you practice what you are going to say.
+                    Think of this stage as taking a formative assessment.
+                    Eventually after practice, you are ready to perform the presentation for your class, which is like taking the summative assessment.
+                </p>
+
+                <p>
+                    In formative assessments, you are either applying learnt knowledge or skills to determine where you are in your learning, get an idea of how a future summative assessment will be formatted, or determining what needs attention before a summative assessment.
+                    A formative assessment also has a decided criteria, showing that it is as important as a summative assessment because you might receive a final mark or show you what in your learning needs improvement.
+                </p>
+
+                <p>
+                    In summative assessments, you are completing a final task which will be marked to give you a final mark.
+                    In your summative assessments, you want to ensure that you are taking things more seriously.
+                    Everything which was unsuccessful in a formative assessment whether it is making mathematical errors in Criteria A or not completely justifying a chosen design in Criteria B, applying teacher feedback is crucial if you want to see a change in result.
+                </p>
+
+                <p>
+                    So, when it comes to writing a formative or summative assessment, it is important to understand that both play a crucial role.
+                </p>
+
+            `
+
+        },
+
+
+        /* =====================================================
+           eASSESSMENTS
+        ===================================================== */
+
+        "eassessments": {
+
+            title: "The MYP eAssessments · MYP 5 only",
+
+            color: "#B8D8EA",
+
+            content: `
+
+                <h2>What are MYP eAssessments (Only MYP5)?</h2>
+
+                <p>
+                    <strong>MYP eAssessments are digital external assessments available in MYP Year 5.</strong>
+                    They provide an externally validated way of demonstrating what you have learned during the MYP.
+                    Unlike a traditional paper examination, the on-screen examinations are completed digitally on a computer.
+                    However, <strong>not every eAssessment works in exactly the same way</strong>.
+                    Depending on the subject, assessment can involve an on-screen examination, an ePortfolio of coursework,
+                    a speaking assessment, or a combination of these.
+                </p>
+
+                <p>The IB describes three forms of MYP external assessment:</p>
+
+                <ul>
+                    <li><strong>On-screen assessment</strong> — an individual digital examination.</li>
+                    <li><strong>ePortfolio</strong> — coursework or performance completed during the MYP and assessed by the teacher, with IB moderation.</li>
+                    <li><strong>Personal Project</strong> — an independent project completed in MYP 5 and externally moderated by the IB.</li>
+                </ul>
+
+                <h2>The three assessment types</h2>
+
+                <h3>On-screen examinations</h3>
+
+                <p>
+                    On-screen examinations are <strong>individual digital examinations externally marked by IB examiners</strong>.
+                    The certificate includes on-screen examinations in:
+                </p>
+
+                <ul>
+                    <li>Language and Literature</li>
+                    <li>Language Acquisition</li>
+                    <li>Individuals and Societies</li>
+                    <li>Sciences</li>
+                    <li>Mathematics</li>
+                    <li>Interdisciplinary Learning</li>
+                </ul>
+
+                <p>
+                    The examinations can last between <strong>1 hour 45 minutes and 2 hours</strong>, depending on the subject.
+                </p>
+
+                <h3>ePortfolios</h3>
+
+                <p>
+                    An ePortfolio is different from an on-screen examination.
+                    Instead of sitting one timed examination, you complete <strong>coursework during the MYP</strong>.
+                    Your teacher assesses the work using the relevant MYP criteria, and the IB then moderates samples of student work
+                    to help maintain a consistent international standard.
+                </p>
+
+                <p>MYP ePortfolio coursework is available in:</p>
+
+                <ul>
+                    <li>Arts</li>
+                    <li>Design</li>
+                    <li>Physical and Health Education</li>
+                </ul>
+
+                <p>
+                    The IB also provides ePortfolio assessment for Language Acquisition in some contexts, but the
+                    <strong>certificate pathway has specific assessment requirements</strong>, so you should follow the assessment route your school has registered for.
+                </p>
+
+                <h3>What does "moderated" mean?</h3>
+
+                <p>
+                    Your teacher makes the original assessment judgment.
+                    The IB then examines selected samples of student work and compares your teacher's assessment with the international assessment standard.
+                    This process is called <strong>external moderation</strong>.
+                </p>
+
+                <div class="example-box">
+                    <p><strong>Teacher assesses → IB samples and moderates → final results are internationally aligned</strong></p>
+                </div>
+
+                <p>
+                    The IB uses a process called <strong>dynamic sampling</strong> for ePortfolios and Personal Projects.
+                    Depending on the results of the initial sample, the IB may review additional work from your school.
+                    As a student, this isn’t your concern, your school handles all of the moderation.
+                    All you need to do is complete your ePortfolio and submit when you are expected to.
+                </p>
+
+                <h2>Language Acquisition is a little different</h2>
+
+                <p>
+                    Language Acquisition combines <strong>an on-screen examination with an internally assessed individual speaking assessment</strong>.
+                    The speaking assessment is completed separately from the on-screen examination and is assessed by the teacher.
+                    The IB describes Language Acquisition as consisting of:
+                </p>
+
+                <div class="example-box">
+                    <p><strong>one on-screen examination + one internally assessed individual speaking assessment</strong></p>
+                </div>
+
+                <p>
+                    So if you're taking German, for example, you aren't simply sitting one 1-hour-45-minute computer examination and finishing everything there.
+                    The speaking component is part of the overall assessment. Note that the oral is completed before your exams.
+                </p>
+
+                <h2>The Personal Project</h2>
+
+                <p>
+                    The <strong>Personal Project is compulsory for MYP Year 5 students</strong>.
+                    It is different from the optional subject eAssessments because every MYP 5 student must complete a Personal Project as part of the programme.
+                </p>
+
+                <p>
+                    The Personal Project is submitted electronically and is <strong>internally assessed and externally moderated by the IB</strong>.
+                    <strong>Your Personal Project is therefore one of the eight components contributing to the full MYP certificate.</strong>
+                </p>
+
+                <h2>Your MYP 5 journey</h2>
+
+                <p>MYP eAssessment isn't one giant exam at the end of Grade 10. Different parts happen at different times.</p>
+
+                <div class="assessment-flow">
+                    <div class="flow-card"><strong>MYP 5 begins</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>Coursework and ePortfolio work</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>Personal Project</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>Interdisciplinary preparation</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>On-screen examinations</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>Results</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>MYP Certificate, if all requirements are met</strong></div>
+                </div>
+
+                <p>
+                    The exact order and school deadlines will vary, so <strong>your school's MYP coordinator and teachers should always be your final source for your personal timetable and deadlines</strong>.
+                    Follow their deadlines and you will be fine!
+                </p>
+
+                <h2>How the 56 points work</h2>
+
+                <p>
+                    For the <strong>full MYP certificate</strong>, there are <strong>eight assessment components</strong>, each receiving a grade from 1–7.
+                    Therefore:
+                </p>
+
+                <div class="total-card">
+                    <span class="total-label">Maximum certificate total</span>
+                    <span class="total-number">56</span>
+                    <span class="total-note">8 components × 7 points = 56 maximum points</span>
+                </div>
+
+                <p>The eight components are:</p>
+
+                <ol>
+                    <li>Language and Literature</li>
+                    <li>Language Acquisition</li>
+                    <li>Individuals and Societies</li>
+                    <li>Sciences</li>
+                    <li>Mathematics</li>
+                    <li>One subject from Arts, PHE or Design</li>
+                    <li>Interdisciplinary Learning</li>
+                    <li>Personal Project</li>
+                </ol>
+
+                <h3>Example</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Component</th><th>Grade</th></tr></thead>
+                        <tbody>
+                            <tr><td>Language &amp; Literature</td><td>6</td></tr>
+                            <tr><td>Language Acquisition</td><td>5</td></tr>
+                            <tr><td>Individuals &amp; Societies</td><td>6</td></tr>
+                            <tr><td>Sciences</td><td>6</td></tr>
+                            <tr><td>Mathematics</td><td>7</td></tr>
+                            <tr><td>Interdisciplinary</td><td>5</td></tr>
+                            <tr><td>Design ePortfolio</td><td>7</td></tr>
+                            <tr><td>Personal Project</td><td>6</td></tr>
+                            <tr><td><strong>Total</strong></td><td><strong>48 / 56</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p><strong>6 + 5 + 6 + 6 + 7 + 5 + 7 + 6 = 48</strong></p>
+
+                <div class="total-card">
+                    <span class="total-label">Example total</span>
+                    <span class="total-number">48 / 56</span>
+                </div>
+
+                <h2>Components of the MYP Certificate</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Component</th><th>Assessment process</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Language &amp; Literature</td><td>On-screen examination, externally marked</td></tr>
+                            <tr><td>Language Acquisition</td><td>On-screen examination + internally assessed speaking component</td></tr>
+                            <tr><td>Individuals &amp; Societies</td><td>On-screen examination, externally marked</td></tr>
+                            <tr><td>Sciences</td><td>On-screen examination, externally marked</td></tr>
+                            <tr><td>Mathematics</td><td>On-screen examination, externally marked</td></tr>
+                            <tr><td>Interdisciplinary Learning</td><td>On-screen examination, externally marked</td></tr>
+                            <tr><td>Arts / Design / PHE</td><td>One required coursework ePortfolio, internally assessed and externally moderated</td></tr>
+                            <tr><td>Personal Project</td><td>Internally assessed and externally moderated</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Requirements for the MYP Certificate</h2>
+
+                <p>To receive the <strong>IB MYP Certificate</strong>, you must meet the required criteria.</p>
+
+                <h3>You must:</h3>
+
+                <ol>
+                    <li><strong>Complete the required six subject components:</strong> Language and Literature, Language Acquisition, Individuals and Societies, Sciences, Mathematics, and one of Arts, Physical and Health Education or Design.</li>
+                    <li><strong>Complete the Interdisciplinary Learning on-screen examination.</strong></li>
+                    <li><strong>Complete the Personal Project.</strong></li>
+                    <li><strong>Achieve at least a grade 3 in every required component.</strong></li>
+                    <li><strong>Achieve at least 28 points overall out of 56.</strong></li>
+                    <li><strong>Participate in the final year of the MYP.</strong></li>
+                    <li><strong>Meet the school's requirements for community engagement / Service as Action.</strong></li>
+                </ol>
+
+                <h3>In simple terms:</h3>
+
+                <div class="requirements-grid">
+                    <div class="requirement-card cyan"><strong>No 1s or 2s in the required components</strong></div>
+                    <div class="requirement-card purple"><strong>At least 28/56 overall</strong></div>
+                    <div class="requirement-card pink"><strong>All required components completed</strong></div>
+                    <div class="requirement-card yellow"><strong>Personal Project completed</strong></div>
+                    <div class="requirement-card cyan"><strong>Interdisciplinary completed</strong></div>
+                    <div class="requirement-card purple"><strong>MYP 5 participation and school service requirements met</strong></div>
+                </div>
+
+                <h2>What is Interdisciplinary Learning?</h2>
+
+                <p>
+                    Interdisciplinary Learning is one of the eight components of the full MYP certificate.
+                    The purpose is to assess your ability to <strong>make meaningful connections between different subject areas</strong>
+                    and use knowledge and skills from more than one discipline.
+                </p>
+
+                <p>
+                    The IB provides <strong>pre-release material</strong> before the examination session.
+                    The interdisciplinary examination focuses on two subject groups from: language and literature, individuals and societies,
+                    sciences, and mathematics.
+                    These two subjects are explored in detail in the examination, although questions may be featured that require another subject to be considered
+                    and that include the opportunity to incorporate arts, design, PHE and language acquisition.
+                </p>
+
+                <p>
+                    Pre-release material will be published on the programme resource centre on <strong>1 April for May sessions</strong>
+                    and on <strong>1 October for November sessions</strong> to facilitate a deep analysis of the global context and to provide a focus for the interdisciplinary learning on-screen examination.
+                    The two subject groups, which will be the focus of the session's interdisciplinary examination, will be announced with the pre-release material.
+                </p>
+
+                <p>
+                    The pre-release material comprises multimedia stimulus material and/or case studies related closely to the session's global context.
+                </p>
+
+                <h3>How will the pre-release material be used in the interdisciplinary examination?</h3>
+
+                <p>
+                    In the interdisciplinary examination, each task reflects the session's global context.
+                    Pre-release material provides background information, explores one or more contemporary real-world challenges,
+                    and offers disciplinary and interdisciplinary sources that students need to understand in order to successfully complete the examination.
+                    The pre-release material will be available in the on-screen environment during the examination.
+                    The examination will also contain new, unfamiliar information that students must synthesize with the pre-release material in order to complete the required tasks.
+                </p>
+
+                <h3>How should you use the pre-release material to prepare?</h3>
+
+                <p>
+                    You can work independently, or in a range of school-based settings, such as small-group and whole-class discussions,
+                    to develop your understanding of the pre-release material.
+                    Your teachers could work with you and others to make inquiries into the pre-release material and its connections with the session's global context.
+                </p>
+
+                <div class="example-box">
+                    <p>
+                        <strong>My mock-exam lesson:</strong>
+                        When I took my mocks for the interdisciplinary examination, I was not familiar with the pre-release material.
+                        This really affected my exam results as I spent most of the exam going through the pre-release material instead of answering the questions.
+                        So, it is always best to enter the exam with a solid understanding of all the pre-release material.
+                    </p>
+                </div>
+
+                <h2>Who actually marks everything?</h2>
+
+                <p>This is an important distinction.</p>
+
+                <h3>On-screen examinations</h3>
+                <p><strong>Student → completes examination → IB examiner marks it</strong></p>
+
+                <h3>ePortfolios</h3>
+                <p><strong>Student → completes coursework → teacher assesses → IB moderates</strong></p>
+
+                <p>
+                    The teacher makes the initial assessment judgment, while the IB moderates samples to help maintain international standards.
+                </p>
+
+                <h3>Personal Project</h3>
+                <p><strong>Student → completes project → teacher/school assesses → IB moderates</strong></p>
+
+                <p>The Personal Project is also externally moderated.</p>
+
+                <h3>Language Acquisition speaking</h3>
+                <p><strong>Student → speaking assessment → teacher assesses</strong></p>
+
+                <h2>What is dynamic sampling?</h2>
+
+                <p>
+                    You might see the phrase <strong>"dynamic sampling"</strong> when reading about ePortfolio or Personal Project moderation.
+                    It sounds complicated, but the basic idea is fairly simple.
+                </p>
+
+                <div class="assessment-flow">
+                    <div class="flow-card"><strong>Select an initial sample</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>Compare teacher marks with IB standards</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>If the marking is consistent → sampling may stop</strong></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><strong>If there is a significant difference → additional work can be selected and reviewed</strong></div>
+                </div>
+
+                <h2>What does each subject generally assess?</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Subject</th><th>Assessment</th><th>What you're generally demonstrating</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Language &amp; Literature</td><td>On-screen</td><td>Analysing, producing literary text, and producing non-literary text</td></tr>
+                            <tr><td>Language Acquisition</td><td>On-screen + speaking</td><td>On-screen: listening, reading and writing. Speaking: preparation, presentation and interactive discussion</td></tr>
+                            <tr><td>Individuals &amp; Societies</td><td>On-screen</td><td>Investigating, communicating, thinking critically</td></tr>
+                            <tr><td>Sciences</td><td>On-screen</td><td>Knowing and understanding, investigation skills, and applying science</td></tr>
+                            <tr><td>Mathematics</td><td>On-screen</td><td>Knowing and understanding, applying mathematics in real-life contexts, and investigating patterns</td></tr>
+                            <tr><td>Interdisciplinary</td><td>On-screen</td><td>Evaluating and reflecting and synthesizing and reflecting</td></tr>
+                            <tr><td>Arts / Design / PHE</td><td>ePortfolio</td><td>Coursework assessed using the relevant subject criteria</td></tr>
+                            <tr><td>Personal Project</td><td>Project/ePortfolio</td><td>Planning, applying skills, and completing the project</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>
+                    The precise tasks and assessment criteria depend on the subject and session, so this table should be treated as a
+                    <strong>general overview rather than a replacement for your subject's official assessment blueprint</strong>.
+                </p>
+
+                <h2>May 2027 timeline</h2>
+
+                <p><strong>Important:</strong> IB deadlines are not necessarily your personal school deadlines. Your school may require you to complete work much earlier.</p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Date</th><th>What happens</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>20 October 2026</strong></td><td>Candidate registration deadline for the May examination session → Don't worry as a student, it's your school's responsibilities.</td></tr>
+                            <tr><td><strong>1 November 2026</strong></td><td>Session-specific partially completed unit planners become available for relevant ePortfolio subjects → Important: all the information necessary to kickstart the ePortfolio.</td></tr>
+                            <tr><td><strong>1 February 2027</strong></td><td>Teacher-assessed totals screens open, allowing schools to begin entering assessment information for ePortfolio subjects → Don't worry as a student, it's your school's responsibilities. However, it is important that you meet your own school's deadlines.</td></tr>
+                            <tr><td><strong>1 April 2027</strong></td><td>Interdisciplinary examination pre-release material becomes available → Important: you get the materials that help you prepare for the Interdisciplinary examination.</td></tr>
+                            <tr><td><strong>20 April 2027</strong></td><td>Deadline for predicted grades, teacher-assessed totals and sample ePortfolio uploads; registration deadline for the following November session. <br><br><strong>Important:</strong> The 20 April 2027 registration deadline is for the following November 2027 session, not for May 2027.</td></tr>
+                            <tr><td><strong>May 2027</strong></td><td>MYP on-screen examination period → Extremely important.</td></tr>
+                            <tr><td><strong>1 August 2027</strong></td><td>May-session results are issued 🎉 → Extremely important.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>April clarification</h3>
+
+                <p>
+                    <strong>20 April 2027 does NOT mean "registration for your May 2027 exams."</strong>
+                    The registration deadline for the <strong>May 2027 session is 20 October 2026</strong>.
+                    The <strong>20 April 2027 registration deadline is for the following November 2027 session</strong>, alongside other May-session administrative deadlines.
+                </p>
+
+                <h2>November 2027 timeline</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Date</th><th>What happens</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>20 April 2027</strong></td><td>Candidate registration deadline for the November session → Don't worry as a student, it's your school's responsibilities.</td></tr>
+                            <tr><td><strong>1 May 2027</strong></td><td>Session-specific partially completed unit planners become available → Important: all the information necessary to kickstart the ePortfolio.</td></tr>
+                            <tr><td><strong>1 August 2027</strong></td><td>Teacher-assessed totals screens open, allowing schools to begin entering assessment information for ePortfolio subjects → Don't worry as a student, it's your school's responsibilities. However, it is important that you meet your own school's deadlines.</td></tr>
+                            <tr><td><strong>1 October 2027</strong></td><td>Interdisciplinary examination pre-release material becomes available → Important: you get the materials that help you prepare for the Interdisciplinary examination.</td></tr>
+                            <tr><td><strong>20 October 2027</strong></td><td>Predicted grades, teacher-assessed totals and sample ePortfolio deadlines; registration deadline for the following May session → Don't worry as a student, it's your school's responsibilities.</td></tr>
+                            <tr><td><strong>November 2027</strong></td><td>MYP on-screen examination period → Extremely important.</td></tr>
+                            <tr><td><strong>1 February 2028</strong></td><td>November-session results are issued at 12:00 noon GMT → Extremely important.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Exam durations</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Subject</th><th>Duration</th></tr></thead>
+                        <tbody>
+                            <tr><td>Language &amp; Literature</td><td><span class="time-badge">2 hours</span></td></tr>
+                            <tr><td>Language Acquisition</td><td><span class="time-badge">1 hour 45 minutes</span><br><br>The Language Acquisition assessment also contains the individual speaking assessment, which is completed before the on-screen examination. The speaking component is internally assessed. Your total mark for the oral assessment is added to the on-screen examination mark.</td></tr>
+                            <tr><td>Individuals &amp; Societies</td><td><span class="time-badge">2 hours</span></td></tr>
+                            <tr><td>Sciences</td><td><span class="time-badge">2 hours</span></td></tr>
+                            <tr><td>Mathematics</td><td><span class="time-badge">2 hours</span></td></tr>
+                            <tr><td>Interdisciplinary Learning</td><td><span class="time-badge">2 hours</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Common misconceptions</h2>
+
+                <h3>❌ "There are nine components because Interdisciplinary is an extra exam."</h3>
+                <p>There are <strong>eight components</strong> contributing to the 56-point certificate total. Interdisciplinary is one of those eight components.</p>
+
+                <h3>❌ "The 20 April 2027 deadline is when I register for May 2027."</h3>
+                <p><strong>No.</strong> The May 2027 candidate registration deadline is <strong>20 October 2026</strong>. 20 April 2027 is the registration deadline for the November 2027 session, alongside other May-session administrative deadlines.</p>
+
+                <h3>❌ "My teacher marks all my MYP eAssessments."</h3>
+                <p><strong>Not all of them.</strong> On-screen examinations are externally marked by IB examiners. ePortfolios and the Personal Project are internally assessed and externally moderated.</p>
+
+                <h3>❌ "The Personal Project is optional."</h3>
+                <p><strong>The Personal Project is compulsory in MYP 5.</strong> It is one of the requirements for the MYP Certificate.</p>
+
+                <h3>❌ "Every MYP student automatically gets an MYP Certificate."</h3>
+                <p><strong>Not necessarily.</strong> Students must meet the certificate requirements, including the required assessments, minimum grades and overall points requirement.</p>
+
+                <h2>Frequently Asked Questions</h2>
+
+                <h3>What happens if I get a 2 in one component but get lots of 7s elsewhere?</h3>
+                <p>
+                    The overall total alone isn't enough. The IB's criteria require <strong>at least a 3 in each required component</strong>,
+                    so a grade below 3 would mean the certificate requirements aren't met even if the overall total is at least 28.
+                </p>
+
+                <h2>The Big Picture</h2>
+
+                <div class="assessment-flow">
+                    <div class="flow-card"><h3>MYP 5</h3><p>6 subject components</p><p>Language &amp; Literature · Language Acquisition · Individuals &amp; Societies · Sciences · Mathematics · Arts / Design / PHE</p></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><h3>Interdisciplinary</h3><p>On-screen examination</p></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><h3>Personal Project</h3><p>Internally assessed + externally moderated</p></div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-card"><h3>8 components</h3><p><strong>8 × 7 = 56 points</strong></p></div>
+                </div>
+
+                <h3>To meet the certificate requirements:</h3>
+
+                <div class="requirements-grid">
+                    <div class="requirement-card cyan"><strong>28/56 minimum</strong></div>
+                    <div class="requirement-card purple"><strong>At least 3 in every component</strong></div>
+                    <div class="requirement-card pink"><strong>All required components completed</strong></div>
+                    <div class="requirement-card yellow"><strong>Personal Project completed</strong></div>
+                    <div class="requirement-card cyan"><strong>Interdisciplinary completed</strong></div>
+                    <div class="requirement-card purple"><strong>MYP 5 participation requirements met</strong></div>
+                </div>
+
+            `
+
+        }
+
+    };
+
+
+    /* =========================================================
+       OPEN RESOURCE
+    ========================================================== */
+
+    function openResource(resourceID) {
+
+        const resource = resources[resourceID];
+
+        if (!resource) {
+            return;
+        }
+
+        document.getElementById("libraryView").style.display = "none";
+
+        const resourceView = document.getElementById("resourceView");
+
+        resourceView.classList.remove("active");
+
+        void resourceView.offsetWidth;
+
+        document.getElementById("resourceTitle").textContent =
+            resource.title;
+
+        document.getElementById("resourceAccent").style.background =
+            resource.color;
+
+        document.getElementById("resourceContent").innerHTML =
+            resource.content;
+
+        resourceView.classList.add("active");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    /* =========================================================
+       BACK TO TOPIC BUTTONS
+    ========================================================== */
+
+    function backToBooks() {
+
+        document.getElementById("resourceView").classList.remove("active");
+
+        document.getElementById("libraryView").style.display = "block";
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+</script>
+
+</body>
+</html>
