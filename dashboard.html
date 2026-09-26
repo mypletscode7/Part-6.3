@@ -2107,7 +2107,7 @@ import {
 import {
     getFirestore,
     doc,
-    getDoc,
+    onSnapshot,
     setDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -2148,10 +2148,21 @@ const db =
     getFirestore(app);
 
 
-await setPersistence(
-    auth,
-    browserLocalPersistence
-);
+try{
+
+    await setPersistence(
+        auth,
+        browserLocalPersistence
+    );
+
+}catch(error){
+
+    console.warn(
+        "Firebase auth persistence could not be enabled:",
+        error
+    );
+
+}
 
 
 /* =========================================================
@@ -2863,14 +2874,237 @@ async function completeLockIn(){
 
 
 /* =========================================================
+   AUTH + REAL-TIME USER DATA
+========================================================= */
+
+let userDataUnsubscribe = null;
+let authInitialised = false;
+
+
+function resetDashboardState(){
+
+    selectedSubjects = [];
+    tasks = [];
+    customAssignmentCategories = [];
+    schoolWebUrl = "";
+    emailUrl = "";
+    completed = false;
+
+    lockProgress.style.width = "0%";
+    capHandle.style.left = "8px";
+    lockText.textContent = "Lock In";
+
+    dashboard.classList.remove(
+        "visible",
+        "entered"
+    );
+
+    lockScreen.classList.remove(
+        "hidden"
+    );
+
+    renderCourses();
+    renderCalendar();
+
+}
+
+
+function applyUserData(data){
+
+    selectedSubjects =
+        Array.isArray(data.subjects)
+        ? data.subjects
+        : [];
+
+    tasks =
+        Array.isArray(data.tasks)
+        ? data.tasks
+        : [];
+
+    customAssignmentCategories =
+        Array.isArray(data.customAssignmentCategories)
+        ? data.customAssignmentCategories
+        : [];
+
+    schoolWebUrl =
+        data.schoolWebUrl || "";
+
+    emailUrl =
+        data.emailUrl || "";
+
+
+    if(schoolWebUrl){
+
+        localStorage.setItem(
+            `mypHaven_school_${currentUser.uid}`,
+            schoolWebUrl
+        );
+
+    }
+
+
+    if(emailUrl){
+
+        localStorage.setItem(
+            `mypHaven_email_${currentUser.uid}`,
+            emailUrl
+        );
+
+    }
+
+
+    if(data.backgroundImageUrl){
+
+        dashboardBackground.style.backgroundImage =
+            `url("${data.backgroundImageUrl}")`;
+
+        localStorage.setItem(
+            `mypHavenBackground_${currentUser.uid}`,
+            data.backgroundImageUrl
+        );
+
+    }
+
+
+    renderCourses();
+    renderCalendar();
+
+
+    if(data.lockedIn === true){
+
+        completed = true;
+
+        lockProgress.style.width =
+            "100%";
+
+        const finalPosition =
+            Math.max(
+                8,
+                lockSlider.offsetWidth -
+                capHandle.offsetWidth -
+                8
+            );
+
+        capHandle.style.left =
+            `${finalPosition}px`;
+
+        lockText.textContent =
+            "We're locked in!";
+
+        if(!dashboard.classList.contains("visible")){
+
+            showDashboard();
+
+        }
+
+    }else{
+
+        completed = false;
+
+        lockProgress.style.width =
+            "0%";
+
+        capHandle.style.left =
+            "8px";
+
+        lockText.textContent =
+            "Lock In";
+
+        dashboard.classList.remove(
+            "visible",
+            "entered"
+        );
+
+        lockScreen.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+function subscribeToUserData(user){
+
+    if(userDataUnsubscribe){
+
+        userDataUnsubscribe();
+        userDataUnsubscribe = null;
+
+    }
+
+
+    const userRef =
+        doc(
+            db,
+            "users",
+            user.uid
+        );
+
+
+    userDataUnsubscribe =
+        onSnapshot(
+            userRef,
+            snapshot => {
+
+                if(!currentUser || currentUser.uid !== user.uid){
+                    return;
+                }
+
+
+                if(snapshot.exists()){
+
+                    const data =
+                        snapshot.data();
+
+                    applyUserData(data);
+
+                }else{
+
+                    resetDashboardState();
+
+                }
+
+            },
+            error => {
+
+                console.error(
+                    "Could not sync dashboard data:",
+                    error
+                );
+
+                /*
+                   Firestore could not be reached. Keep the dashboard
+                   usable with the user's last locally saved data.
+                */
+                loadLocalFallback();
+
+            }
+        );
+
+}
+
+
+/* =========================================================
    AUTH
 ========================================================= */
 
 onAuthStateChanged(
     auth,
-    async user => {
+    user => {
+
+        if(userDataUnsubscribe){
+
+            userDataUnsubscribe();
+            userDataUnsubscribe = null;
+
+        }
+
 
         if(!user){
+
+            currentUser = null;
+            authInitialised = true;
 
             window.location.href =
                 "./account.html";
@@ -2880,175 +3114,27 @@ onAuthStateChanged(
         }
 
 
-        currentUser =
-            user;
+        currentUser = user;
+        authInitialised = true;
 
+        /*
+           Load the most recent local copy immediately so the dashboard
+           does not appear empty while Firestore is connecting. The
+           real-time Firestore listener below then replaces it with the
+           authoritative cloud data.
+        */
+        loadLocalFallback();
 
-        await loadUserData();
+        subscribeToUserData(user);
 
     }
 );
 
 
 /* =========================================================
-   LOAD USER DATA
-========================================================= */
-
-async function loadUserData(){
-
-    try{
-
-        const userRef =
-            doc(
-                db,
-                "users",
-                currentUser.uid
-            );
-
-
-        const snapshot =
-            await getDoc(
-                userRef
-            );
-
-
-        if(snapshot.exists()){
-
-            const data =
-                snapshot.data();
-
-
-            selectedSubjects =
-                Array.isArray(
-                    data.subjects
-                )
-                ? data.subjects
-                : [];
-
-
-            tasks =
-                Array.isArray(
-                    data.tasks
-                )
-                ? data.tasks
-                : [];
-
-
-            customAssignmentCategories =
-                Array.isArray(
-                    data.customAssignmentCategories
-                )
-                ? data.customAssignmentCategories
-                : [];
-
-
-            schoolWebUrl =
-                data.schoolWebUrl ||
-                "";
-
-
-            emailUrl =
-                data.emailUrl ||
-                "";
-
-
-            if(data.backgroundImageUrl){
-
-                dashboardBackground.style.backgroundImage =
-                    `url("${data.backgroundImageUrl}")`;
-
-            }
-
-
-            if(schoolWebUrl){
-
-                localStorage.setItem(
-                    `mypHaven_school_${currentUser.uid}`,
-                    schoolWebUrl
-                );
-
-            }
-
-
-            if(emailUrl){
-
-                localStorage.setItem(
-                    `mypHaven_email_${currentUser.uid}`,
-                    emailUrl
-                );
-
-            }
-
-
-            renderCourses();
-
-            renderCalendar();
-
-
-            if(data.lockedIn === true){
-
-                completed = true;
-
-                lockProgress.style.width =
-                    "100%";
-
-
-                const finalPosition =
-                    Math.max(
-                        8,
-                        lockSlider.offsetWidth -
-                        capHandle.offsetWidth -
-                        8
-                    );
-
-
-                capHandle.style.left =
-                    `${finalPosition}px`;
-
-
-                lockText.textContent =
-                    "We're locked in!";
-
-
-                setTimeout(() => {
-
-                    showDashboard();
-
-                },100);
-
-            }
-
-        }else{
-
-            selectedSubjects = [];
-
-            tasks = [];
-
-            customAssignmentCategories = [];
-
-            renderCourses();
-
-            renderCalendar();
-
-        }
-
-    }catch(error){
-
-        console.error(
-            "Could not load dashboard:",
-            error
-        );
-
-        loadLocalFallback();
-
-    }
-
-}
-
-
-/* =========================================================
    LOCAL FALLBACK
 ========================================================= */
+
 
 function loadLocalFallback(){
 
@@ -3075,6 +3161,9 @@ function loadLocalFallback(){
         customAssignmentCategories =
             local.customAssignmentCategories ||
             [];
+
+        completed =
+            local.lockedIn === true;
 
 
         const savedBackground =
@@ -3117,6 +3206,29 @@ function loadLocalFallback(){
 
     renderCalendar();
 
+    if(completed){
+
+        lockProgress.style.width =
+            "100%";
+
+        const finalPosition =
+            Math.max(
+                8,
+                lockSlider.offsetWidth -
+                capHandle.offsetWidth -
+                8
+            );
+
+        capHandle.style.left =
+            `${finalPosition}px`;
+
+        lockText.textContent =
+            "We're locked in!";
+
+        showDashboard();
+
+    }
+
 }
 
 
@@ -3145,7 +3257,10 @@ async function saveDashboard(){
         customAssignmentCategories,
 
         backgroundImage:
-            background
+            background,
+
+        lockedIn:
+            completed
 
     };
 
